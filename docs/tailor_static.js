@@ -12,16 +12,20 @@
 (function () {
   'use strict';
 
-  var K = 'linziyang-ivp-2026-10-29-v1';
+  var SALT = 'ivp-2026-10-29|v2';        // 必须与 build_secure_config.py 一致
+  var ITER = 200000;                     // PBKDF2 迭代次数，同上
   var PROXY = [
     'https://corsproxy.io/?',
     'https://api.allorigins.win/raw?url='
   ];
   var LS_PROFILE = 'ivpStaticProfile';
   var LS_ITEMS = 'ivpStaticItems';
+  var LS_PASS = 'ivpPass';
 
-  /* ---------------- 配置解密 ---------------- */
+  /* ---------------- 配置解密（要口令） ---------------- */
   var CFG = null;
+  var PASS = '';
+
   function b64d(s) {
     s = s.replace(/-/g, '+').replace(/_/g, '/');
     var pad = s.length % 4 ? '='.repeat(4 - (s.length % 4)) : '';
@@ -31,26 +35,63 @@
     return out;
   }
 
-  /** 用种子派生 AES-CBC 密钥（复刻 Python Fernet 的取法：SHA256(seed) → base64url） */
-  async function decodeCfg() {
-    if (CFG) return CFG;
-    var token = window.IVP_CFG;
-    if (!token) throw new Error('缺少 config.enc.js，先跑 build_secure_config.py 并上传');
+  /** 口令 → PBKDF2-SHA256(20万次) → 32 字节，切两半当 Fernet 的签名钥 / 加密钥 */
+  async function deriveRaw(pass) {
+    var base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass),
+      { name: 'PBKDF2' }, false, ['deriveBits']);
+    var bits = await crypto.subtle.deriveBits(
+      { name: 'PBKDF2', salt: new TextEncoder().encode(SALT), iterations: ITER, hash: 'SHA-256' },
+      base, 256);
+    return new Uint8Array(bits);
+  }
 
-    var seedBuf = new TextEncoder().encode(K);
-    var hash = await crypto.subtle.digest('SHA-256', seedBuf);
-    var rawKey = new Uint8Array(hash);                    // Fernet 的签名密钥
-    var encKey = rawKey.slice(16, 32);                    // 后 16 字节就是 AES key
-    var mac = rawKey.slice(0, 16);
-
-    var blob = b64d(token);                               // version(1)+ts(8)+iv(16)+ct+hmac(32)
+  /** 解 Fernet：先验 HMAC（口令错就明确报错），再 AES-CBC 解密 */
+  async function fernetOpen(token, raw) {
+    var blob = b64d(token);                       // version(1)+ts(8)+iv(16)+ct+hmac(32)
+    if (blob.length < 57) throw new Error('密文格式不对');
+    var body = blob.slice(0, blob.length - 32);
+    var sig = blob.slice(blob.length - 32);
     var iv = blob.slice(9, 25);
     var ct = blob.slice(25, blob.length - 32);
 
-    var key = await crypto.subtle.importKey('raw', encKey, { name: 'AES-CBC' }, false, ['decrypt']);
+    var macKey = await crypto.subtle.importKey('raw', raw.slice(0, 16),
+      { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+    var ok = await crypto.subtle.verify('HMAC', macKey, sig, body);
+    if (!ok) { var e = new Error('口令不对'); e.code = 'PASS'; throw e; }
+
+    var key = await crypto.subtle.importKey('raw', raw.slice(16, 32), { name: 'AES-CBC' }, false, ['decrypt']);
     var plain = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, key, ct);
-    CFG = JSON.parse(new TextDecoder().decode(plain));
-    return CFG;
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+
+  /** 拿配置；没口令就先问 */
+  async function decodeCfg(pass) {
+    if (CFG) return CFG;
+    var token = window.IVP_CFG;
+    if (!token) throw new Error('缺少 config.enc.js，先跑 build_secure_config.py 并上传');
+    pass = pass || PASS || loadPass();
+    if (!pass) { openGate(); throw new Error('还没输入口令'); }
+    try {
+      CFG = await fernetOpen(token, await deriveRaw(pass));
+      PASS = pass;
+      return CFG;
+    } catch (err) {
+      CFG = null;
+      if (err.code === 'PASS' || /操作|decrypt|padding/i.test(String(err.message))) {
+        var e2 = new Error('口令不对'); e2.code = 'PASS'; throw e2;
+      }
+      throw err;
+    }
+  }
+
+  function loadPass() {
+    try { return sessionStorage.getItem(LS_PASS) || localStorage.getItem(LS_PASS) || ''; } catch (e) { return ''; }
+  }
+  function keepPass(pass, remember) {
+    try {
+      sessionStorage.setItem(LS_PASS, pass);
+      if (remember) localStorage.setItem(LS_PASS, pass); else localStorage.removeItem(LS_PASS);
+    } catch (e) {}
   }
 
   /* ---------------- 模型调用 ----------------
@@ -266,13 +307,20 @@
     bar.style.display = 'flex';
     $('#liveDot').className = 'dot' + (ST.dirty ? ' dirty' : '');
     if (!p.company && !p.role) {
-      $('#liveTxt').innerHTML = '还没填画像 · 填完公司/岗位/JD 会自动保存到这台设备';
+      $('#liveTxt').innerHTML = '还没填画像 · 填完公司/岗位/JD 会自动保存到这台设备' +
+        (locked() ? ' · <a href="#" id="lnkUnlock" style="color:#b45309">🔒 未解锁，点此输口令</a>' : '');
+      var lk = $('#lnkUnlock');
+      if (lk) lk.onclick = function (e) { e.preventDefault(); openGate(); };
       return;
     }
-    $('#liveTxt').innerHTML = ST.dirty
+    $('#liveTxt').innerHTML = (ST.dirty
       ? '<b style="color:#b45309">有改动</b> · 停手 1 秒自动保存，已生成的稿子会标成旧版本'
       : '画像 <b>' + esc(p.company) + ' · ' + esc(p.role) + '</b> 已存本机 · 版本 ' + esc(ver) +
-        ' · 稿件 ' + (ST.items.length ? ST.items.length + ' 题' : '未生成');
+        ' · 稿件 ' + (ST.items.length ? ST.items.length + ' 题' : '未生成'))
+      + (locked() ? ' · <a href="#" id="lnkUnlock" style="color:#b45309">🔒 未解锁，点此输口令</a>' : '');
+
+    var lnk = $('#lnkUnlock');
+    if (lnk) lnk.onclick = function (e) { e.preventDefault(); openGate(); };
   }
 
   function paintGap() {
@@ -476,6 +524,9 @@
 
   async function genSelected() {
     if (ST.busy) return;
+    if (locked()) {
+      try { await decodeCfg(); } catch (e) { openGate(); return; }
+    }
     var p = readForm();
     if (!p.company || !p.role || !p.jd) { alert('公司、岗位、JD 三样要填齐'); return; }
     var picked = [];
@@ -629,6 +680,7 @@
     try {
       var p = readForm();
       if (!p.jd) { paintGap(); return; }
+      if (locked()) { paintGap(); return; }        // 没口令：只算本地字面部分，不去打扰模型
       if (ST.pointsFor !== hashStr(p.jd)) {
         var ok = false;
         try { ok = await extractPoints(p.jd); } catch (e) {}
@@ -668,6 +720,7 @@
   function bindStaticOverrides() {
     try { loadLocal(); } catch (e) {}
     paintQuestions(); paintGap(); paintBar(); paintItems();
+    if (!loadPass()) setTimeout(function () { if (locked()) openGate(); }, 350);
     var b = $('#btnRecalc'); if (b) b.onclick = genSelected;
     var c = $('#btnGen'); if (c) c.onclick = genSelected;
     var s = $('#btnSaveProf');
@@ -698,5 +751,76 @@
     });
   }
 
-  window.IVP_TAILOR = { gen: genSelected, refreshPoints: refreshPoints, cfg: decodeCfg };
+  /* ---------------- 口令闸门 ---------------- */
+  var gateEl = null;
+
+  function openGate(focus) {
+    if (!gateEl) {
+      var hint = window.IVP_CFG_HINT || '自己设的那句口令';
+      gateEl = document.createElement('div');
+      gateEl.id = 'ivpGate';
+      gateEl.style.cssText = 'position:fixed;inset:0;background:rgba(17,24,39,.55);z-index:2147483000;' +
+        'display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)';
+      gateEl.innerHTML =
+        '<div style="background:#fff;border-radius:14px;max-width:390px;width:100%;padding:22px 22px 18px;' +
+        'box-shadow:0 22px 60px rgba(0,0,0,.28);font-family:inherit">' +
+        '<h3 style="margin:0 0 6px;font-size:16.5px">输入口令</h3>' +
+        '<p style="margin:0 0 14px;font-size:12.5px;color:#6b7280;line-height:1.65">' +
+        '模型的 Key 是加密存着的，口令对了才能在这台设备上出稿。<br>不输也能看稿子，只是生成按钮用不了。</p>' +
+        '<input id="ivpPassInput" type="password" autocomplete="current-password" placeholder="口令" ' +
+        'style="width:100%;box-sizing:border-box;border:1px solid #d6dae1;border-radius:9px;padding:11px 13px;' +
+        'font-size:15px;font-family:inherit;outline:none">' +
+        '<div id="ivpGateMsg" style="font-size:12px;color:#b91c1c;min-height:17px;margin-top:6px"></div>' +
+        '<label style="font-size:12.5px;color:#374151;display:flex;gap:7px;align-items:center;margin:2px 0 14px">' +
+        '<input type="checkbox" id="ivpRemember" checked>记住这台设备，下次不用再输</label>' +
+        '<div style="display:flex;gap:9px">' +
+        '<button id="ivpUnlock" style="flex:1;background:#111827;color:#fff;border:none;border-radius:9px;' +
+        'padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">解锁</button>' +
+        '<button id="ivpLater" style="background:#f3f4f6;color:#374151;border:none;border-radius:9px;' +
+        'padding:11px 15px;font-size:13.5px;cursor:pointer;font-family:inherit">稍后</button></div>' +
+        '<p style="margin:13px 0 0;font-size:11.5px;color:#9ca3af;line-height:1.6">口令提示：' + esc(hint) +
+        '<br>忘了就跟 assistant 说「重置定制口令」，重新生成一次密文即可。</p></div>';
+      document.body.appendChild(gateEl);
+
+      gateEl.querySelector('#ivpLater').onclick = function () { gateEl.style.display = 'none'; };
+      gateEl.querySelector('#ivpUnlock').onclick = doUnlock;
+      gateEl.querySelector('#ivpPassInput').onkeydown = function (e) {
+        if (e.key === 'Enter') doUnlock();
+      };
+      gateEl.onclick = function (e) { if (e.target === gateEl) gateEl.style.display = 'none'; };
+    }
+    gateEl.style.display = 'flex';
+    var msg = gateEl.querySelector('#ivpGateMsg'); if (msg) msg.textContent = '';
+    if (focus !== false) setTimeout(function () {
+      var i = gateEl.querySelector('#ivpPassInput'); if (i) { i.value = ''; i.focus(); }
+    }, 80);
+  }
+
+  async function doUnlock() {
+    if (!gateEl) return;
+    var input = gateEl.querySelector('#ivpPassInput');
+    var msg = gateEl.querySelector('#ivpGateMsg');
+    var btn = gateEl.querySelector('#ivpUnlock');
+    var pass = (input.value || '').trim();
+    if (!pass) { msg.textContent = '先输口令'; return; }
+    btn.disabled = true; btn.textContent = '验证中…'; msg.textContent = '';
+    try {
+      await decodeCfg(pass);                       // 成功即缓存到 CFG
+      keepPass(pass, gateEl.querySelector('#ivpRemember').checked);
+      gateEl.style.display = 'none';
+      paintBar(); paintGap();
+      if (ST.points.length || readForm().jd) runRefresh();
+      if (ST.items.length) paintItems();
+    } catch (e) {
+      msg.textContent = e.code === 'PASS' ? '口令不对，再试一次' : ('解密失败：' + e.message);
+      input.select();
+    } finally {
+      btn.disabled = false; btn.textContent = '解锁';
+    }
+  }
+
+  function locked() { return !CFG; }
+
+  window.IVP_TAILOR = { gen: genSelected, refreshPoints: refreshPoints, cfg: decodeCfg,
+    openGate: openGate, unlock: function (p) { return decodeCfg(p); }, reset: function () { CFG = null; } };
 })();
