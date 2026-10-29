@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第一档五道设计题 · 逐题解题框架</title>
+<style>
+  :root{--ink:#15171c;--sub:#5b6472;--line:#e3e7ee;--bg:#f5f7fa;--brand:#1f6feb;--brand-d:#0b4bb3;}
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px 16px 56px;background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;line-height:1.76;font-size:15px}
+  .page{max-width:900px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1f6feb,#0b4bb3);color:#fff;border-radius:13px;padding:20px 24px;margin-bottom:16px}
+  header h1{margin:0 0 6px;font-size:21px}
+  header p{margin:0;font-size:13px;opacity:.93}
+  h2{font-size:17px;background:var(--brand);color:#fff;margin:30px 0 12px;padding:8px 15px;border-radius:7px}
+  h3{font-size:15px;color:var(--brand-d);margin:18px 0 7px;padding-left:10px;border-left:4px solid var(--brand)}
+  table{width:100%;border-collapse:collapse;margin:9px 0;font-size:13.6px;background:#fff}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:#eef3fb;font-size:13px;font-weight:600}
+  .tip{background:#fff8f0;border:1px solid #ffd9b3;border-radius:9px;padding:12px 16px;margin:11px 0;font-size:14.2px}
+  .tip b{color:#b35c00}
+  .src{color:var(--sub);font-size:12.4px;background:#f6f8fb;border-left:3px solid #c3ccd8;
+    padding:7px 11px;border-radius:0 5px 5px 0;margin:7px 0;line-height:1.62}
+  .src b{color:#4a5462}
+  .warn{background:#fff3cd;color:#8a5a00;padding:0 3px;border-radius:2px}
+  .first{background:#eef4ff;border-left:4px solid #1f6feb;border-radius:0 7px 7px 0;padding:9px 13px;margin:8px 0;font-weight:700;color:#123f8f}
+  .mine{background:#f4fbf6;border:1px solid #cfe9d8;border-radius:9px;padding:12px 16px;margin:10px 0;font-size:14.4px}
+  .mine b{color:#1b6b3f}
+  .pick{background:#fffbe8;border:1px dashed #e8a300;border-radius:8px;padding:9px 13px;margin:9px 0;font-size:14px}
+  .pick b{color:#8a5a00}
+  .dim{background:#fff;border:1px solid var(--line);border-radius:9px;padding:12px 16px;margin:10px 0}
+  .dim .n{display:inline-block;background:var(--brand);color:#fff;border-radius:4px;padding:0 7px;font-size:12px;margin-right:7px;font-weight:600}
+  .foot{color:#8b95a5;font-size:12px;text-align:center;margin-top:34px;line-height:1.8}
+  ul,ol{margin:6px 0;padding-left:22px}
+  li{margin:4px 0}
+  .qnum{display:inline-block;background:#fff;color:var(--brand-d);border:2px solid var(--brand);
+    border-radius:50%;width:26px;height:26px;line-height:22px;text-align:center;font-size:14px;margin-right:8px;font-weight:700}
+  @page{size:A4;margin:13mm 12mm}
+  @media print{
+    body{background:#fff;padding:0;font-size:13.2px;line-height:1.62}
+    header{border-radius:0;padding:14px 18px}
+    header h1{font-size:18px}
+    h2{margin-top:15px;font-size:15.5px;padding:6px 12px}
+    h3{margin:12px 0 5px;font-size:14px}
+    table{font-size:12.4px;margin:6px 0}
+    th,td{padding:5px 8px}
+    .dim,.mine,.first,.tip,.pick{break-inside:avoid;padding:9px 13px;margin:7px 0;font-size:13px}
+    .src{font-size:11.6px;padding:5px 9px}
+  }
+
+/* ===== MOBILE-OVERRIDE ===== */
+@media (max-width:760px){
+  .page,.wrap{width:100%!important;max-width:100%!important;box-shadow:none!important;padding:16px 13px 40px!important}
+  body{font-size:14px!important}
+  h1{font-size:21px!important;letter-spacing:-.3px}
+  h2{font-size:16.5px!important}
+  table{font-size:11.5px!important;table-layout:fixed!important}
+  th,td{padding:5px 6px!important;line-height:1.55!important}
+  th{white-space:normal!important}
+  .grid{grid-template-columns:1fr!important}
+  .flow,.stage{flex-direction:column!important}
+  .flow .step,.stage .s{border-right:1px solid var(--line,#e6e6e6)!important;border-bottom:none!important;margin-bottom:8px;border-radius:8px!important}
+  .script,.say{padding:12px 13px!important;font-size:13.5px!important}
+  .card{padding:11px 12px!important}
+  code,pre{white-space:pre-wrap!important;word-break:break-all}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>第一档五道设计题 · 逐题解题框架</h1>
+  <p>2026-10-29 腾讯 AI-HR 群面 ｜ 每题：破题句 → 五个可讲维度 → 三个功能 → 指标与风险 → 60 秒个人陈述</p>
+</header>
+
+<div class="tip">
+<b>先看用法，不然会用错。</b>这五道题是<b>我按岗位方向拟的题面</b>，只有第 1 题有真题来源。你要学的不是"押中"，而是<b>设计类题的通用结构在每个具体 HR 场景里长什么样</b>。<br>
+<b>结构永远四步：</b>① 谁的事（用户分层）→ ② 卡在哪（具体场景＋现状数据）→ ③ 怎么解（三个功能，说清先做哪个）→ ④ 怎么算成（一个指标＋一个风险）。<br>
+<b>每题的"可讲维度"就是第四步之外最容易被忽略的第三点：考官听得出来你有没有真想过这门生意的细节。</b>
+</div>
+
+<div class="src"><b>信源｜</b>题面来源：第 1 题为牛客面经真题原话；第 2–5 题为<b>我据 JD「探索 AI 在各模块中的应用」＋腾讯 AI-HR Star 四方向（沟通/分析/创意/技术应用）拟写</b>，无真题依据。题内所有行业方法论（柯氏四级、漏斗、NPS、AARRR 等）为公开通用理论；所有"腾讯已有同类产品"的判断来自公开发布内容，<span class="warn">不保证内部现况</span>；全部业务建议与话术由我撰写，属备考建议，非腾讯立场。</div>
+
+<h2>通用骨架：四问法填表（先背这一张，再看五道题）</h2>
+<table>
+<tr><th style="width:16%">格</th><th style="width:34%">你要填什么</th><th>判分点（考官心里在勾的）</th></tr>
+<tr><td><b>① 用户</b></td><td>三类人 + 各类最痛的一件事（说得出具体场景）</td><td>会不会"分层"。只说"员工"的，是没想</td></tr>
+<tr><td><b>② 卡点</b></td><td>现状 → 目标差在哪一步（可用"漏斗哪一段掉得狠"表述）</td><td>有没有"现状"概念。只说痛不说量的，是拍脑袋</td></tr>
+<tr><td><b>③ 解法</b></td><td>三个功能 + <b>先说做哪个、为什么先做这个</b></td><td>优先级意识。三个功能平铺的，是清单不是方案</td></tr>
+<tr><td><b>④ 成功</b></td><td>一个指标（能算的）+ 一个风险（能防的）</td><td>闭环意识。没指标＝不可验收；没风险＝不成熟</td></tr>
+</table>
+<div class="pick"><b>五题通用的一句话结尾（好用、万能）：</b>「如果只允许我先做一个功能，我会做 <b>XX</b>，因为它最省人力、验证最快；另外两个我放在第二期。<b>第一期的验收标准是 XX 指标从 A 提到 B，最大的风险是 XX，我的兜底是留一条人工通道。</b>」</div>
+<div class="src"><b>说明｜</b>这张表和这句话是我从群面评分维度（结构、深度、产出、协作）反推的写法，不是官方评分表，但通用性已被大量面经验证。</div>
+
+<h2><span class="qnum">1</span>设计一个提升校招面试体验的产品</h2>
+<div class="src"><b>真题来源｜</b>牛客网面经记录：「设计一个提升校招面试体验的 App / 产品」。属历史真题，<b>今年是否重考无法确认</b>。</div>
+
+<h3>破题第一句</h3>
+<div class="first">「先定三类用户：候选人、业务面试官、HR。这三类人痛的不是同一件事——候选人怕等，面试官怕麻烦，HR 怕失控。」</div>
+
+<h3>五个可讲维度（挑 2–3 个讲，别全讲）</h3>
+
+<div class="dim"><span class="n">维度 1</span><b>候选人侧：信息与等待</b><br>
+痛点不是"流程慢"，是<b>不知道现在到哪一步了</b>。校招最大的投诉永远是三件：进度不透明、面试后无反馈、等结果时没有下文。<br>
+可做：<b>进度时间轴</b>（投递／筛过／约面／面完／待定，每一步给"预计 X 个工作日"）、<b>面试后 24 小时内的结构化反馈</b>（哪怕一句"这次更看重案例拆解"）、<b>超时自动说明</b>（"我们还在评估，预计 3 天内答复"比沉默强十倍）。<br>
+<b>谁反对：</b>HR（怕承诺时间做不到）。<b>你的答案：</b>时间轴不给绝对日期，给"当前环节 + 剩余步数 + 平均耗时"。</div>
+
+<div class="dim"><span class="n">维度 2</span><b>面试官侧：把准备成本降到 10 分钟以内</b><br>
+业务面试官抗拒的从来不是面试，是<b>看简历＋想问题＋填评价表</b>这三件杂事。<br>
+可做：<b>一页面试速览</b>（候选人 3 个亮点 + 2 个待验证点 + 3 个必问题）、<b>语音填评价</b>（说完自动转成结构化评分）、<b>面完即可提交</b>（不用等到晚上批量填）。<br>
+<b>为什么重要：</b>面试官慢一天，候选人就多流失一天。<b>提升体验的最高杠杆其实在面试官这一侧，不在候选人这一侧。</b></div>
+
+<div class="dim"><span class="n">维度 3</span><b>HR 侧：把"体验"变成可运营的指标</b><br>
+现在大多公司只在结束时发一个满意度问卷，那是<b>事后情绪，不是过程体验</b>。<br>
+可做：<b>环节级 NPS</b>（每次面试后一条："这次面试你愿意推荐给同学吗"）、<b>流失节点热力图</b>（哪一步掉人最多）、<b>投诉工单闭环</b>（谁处理、几小时结、是否回访）。</div>
+
+<div class="dim"><span class="n">维度 4</span><b>师生/校方这一层（最容易被全场遗漏，讲了最加分）</b><br>
+校招的真实链路里还有一个角色：<b>学校就业办和辅导员</b>。企业宣讲能不能进校、学生信不信，很大程度取决于他们。<br>
+可做：给校方一个"企业招聘透明度看板"（今年招了多少本校学生、哪些岗位、平均流程天数）。<b>这一层几乎没有候选人会想到，但它是真实的利益相关方。</b></div>
+
+<div class="dim"><span class="n">维度 5</span><b>AI 该放哪、不该放哪（AI-HR 岗位必讲）</b><br>
+<b>该放：</b>常见问题问答、进度查询、面试提醒、简历要点摘要、评价转写。<br>
+<b>不该放：</b>淘汰判断、薪资沟通、拒绝通知（尤其不能纯机器发）。<br>
+判断标准一句话：<b>「出错代价低且答案标准化 → 交给 AI；出错代价高或涉及情绪 → 必须留人。」</b></div>
+
+<h3>三个功能（说清先做哪个）</h3>
+<table>
+<tr><th style="width:22%">功能</th><th style="width:20%">对应用户</th><th style="width:12%">先/后</th><th>理由</th></tr>
+<tr><td><b>进度时间轴＋超时说明</b></td><td>候选人</td><td><b>先做</b></td><td>开发最轻（本质是把 ATS 状态外显），投诉下降最快，一周能上线</td></tr>
+<tr><td><b>面试官一页速览＋语音评价</b></td><td>面试官</td><td>第二期</td><td>依赖简历解析质量，需要先清洗一年数据才敢上</td></tr>
+<tr><td><b>环节级 NPS＋流失热力图</b></td><td>HR</td><td>同时做</td><td>它不改善体验，但让你知道下个月该改哪——没有它，前两个是盲改</td></tr>
+</table>
+
+<h3>指标与风险</h3>
+<div class="mine"><b>指标：</b>面试后 24 小时满意度（或环节级 NPS）从 X 提到 X+15；辅指标<b>「面试爽约率」和「offer 接受率」</b>。<br>
+<b>风险：</b>时间轴暴露了 HR 的真实拖延 → 内部反弹。<b>兜底：</b>先只对候选人展示"环节 + 剩余步数"，不展示具体日期；同时把超时原因自动推给 HR 主管——<b>让工具先去压力内部，而不是让 HR 直接面对候选人。</b></div>
+
+<h3>60 秒个人陈述模板</h3>
+<div class="first">「我先定用户：候选人、面试官、HR，三类人痛的不是一件事。候选人痛在'不知道到哪一步了'，面试官痛在'准备太麻烦'，HR 痛在'体验没法量化'。所以我做三件事：第一，<b>把流程外显</b>——进度时间轴加超时说明，这个最轻、最快、投诉降得最直接；第二，<b>把面试官的成本压到十分钟以内</b>——一页速览加语音评价，因为体验的最大杠杆其实在面试官这一侧；第三，<b>把体验变成能算的指标</b>——面试后一条 NPS，加一张流失热力图。第一期我只做第一件和第三件，因为一件改善体验、一件让我们知道下个月改哪。指标是面试后 24 小时满意度，风险是时间轴会把 HR 的拖延暴露出来，所以我先对内压力、不对外承诺日期。」</div>
+
+<h2><span class="qnum">2</span>设计一个帮助新员工融入的产品／机制</h2>
+<div class="src"><b>题面来源｜</b>我据腾讯 HR 公开做过的新人融入类项目方向拟写（如新人礼盒、入职引导类产品），<b>无真题来源</b>。</div>
+
+<h3>破题第一句</h3>
+<div class="first">「新人流失不在第一天，在<b>第一个月</b>。所以我不设计入职礼包，我设计一条 30 天的时间线：前一周、第一天、第一个月，三个节点各解决一件不同的事。」</div>
+<p><b>为什么这句好：</b>它当场否掉了最平庸的答案（做一个欢迎页面），并且给出"时间线"这个结构，考官立刻知道你有框架。</p>
+
+<h3>五个可讲维度</h3>
+
+<div class="dim"><span class="n">维度 1</span><b>入职前一周：降低"未知焦虑"</b><br>
+新人最慌的是"我第一天穿什么、找谁、电脑有没有、要讲什么"。<br>
+可做：<b>报到清单</b>（地址、联系人、着装、必带材料）、<b>团队一页纸</b>（每个同事一张照片＋一句话职责＋一个可问的问题）、<b>第一天日程表</b>（几点到几点做什么，精确到"上午跟谁吃饭"）。</div>
+
+<div class="dim"><span class="n">维度 2</span><b>第一天：让人被"认出来"</b><br>
+体验的分水岭不是流程是否顺，是<b>有没有人等他</b>。走到工位没人抬头，是新人最常见的失落点。<br>
+可做：<b>Buddy 制度</b>（一个入职满一年的同龄人，不是领导）、<b>团队群里的公开介绍卡</b>（名字、从哪来、兴趣、能帮什么）、<b>工位预置</b>（电脑、门禁、工牌提前就绪，不用新人跑三个窗口）。</div>
+
+<div class="dim"><span class="n">维度 3</span><b>第一个月：把"融入"变成可观测</b><br>
+现在的做法通常是"一个月后发个问卷"，但那时该走的已经走了。<br>
+可做：<b>7 / 30 天两个访谈节点</b>（不是问卷，是 15 分钟真人对话，只问三个问题：哪件事最不顺手／有谁帮过你／有没有想不通的）、<b>三个小里程碑</b>（第一周参加一次跨组会、第一个月独立交付一个小任务、第一个月认识 5 个非本组同事）。</div>
+
+<div class="dim"><span class="n">维度 4</span><b>直属主管这一层（真正的决定因素）</b><br>
+新人离职原因里排第一的从来不是"公司"，是"主管"。<br>
+可做：<b>给主管一张"新人 30 天清单"</b>（第 1 天请吃饭、第 3 天定第一个任务、第 7 天给一次具体反馈、第 30 天聊一次方向）。<b>把主管的动作标准化，比给新人做 App 有效得多。</b></div>
+
+<div class="dim"><span class="n">维度 5</span><b>AI 的位置：陪伴与提醒，不做判断</b><br>
+可做：<b>新人问答助手</b>（报销怎么走、年假多少、IT 找谁——全是高频、标准、出错代价低）、<b>主动提醒</b>（第 3 天推一条"这周该跟主管聊一次目标"，第 20 天推"你还有哪些流程没走完"）。<br>
+<b>不做：</b>不拿 AI 去"评估入模程度"，那会让人觉得自己被监控。</div>
+
+<h3>三个动作（说清先做哪个）</h3>
+<table>
+<tr><th style="width:24%">动作</th><th style="width:12%">先/后</th><th>理由</th></tr>
+<tr><td><b>主管 30 天清单 + Buddy 制度</b></td><td><b>先做</b></td><td>零开发、当月能落地；这两个动作覆盖了 80% 的问题</td></tr>
+<tr><td><b>入职前一周的报到清单＋团队一页纸</b></td><td>第二期</td><td>需要各部门配合整理内容，但一次做好可长期复用</td></tr>
+<tr><td><b>7/30 天访谈＋新人问答助手</b></td><td>第三期</td><td>助手依赖知识库先有人做经验萃取，否则上线就是答错</td></tr>
+</table>
+<div class="pick"><b>可以主动说的一句（会让人记住你）：</b>「我不建议第一版就做一个 App。新人一个月只用十几天，装一个 App 的成本比价值高。<b>先用企业微信里的推送 + 一张清单跑通，验证了再加壳。</b>」</div>
+
+<h3>指标与风险</h3>
+<div class="mine"><b>指标：</b>新员工 <b>90 天留存率</b>（主）、<b>30 天"我有至少一个可以求助的人"认同率</b>（辅）。<br>
+<b>风险：</b>Buddy 变成负担、流于形式。<b>兜底：</b>给 Buddy 明确工时折算或小激励，并把"帮了新人什么"写进 Buddy 自己的成长记录——<b>让做这件事的人也有收益。</b></div>
+
+<h3>60 秒个人陈述模板</h3>
+<div class="first">「新人流失不在第一天，在第一个月。所以我做的是一条 30 天时间线，三个节点各解决一件事：入职前一周解决<b>未知</b>——报到清单和团队一页纸，让人知道找谁、穿什么、第一天做什么；第一天解决<b>被认出来</b>——一个同龄 Buddy 加一张公开介绍卡，因为最伤人的不是流程不顺，是走到工位没人抬头；第一个月解决<b>可观测</b>——7 天和 30 天两次真人访谈，只问三个问题。第一期我只做两件零开发的：主管 30 天清单和 Buddy 制度，这两个覆盖了八成问题。指标是 90 天留存率，风险是 Buddy 流于形式，兜底是让 Buddy 也有收益。」</div>
+
+<h2><span class="qnum">3</span>设计一个评估培训效果的产品</h2>
+<div class="src"><b>题面来源｜</b>我据 JD「人力资源相关模块的项目」＋培训评估这一公认痛点拟写。<b>无真题来源</b>。这道题是你的主场，但要提防一个陷阱：<b>讲太专业会让全场听不懂、也插不上话</b>。</div>
+
+<h3>破题第一句</h3>
+<div class="first">「先问一句：现在我们测的是什么？如果只有课后满意度，那只是柯氏第一级——它测的是<em>当时高不高兴</em>，不是<em>回去有没有变</em>。所以我要设计的是往上走两级的工具。」</div>
+
+<h3>五个可讲维度</h3>
+
+<div class="dim"><span class="n">维度 1</span><b>用柯氏四级当骨架（你的护城河）</b><br>
+<b>L1 反应</b>（满意度、内容是否有用）→ <b>L2 学习</b>（真学会了没：前测后测、实操考核）→ <b>L3 行为</b>（回去有没有用：30/60 天后主管或同事的观察、工作样本）→ <b>L4 结果</b>（业务指标：新人上手周期、客诉率、离职率）。<br>
+<b>关键一句：</b>「L1 我们现在有，L4 太远，<b>缺的中间两层才是产品该做的</b>。」</div>
+
+<div class="dim"><span class="n">维度 2</span><b>L2 最容易做，也最容易被跳过</b><br>
+很多培训没有前测，所以永远证明不了"学过之后变好了"。<br>
+可做：<b>开课前 5 道题测基线</b>、<b>结课当场做情景题</b>（不是选择题，是"客户说这句话你怎么回"）、<b>把考核结果存进个人成长档案</b>（可复用于后续晋升／轮岗）。</div>
+
+<div class="dim"><span class="n">维度 3</span><b>L3 行为：找"看得见的人"来评价</b><br>
+行为这一层不能问学员自己（会有自评偏差），要问<b>天天看得见他的人</b>：直属主管、同组同事。<br>
+可做：<b>30 天三条观察项</b>（不用打分，只勾"做到了／没做到／没机会做到"）、<b>一个具体工作样本</b>（让他交一份真实产出，比问卷可信）。<b>注意：观察项必须少，三条以内，多了没人填。</b></div>
+
+<div class="dim"><span class="n">维度 4</span><b>L4 结果：不要试图证明因果，要说"贡献"</b><br>
+培训很难单独证明"离职率下降是因为培训"，这是个方法论陷阱。<br>
+正确说法：<b>「我不做严格因果，我做同期对照——同一批新人，参加过的和没参加的分组看 90 天留存差异。」</b>这句话会让考官觉得你真的懂评估，不是背书。</div>
+
+<div class="dim"><span class="n">维度 5</span><b>产品形态：先做"评估报告"，不做"评估系统"</b><br>
+HR 最痛的不是没有数据，是<b>没法把结果讲给业务听</b>。<br>
+可做：<b>一页培训效果报告</b>（这门课 L1–L4 各是什么数、哪一层最弱、建议下一期改什么）、<b>讲师质量看板</b>（同一门课不同讲师的 L2 差距）、<b>课程淘汰机制</b>（连续两期 L3 不达标就下线）。<b>"能下线课程"是评估产品真正的价值。</b></div>
+
+<h3>三个动作（说清先做哪个）</h3>
+<table>
+<tr><th style="width:26%">动作</th><th style="width:12%">先/后</th><th>理由</th></tr>
+<tr><td><b>结课当场 L2 情景题 + 基线前测</b></td><td><b>先做</b></td><td>当场能收，不依赖后续配合，一期就能出数据</td></tr>
+<tr><td><b>30 天主管三条观察</b></td><td>第二期</td><td>需要主管配合，先用一门课试点，跑通了再推全员</td></tr>
+<tr><td><b>一页效果报告 + 课程淘汰机制</b></td><td>同时推进</td><td>没有报告，前面两件的数据没人看；没有淘汰，评估就只是档案</td></tr>
+</table>
+
+<h3>指标与风险</h3>
+<div class="mine"><b>指标：</b>主指标 <b>L3 行为达标率</b>（30 天后主管勾"做到了"的比例）；辅指标 <b>L2 前后测提升幅度</b>、<b>被下线课程数</b>（反向指标，但最能说明评估有效）。<br>
+<b>风险：</b>主管嫌麻烦不填、数据造假应付。<b>兜底：</b>三条以内、一键勾选、每季度只抽一门课；<b>并且明确说"这个数据不用于考核讲师个人"</b>——一旦变成考核，数据立刻失真。</div>
+
+<h3>60 秒个人陈述模板</h3>
+<div class="first">「先问一句：我们现在测的是什么？如果只有课后满意度，那只是柯氏第一级，测的是当时高不高兴，不是回去有没有变。我要做的是往上走两级：<b>L2 学习</b>——开课前测基线，结课当场做情景题，不是选择题，是'客户说这句话你怎么回'；<b>L3 行为</b>——30 天后问主管三条观察项，不打分，只勾做到没做到，因为问学员本人会有自评偏差。L4 我不试图证明因果，我做同期对照：参加过和没参加过的分组看 90 天留存。第一期只做 L2 和一份一页效果报告，因为当场能收、一期就能出数。指标是 L3 达标率，风险是主管不填，兜底是三条以内、一键勾选、并且说清这个数据不用于考核讲师。」</div>
+
+<h2><span class="qnum">4</span>设计一个员工／候选人智能问答助手</h2>
+<div class="src"><b>题面来源｜</b>我据 JD「探索 AI 在各模块中的应用」＋腾讯 HR 助手类公开产品方向拟写，<b>无真题来源</b>。这道题最容易答成"技术炫耀"，<b>反而要答得最朴素</b>。</div>
+
+<h3>破题第一句</h3>
+<div class="first">「先定边界，定完边界才谈功能：<b>什么必须 AI 答、什么必须转人工、什么绝对不能让 AI 答。</b>这三条线不划清，做出来的东西一定出事。」</div>
+
+<h3>五个可讲维度</h3>
+
+<div class="dim"><span class="n">维度 1</span><b>先选场景：按"三高"筛</b><br>
+<b>高频</b>（每天都被问）、<b>高标准化</b>（答案唯一，有制度原文）、<b>高出错代价可控</b>（答错能纠正、不会造成法律或钱的问题）。<br>
+符合的：年假怎么算、报销流程、社保公积金、入职材料、IT 权限申请、培训报名。<br>
+不符合的：薪酬谈判、绩效申诉、劳动纠纷、裁员沟通——<b>这些必须人来做，且必须当面。</b></div>
+
+<div class="dim"><span class="n">维度 2</span><b>答错的代价分级（这条最能显专业）</b><br>
+把所有问题按"答错会怎样"分三档：<b>红</b>（涉及钱、法律、隐私 → 只给"我给你转接"，不给答案）、<b>黄</b>（答案有地区／职级差异 → 先反问澄清再答）、<b>绿</b>（通用政策 → 直接答，附原文链接）。<br>
+<b>一句可讲：</b>「好的问答助手不是答得多，是<b>知道什么时候不答</b>。」</div>
+
+<div class="dim"><span class="n">维度 3</span><b>知识库才是产品本体，模型只是壳</b><br>
+现实中这类助手失败 90% 死在知识库：政策过期、口径不一、各部门各有一份。<br>
+可做：<b>单一事实源</b>（每条规定指定一个 owner 和一个生效日期）、<b>答案必须带原文出处＋生效日</b>、<b>过期自动下线</b>。<br>
+<b>你这个说法有实战支撑：</b>你自己做 AI 学习助手时就遇到过 RAG 检索不到或检索错的问题，这段可以当例子讲。</div>
+
+<div class="dim"><span class="n">维度 4</span><b>兜底与反馈闭环</b><br>
+可做：<b>一键转人工</b>（不用重述问题，把上下文带过去）、<b>"这个答案有用吗"单按钮</b>、<b>未解决问题周报</b>（把答不上的问题汇总给知识库 owner，下周补）。<br>
+<b>这一条是区分"做过"和"想过"的分水岭。</b></div>
+
+<div class="dim"><span class="n">维度 5</span><b>衡量：不要只用"回答准确率"</b><br>
+更真实的三个数：<b>自助解决率</b>（没转人工就结束的比例）、<b>重复提问率</b>（同一人两周内问同一件事，说明答得不清楚）、<b>HR 咨询工单下降量</b>（真正的价值证明）。<br>
+<b>反向指标：</b>误答投诉数——这个必须单独看，因为它藏在前三个指标里看不见。</div>
+
+<h3>三个动作（说清先做哪个）</h3>
+<table>
+<tr><th style="width:24%">动作</th><th style="width:12%">先/后</th><th>理由</th></tr>
+<tr><td><b>知识库整理 + 三档问题分级</b></td><td><b>先做</b></td><td>没有干净知识库，模型换了三个也一样答错。<b>顺序不能反</b></td></tr>
+<tr><td><b>绿档问答上线 + 一键转人工</b></td><td>第二期</td><td>先只覆盖最安全的一档，出错代价可控</td></tr>
+<tr><td><b>未解决周报 + 知识库 owner 机制</b></td><td>同期</td><td>上线只是开始，能不能自己长才是关键</td></tr>
+</table>
+
+<h3>指标与风险</h3>
+<div class="mine"><b>指标：</b><b>自助解决率</b>（主）、<b>误答投诉数</b>（反向，单独看）、HR 政策类工单量下降幅度（辅）。<br>
+<b>风险：</b>答错一条薪酬或合规问题，造成信任崩塌。<b>兜底：</b>红档一律不给答案只转人工；所有答案强制带原文出处；上线前先做一个月"影子测试"——<b>AI 答、人工审，只给人看人工确认过的答案。</b></div>
+
+<h3>60 秒个人陈述模板</h3>
+<div class="first">「我先定边界：什么必须 AI 答、什么必须转人工、什么绝对不能让 AI 答。按答错的代价分三档：涉及钱、法律、隐私的是红档，只给转接不给答案；答案有地区或职级差异的是黄档，先反问澄清；通用政策是绿档，直接答并附原文。功能上就三件：<b>绿档问答</b>、<b>一键转人工且带上下文</b>、<b>未解决问题周报</b>——把答不上的问题汇总给知识库的负责人。但我最想说的是：<b>这类产品的本体不是模型，是知识库</b>。政策过期、各部门口径不一，模型再好也答错，所以第一个动作一定是先把知识库整理成单一事实源，每条有 owner、有生效日期。指标看自助解决率，同时单独盯误答投诉数。风险是答错一条薪酬问题，兜底是红档不答、强制带出处、上线前先影子测试一个月。」</div>
+
+<h2><span class="qnum">5</span>给 HR 团队做一个 AI 工具，提升效率</h2>
+<div class="src"><b>题面来源｜</b>JD 原话「积极探索 AI 在各模块中的应用，通过实践推动项目实施」的直译题目，<b>无真题来源</b>。这道题考的是<b>排序能力</b>，不是想象力。想列十个 AI 点子的人会输给能说清"先做哪一个"的人。</div>
+
+<h3>破题第一句</h3>
+<div class="first">「我不先想能做什么，我先给 HR 的活排个序：<b>按'耗人程度'和'出错代价'两个维度排</b>，再决定 AI 先上哪一步。」</div>
+
+<h3>五个可讲维度</h3>
+
+<div class="dim"><span class="n">维度 1</span><b>先把 HR 的活切开：四种性质</b><br>
+① <b>重复＋标准化</b>（政策问答、流程提醒、材料收集、排期）→ AI 优先；<br>
+② <b>重复＋需判断</b>（简历初筛、名单核对）→ AI 辅助，人定终局；<br>
+③ <b>低频＋高情绪</b>（离职面谈、绩效申诉、裁员沟通）→ 人不让位；<br>
+④ <b>低频＋高创造</b>（方案设计、文化项目）→ AI 只做素材。<br>
+<b>一句话总结：</b>「AI 先吃掉第一格，第二格做副驾，第三格碰都别碰。」</div>
+
+<div class="dim"><span class="n">维度 2</span><b>排序标准：两个维度，不是三个</b><br>
+横轴「耗人程度」（占多少工时、多少人重复干）、纵轴「出错代价」（错了要赔钱／担法律责任／伤感情）。<br>
+先做 <b>高耗人 + 低代价</b> 的：政策问答、流程提醒、会议纪要与培训物料初稿。<br>
+<b>别急着做</b> 高耗人 + 高代价 的：简历淘汰、绩效定级——它们是价值最大但也最容易翻车的。</div>
+
+<div class="dim"><span class="n">维度 3</span><b>选一个具体切口讲透（不要泛泛而谈）</b><br>
+推荐讲<b>「HR 自己的知识型杂活」</b>：写制度文件初稿、做培训 PPT、整理员工咨询记录、生成周报。<br>
+理由：① 内部分析清楚、数据安全可控；② 出错代价低（人是最后一关）；③ <b>HR 自己先尝到甜头，才有动力推向业务</b>。<br>
+<b>一句可讲：</b>「我要先让 HR 自己被 AI 服务一次，不然没资格去推别人。」</div>
+
+<div class="dim"><span class="n">维度 4</span><b>试点怎么设计（有方法论，不是"试一试"）</b><br>
+选 <b>1 个模块 + 5–10 人 + 4 周</b>；设<b>基线</b>（试点前这活每周花多少小时）；<b>只对比同一批人同一类活</b>；4 周后看"省下来的时间有没有真的变成别的事"——<b>如果省下的时间只是被更多活填满，效率就只是幻觉。</b><br>
+<b>这句"效率幻觉"很容易被记住。</b></div>
+
+<div class="dim"><span class="n">维度 5</span><b>推不动怎么办（组织侧，最容易被漏）</b><br>
+AI 工具失败大多不是技术问题，是没人用。三个动作：<b>找种子用户</b>（每个模块找一个愿意试的人）、<b>让收益可见</b>（把"这周省了 3 小时"公开出来）、<b>不考核使用率</b>（一考核就变成刷数据）。<br>
+<b>再加上你最真实的经验：</b>你搭 AI 学习助手和沙盘系统时，最后卡住的都不是代码，是"没人告诉我真正要什么"——所以你会先做<b>需求确认</b>再做工具。这段可以当例子讲。</div>
+
+<h3>三个动作（说清先做哪个）</h3>
+<table>
+<tr><th style="width:26%">动作</th><th style="width:12%">先/后</th><th>理由</th></tr>
+<tr><td><b>给全 HR 的活做一次"耗人×代价"盘点</b></td><td><b>先做</b></td><td>不盘点就选点，选的一定是最响的那个声音，不是最该做的</td></tr>
+<tr><td><b>选 1 个低代价高耗人的场景做 4 周试点</b></td><td>第二期</td><td>小范围、有基线、可对比，一个月能出结论</td></tr>
+<tr><td><b>种子用户 + 收益公开 + 不考核使用率</b></td><td>同期贯穿</td><td>决定这东西最后是活下来还是躺在角落</td></tr>
+</table>
+
+<h3>指标与风险</h3>
+<div class="mine"><b>指标：</b>单件任务的<b>平均耗时下降</b>（主）、<b>周节省工时</b>（辅）、<b>试点模块使用留存</b>（4 周后还在用的人占比）。<b>反向指标：返工率</b>——AI 出稿被人推翻重写的比例，高了说明工具在帮倒忙。<br>
+<b>风险：</b>省下的时间被填满新活，或者数据安全越界（员工信息被传进外部模型）。<b>兜底：</b>省下时间要明确"再投到哪件事"，写进试点方案；数据侧只做脱敏后的内部部署，敏感字段不进模型。</div>
+
+<h3>60 秒个人陈述模板</h3>
+<div class="first">「我不先想能做什么，我先给 HR 的活排个序。按两个维度：耗人程度和出错代价。HR 的活其实分四种：重复又标准的，比如政策问答、流程提醒，AI 可以直接吃；重复但要判断的，比如简历初筛，AI 做副驾、人定终局；低频但情绪重的，离职面谈、绩效申诉，人不让位；低频但要创造的，方案设计，AI 只做素材。所以先做高耗人、低代价的那一格。我建议第一个切 HR 自己的知识型杂活——写制度初稿、做培训物料、整理咨询记录，因为出错有人兜底，而且<b>HR 自己先尝到甜头，才有底气推给别人</b>。试点就 1 个模块、5 到 10 人、4 周，先记基线，4 周后看省下的时间有没有真的变成别的事——如果只是被更多活填满，那是效率幻觉。指标看平均耗时和返工率，风险是省下的时间被填满，所以试点方案里必须写清省下的时间投到哪。」</div>
+
+<h2>五题通用：如果讨论中途被带偏，用这三句拉回来</h2>
+<table>
+<tr><th style="width:28%">场景</th><th>说法</th></tr>
+<tr><td>大家开始堆功能</td><td>「我们先回到用户：这个功能服务的是哪一类人？如果说不清是谁，就是可以不做的。」</td></tr>
+<tr><td>没人提指标</td><td>「我们还没定怎么算成。我建议先定一个指标，不然待会儿汇报没法收口。」</td></tr>
+<tr><td>时间不够了</td><td>「还有 8 分钟，我建议现在收三句话：用户是谁、做什么、怎么算成，其余放附录。」</td></tr>
+</table>
+<div class="src"><b>这三句是我写的</b>，属备考话术，不是官方要求。用的时候按自己的语气说，别背成模板腔。</div>
+
+<div class="foot">
+第一档五道设计题 · 逐题解题框架 ｜ 2026-10-29 腾讯 AI-HR 群面<br>
+题面来源：第 1 题牛客面经真题；第 2–5 题据 JD 与岗位方向拟写，非真题 ｜ 方法论（柯氏四级、漏斗、NPS 等）为公开通用理论<br>
+所有业务建议与话术为备考参考，非腾讯官方口径；现场以主持人宣布为准
+</div>
+
+</div>
+<script src="nav.js" defer></script>
+</body>
+</html>
