@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>产品思维加分包 · 群面补充</title>
+<style>
+:root{
+  --ink:#1a1a1a; --sub:#666; --line:#e6e6e6; --bg:#fff;
+  --blue:#1e5eff; --blue-bg:#f0f5ff;
+  --red:#d93025; --red-bg:#fdf1f0;
+  --green:#0f7b3f; --green-bg:#f0f8f3;
+  --amber:#a35a00; --amber-bg:#fff8ec;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:#f7f7f8; color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.75;
+}
+.page{width:1080px;margin:0 auto;background:var(--bg);padding:44px 56px 60px;box-shadow:0 0 0 1px var(--line)}
+h1{font-size:26px;line-height:1.35;margin:0 0 6px;letter-spacing:-.3px}
+.meta{color:var(--sub);font-size:13px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+h2{font-size:18px;margin:34px 0 12px;padding-left:11px;border-left:4px solid var(--ink);line-height:1.3}
+h3{font-size:15px;margin:20px 0 8px}
+p{margin:8px 0}
+ul,ol{margin:8px 0;padding-left:22px}
+li{margin:5px 0}
+b{font-weight:600}
+.src{color:#8a8a8a;font-size:12px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;table-layout:fixed}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top;word-break:break-word;line-height:1.65}
+th{background:#fafafa;font-weight:600}
+.box{border-radius:6px;padding:14px 18px;margin:14px 0;font-size:14.5px}
+.box p:first-child{margin-top:0}
+.box p:last-child{margin-bottom:0}
+.b-red{background:var(--red-bg);border-left:3px solid var(--red)}
+.b-blue{background:var(--blue-bg);border-left:3px solid var(--blue)}
+.b-green{background:var(--green-bg);border-left:3px solid var(--green)}
+.b-amber{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.card{border:1px solid var(--line);border-radius:6px;padding:13px 16px}
+.card h4{margin:0 0 6px;font-size:14.5px;font-weight:600}
+.card ul{padding-left:18px;margin:6px 0;font-size:14px}
+.say{border:1px solid var(--ink);border-radius:6px;padding:14px 18px;margin:10px 0;background:#fff;font-size:14.5px;line-height:1.8}
+.say .lbl{font-size:12px;color:var(--sub);letter-spacing:1px;margin-bottom:6px}
+.q{color:var(--blue);font-weight:600}
+.stage{display:flex;gap:0;margin:14px 0;font-size:13px}
+.stage .s{flex:1;border:1px solid var(--line);padding:10px 12px;background:#fff}
+.stage .s:not(:last-child){border-right:none}
+.stage .s b{display:block;font-size:13px;margin-bottom:3px}
+.stage .s span{color:var(--sub);font-size:12.5px;line-height:1.55;display:block}
+.stage .s em{font-style:normal;color:var(--blue);font-size:11.5px}
+hr{border:none;border-top:1px dashed var(--line);margin:24px 0}
+.foot{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);color:#999;font-size:12px}
+@page{size:A4;margin:13mm 12mm}
+@media print{
+  body{background:#fff;font-size:11pt}
+  .page{width:auto;box-shadow:none;padding:0}
+  h2{margin-top:18px}
+  .grid,.stage,table,.card,.box,.say{break-inside:avoid}
+}
+
+/* ===== MOBILE-OVERRIDE ===== */
+@media (max-width:760px){
+  .page,.wrap{width:100%!important;max-width:100%!important;box-shadow:none!important;padding:16px 13px 40px!important}
+  body{font-size:14px!important}
+  h1{font-size:21px!important;letter-spacing:-.3px}
+  h2{font-size:16.5px!important}
+  table{font-size:11.5px!important;table-layout:fixed!important}
+  th,td{padding:5px 6px!important;line-height:1.55!important}
+  th{white-space:normal!important}
+  .grid{grid-template-columns:1fr!important}
+  .flow,.stage{flex-direction:column!important}
+  .flow .step,.stage .s{border-right:1px solid var(--line,#e6e6e6)!important;border-bottom:none!important;margin-bottom:8px;border-radius:8px!important}
+  .script,.say{padding:12px 13px!important;font-size:13.5px!important}
+  .card{padding:11px 12px!important}
+  code,pre{white-space:pre-wrap!important;word-break:break-all}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>产品思维加分包 · 群面补充</h1>
+<div class="meta">腾讯 AI-HR 培训生群面备战补充｜依据：你提供的面经反馈「可能比较注重产品思维」｜通用备战材料，非官方口径</div>
+
+<div class="box b-blue">
+<p><b>先说结论：产品思维不是"会背产品黑话"，是回答的顺序变了。</b>普通人拿到题直接想"方案是什么"；有产品思维的人先问"这是谁的问题、痛在哪、值不值得解、怎么验证解对了"。<br>
+考官听你<b>先定义问题再给方案</b>、<b>给方案时敢说舍弃</b>、<b>收尾时主动上指标</b>，就能判断你有没有这层思维——不需要说出"用户画像""颗粒度"这类词。</p>
+</div>
+
+<h2>一、一个总框架：产品思维四步，替代"上来就给方案"</h2>
+
+<table>
+<tr><th>步骤</th><th>心里问自己</th><th>说出来的样子</th><th>没这步会怎样</th></tr>
+<tr><td><b>1. 定义用户</b><br><span class="src">谁的问题</span></td><td>这道题里谁是"用户"？分几类，谁最痛？</td><td>"这个方案的服务对象其实是两类人……核心痛点在中间那一类。"</td><td>方案没有主语，听起来像背模板</td></tr>
+<tr><td><b>2. 定义问题</b><br><span class="src">痛在哪</span></td><td>问题出在流程的哪一步？是"不知道"还是"做不到"？</td><td>"表面是投诉率高，实际是候选人不知道自己被淘汰了。"</td><td>解错题——答案再流畅也是零分</td></tr>
+<tr><td><b>3. 取舍排序</b><br><span class="src">MVP</span></td><td>资源有限，先做哪个、明确不做哪个？</td><td>"如果只能先做一件事，我先做告知链路，功能往后放。"</td><td>什么都想要，显得没经历过真实约束</td></tr>
+<tr><td><b>4. 验证闭环</b><br><span class="src">怎么知道对了</span></td><td>上线后看什么数？错了怎么退？</td><td>"我拿投诉率降到 2% 来验证这个改动，不达预期就回滚。"</td><td>方案是"抛出去的"，不是"负责任的"</td></tr>
+</table>
+
+<div class="box b-amber">
+<p><b>记忆口诀：谁痛 → 痛在哪 → 先解什么 → 怎么算解对了。</b>任何 AI-HR 题都能套这四步开场，30 秒内完成。</p>
+</div>
+
+<h2>二、把 HR 题翻译成产品题：一张对照表</h2>
+
+<p>面经说考产品思维，意思是<b>别把题当 HR 题答，要当产品题答</b>。翻译对照如下（以 AI 招聘、AI 面试题为主）：</p>
+
+<table>
+<tr><th>HR 世界的词</th><th>产品思维的词</th><th>用起来的样子</th></tr>
+<tr><td>候选人</td><td>用户（且要分层）</td><td>"落选的候选人是被忽略的用户，他们的体验决定雇主口碑。"</td></tr>
+<tr><td>招聘流程</td><td>用户旅程 / 漏斗</td><td>"我把候选人从投递到入职走一遍，每一站算一次流失。"</td></tr>
+<tr><td>简历被刷</td><td>转化损耗</td><td>"1% 的转化率意味着 99% 的用户'白来了'，这部分体验没人管。"</td></tr>
+<tr><td>投诉率</td><td>体验指标 / NPS 信号</td><td>"投诉是体验崩塌后的报警器，要往前追到'告知'这一环。"</td></tr>
+<tr><td>人才流失率</td><td>留存</td><td>"18% 流失就是留存问题，流失点大概率在 offer 等待的空窗期。"</td></tr>
+<tr><td>HR / 面试官</td><td>内部用户（B 端）</td><td>"这个工具的 B 端用户是面试官，他觉得不好用就不会用。"</td></tr>
+<tr><td>AI 工具</td><td>产品功能，是手段不是目的</td><td>"AI 不是答案，是降低边际成本的手段；先确认问题，再决定要不要 AI。"</td></tr>
+</table>
+
+<h2>三、群面五个环节，产品思维分别怎么露出</h2>
+
+<div class="stage">
+<div class="s"><b>读题（5min）</b><span>草稿纸上画一条横线当<b>用户旅程</b>，把题目里的数字标到对应环节上</span><em>动作比观点早一步</em></div>
+<div class="s"><b>轮流发言</b><span>不做第一个给方案的，做<b>第一个定义问题的</b>："大家方案都很好，我先对齐一下我们到底在解谁的问题"</span><em>一次就够，别抢戏</em></div>
+<div class="s"><b>头脑风暴</b><span>点子多了主动收："我建议按影响大小排个序，<b>先做能立刻上线的</b>"——把讨论从发散拉到取舍</span><em>MVP 意识最加分</em></div>
+<div class="s"><b>组内总结</b><span>总结里必须有取舍和指标："我们放弃了 X，因为 Y；验证看 Z 指标"</span><em>只复述不取舍=平庸总结</em></div>
+<div class="s"><b>汇报（3min）</b><span>结构=问题定义 → 方案主线 → 舍弃了什么 → 三个数。不回顾讨论过程</span><em>结论先行</em></div>
+</div>
+
+<div class="box b-green">
+<p><b>考官视角的加分瞬间</b>（面经里反复出现的信号）：<br>
+一，你在别人争论功能时说"我们先回到用户是谁"；二，你说"这个很好但优先级不高"；三，你说"这个数怎么算，口径是什么"；四，你承认"这个方案有风险，风险是 X，我们的兜底是 Y"。这四句话比任何产品名词都有说服力。</p>
+</div>
+
+<h2 class="pb">四、直接可用的产品思维句式（挑顺口的背 5 句）</h2>
+
+<div class="say">
+<div class="lbl">定义问题</div>
+<p>"在讨论方案之前，我想先花十秒确认我们解的是谁的什么问题——<q class="q">题目给的三个数字里，最刺眼的是 1% 的转化率</q>，我认为核心问题是越往后的环节越没有为'落选的大多数'做设计。"</p>
+</div>
+
+<div class="say">
+<div class="lbl">分层</div>
+<p>"用户不是一个整体。核心研发岗候选人和普通运营岗候选人，对响应速度的敏感度完全不一样——<q class="q">方案要给核心那一层开优先通道</q>。"</p>
+</div>
+
+<div class="say">
+<div class="lbl">MVP / 取舍</div>
+<p>"这些想法都对，但如果资源只够先做一个，我选告知链路——因为它同时改善投诉率和到面比，<q class="q">是性价比最高的一刀</q>；智能邀约可以放到二期。"</p>
+</div>
+
+<div class="say">
+<div class="lbl">数据闭环</div>
+<p>"每个改动我会配一个验收数：<q class="q">改告知，看投诉率；改约面，看到面比；改保温，看接受率</q>。指标不动，就说明这个改动是错的，要敢回滚。"</p>
+</div>
+
+<div class="say">
+<div class="lbl">AI 的产品观</div>
+<p>"我提醒一句，<q class="q">AI 在这套方案里是手段不是卖点</q>：它只在'人工边际成本高、规则可结构化'的环节有价值，比如筛简历和排面试；判断和决策这类环节硬上 AI，反而制造新的投诉。"</p>
+</div>
+
+<div class="say">
+<div class="lbl">风险与兜底</div>
+<p>"这个方案最大的风险是 AI 误杀，我们不回避它——<q class="q">排序不淘汰、人工复核、申诉通道</q>，三重兜底写进方案里，而不是出了事再补。"</p>
+</div>
+
+<h2>五、产品思维的三类高频追问，提前备好</h2>
+
+<table>
+<tr><th>追问</th><th>答题骨架</th><th>示例（AI 面试场景）</th></tr>
+<tr><td>"你这个方案的指标怎么定？"</td><td>先口径后目标：定义 → 基线 → 目标 → 分层看</td><td>"到面比 = 实到 ÷ 邀约，先拿上季度做基线，目标定相对提升幅度，核心岗单独看，不和普通岗混均值。"</td></tr>
+<tr><td>"用户说不好用，你怎么改？"</td><td>别急着改：先分群定位 → 看行为数据 → 小步验证</td><td>"先看是谁在说：都说不满和个别岗位不满，改法完全不同；再看到面比、完成率这些行为数据交叉验证，最后 A/B 小流量试，不拍脑袋全量改。"</td></tr>
+<tr><td>"AI 方案上错了怎么办？"</td><td>预设退出机制：灰度 → 回滚 → 人工兜底</td><td>"上线走灰度，一个岗位类先试；验收指标两周不达标就回滚；人工流程随时可切回，这是设计时就写进方案的，不是事后补救。"</td></tr>
+</table>
+
+<h2>六、最容易踩的坑：把产品思维背成产品黑话</h2>
+
+<div class="box b-red">
+<p><b>这些词慎用</b>：抓手、闭环（单独说）、赋能、颗粒度、组合拳、打法、心智、底层逻辑。<br>
+<b>替代方案</b>：说人话——"抓手"说成"最优先做的一件事"；"赋能业务"说成"让 HRBP 招人更快"；"闭环"要么配上具体机制（"抽检结果回灌模型，形成越用越准的循环"），要么不说。<br>
+<span class="src">原因：群面考官多为业务负责人，黑话密度高反而像没做过事。名词的含金量来自后面跟的那个具体例子。</span></p>
+</div>
+
+<h3>自检清单（发言前 3 秒过一遍）</h3>
+<ul>
+<li>我这句话里<b>有用户吗</b>？（候选人/面试官/HRBP，谁）</li>
+<li>我有没有说<b>先做什么、不做什么</b>？（没有取舍就不是方案）</li>
+<li>我的结论<b>能用一个数验证吗</b>？（说不出验证方式的建议是空的）</li>
+<li>我提 AI 的时候，<b>说清它是手段了吗</b>？（AI 解决"量大、重复、规则清楚"，不解决"判断"）</li>
+</ul>
+
+<div class="foot">
+本页为个人备战补充材料。"面经说注重产品思维"来自你提供的面经信息；四步框架、句式与建议值为个人整理，非腾讯官方口径。
+</div>
+
+</div>
+<script src="nav.js" defer></script>
+</body>
+</html>
