@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 全流程招聘优化 · 群面解题卡</title>
+<style>
+:root{
+  --ink:#1a1a1a; --sub:#666; --line:#e6e6e6; --bg:#fff;
+  --blue:#1e5eff; --blue-bg:#f0f5ff;
+  --red:#d93025; --red-bg:#fdf1f0;
+  --green:#0f7b3f; --green-bg:#f0f8f3;
+  --amber:#a35a00; --amber-bg:#fff8ec;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:#f7f7f8; color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.75;
+}
+.page{width:1080px;margin:0 auto;background:var(--bg);padding:44px 56px 60px;box-shadow:0 0 0 1px var(--line)}
+h1{font-size:26px;line-height:1.35;margin:0 0 6px;letter-spacing:-.3px}
+.meta{color:var(--sub);font-size:13px;margin-bottom:26px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+h2{font-size:18px;margin:38px 0 12px;padding-left:11px;border-left:4px solid var(--ink);line-height:1.3}
+h3{font-size:15px;margin:22px 0 8px}
+p{margin:8px 0}
+ul,ol{margin:8px 0;padding-left:22px}
+li{margin:4px 0}
+b{font-weight:600}
+.src{color:#8a8a8a;font-size:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:3px;vertical-align:1px;margin-left:6px;font-weight:500}
+.t-o{background:#eef2f7;color:#3d5a80}
+.t-j{background:#fdf1f0;color:#b3261e}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;table-layout:fixed}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top;word-break:break-word;line-height:1.6}
+th{background:#fafafa;font-weight:600;white-space:nowrap}
+td.n{font-variant-numeric:tabular-nums}
+.box{border-radius:6px;padding:14px 18px;margin:14px 0;font-size:14.5px}
+.box p:first-child{margin-top:0}
+.box p:last-child{margin-bottom:0}
+.b-red{background:var(--red-bg);border-left:3px solid var(--red)}
+.b-blue{background:var(--blue-bg);border-left:3px solid var(--blue)}
+.b-green{background:var(--green-bg);border-left:3px solid var(--green)}
+.b-amber{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.card{border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.card h4{margin:0 0 8px;font-size:14.5px;font-weight:600}
+.card .who{font-size:12px;color:var(--sub);font-weight:400;margin-left:6px}
+.card ul{padding-left:18px;margin:6px 0;font-size:14px}
+.flow{display:flex;align-items:stretch;gap:0;margin:14px 0;font-size:13px}
+.flow .step{flex:1;border:1px solid var(--line);padding:10px 12px;position:relative;background:#fff}
+.flow .step:not(:last-child){border-right:none}
+.flow .step b{display:block;font-size:13px;margin-bottom:3px}
+.flow .step span{color:var(--sub);font-size:12px;line-height:1.5;display:block}
+.flow .step em{font-style:normal;color:var(--blue);font-size:11px}
+.script{border:1px solid var(--ink);border-radius:6px;padding:18px 22px;margin:14px 0;background:#fff;font-size:14.5px;line-height:1.85}
+.script .lbl{font-size:12px;color:var(--sub);letter-spacing:1px;margin-bottom:8px}
+.script .q{color:var(--blue);font-weight:600}
+.kv{font-size:14px}
+.kv b{display:inline-block;min-width:76px}
+hr{border:none;border-top:1px dashed var(--line);margin:26px 0}
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:#999;font-size:12px}
+@page{size:A4;margin:14mm 12mm}
+@media print{
+  body{background:#fff;font-size:11pt}
+  .page{width:auto;box-shadow:none;padding:0}
+  h2{margin-top:20px}
+  .grid,.flow,table,.card,.box{break-inside:avoid}
+  .script{break-inside:avoid}
+  .pill{white-space:nowrap}
+  .pb{break-before:page}
+}
+
+/* ===== MOBILE-OVERRIDE ===== */
+@media (max-width:760px){
+  .page,.wrap{width:100%!important;max-width:100%!important;box-shadow:none!important;padding:16px 13px 40px!important}
+  body{font-size:14px!important}
+  h1{font-size:21px!important;letter-spacing:-.3px}
+  h2{font-size:16.5px!important}
+  table{font-size:11.5px!important;table-layout:fixed!important}
+  th,td{padding:5px 6px!important;line-height:1.55!important}
+  th{white-space:normal!important}
+  .grid{grid-template-columns:1fr!important}
+  .flow,.stage{flex-direction:column!important}
+  .flow .step,.stage .s{border-right:1px solid var(--line,#e6e6e6)!important;border-bottom:none!important;margin-bottom:8px;border-radius:8px!important}
+  .script,.say{padding:12px 13px!important;font-size:13.5px!important}
+  .card{padding:11px 12px!important}
+  code,pre{white-space:pre-wrap!important;word-break:break-all}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>AI 全流程招聘优化 · 群面解题卡</h1>
+<div class="meta">腾讯 AI-HR 培训生（沟通方向）· 10/29 17:00 群面备战｜题库来源：用户提供真题（角色扮演型设计方案题）</div>
+
+<div class="box b-blue">
+<p><b>这道题的本质不是"上几个 AI 工具"，是"在 150 个名额、四个互相拉扯的角色、四维约束下，把一条 21 天的流水线重排一遍，并且给每个环节安上能算的指标"。</b></p>
+<p>考官看三件事：一， 你有没有真的把角色诉求当约束（不是走过场）；二，你的方案是不是长在流程上（而不是罗列 AI 功能）；三，收尾有没有落到周期、到面比、满意度这三个数。<br>
+<span class="src">说明：本卡中"题目给定"的数字全部来自你贴的题干；凡属我的推算/建议值，均标"建议值"，访谈与面经里的说法标来源。</span></p>
+</div>
+
+<h2>一、先算清盘子：这题的数字决定方案取舍</h2>
+
+<table>
+<colgroup><col style="width:15%"><col style="width:19%"><col style="width:24%"><col style="width:42%"></colgroup>
+<tr><th>项</th><th>题目给定</th><th>由此可推</th><th>对方案的含义</th></tr>
+<tr><td class="n">简历总量</td><td class="n">15,000 份<br>（正式 9,000 / 实习 6,000）</td><td class="n">单岗位类均摊 5,000 份</td><td>筛简历是最大的人工黑洞，<b>AI 初筛优先度最高</b></td></tr>
+<tr><td class="n">录用总量</td><td class="n">150 人（正式 100 + 实习留用 50）</td><td class="n">简历→录用 <b>1%</b></td><td>漏斗极窄，<b>越往后越不能"多面"</b>，后面每一环都要设淘汰闸</td></tr>
+<tr><td class="n">现周期</td><td class="n">21 天</td><td class="n">建议压到 <b>12～14 天</b>（建议值）</td><td>21→13 天约省 38%，是能对外承诺、又不吹牛的量级</td></tr>
+<tr><td class="n">核心岗人才流失率</td><td class="n">18%</td><td class="n">—</td><td>"流失"多半发生在<b>等结果的空窗期</b>，所以"响应速度"是硬指标，不是体验锦上添花</td></tr>
+<tr><td class="n">投诉率</td><td class="n">7%</td><td class="n">约 1,050 人次/季（按简历量粗估，非投诉口径）</td><td>投诉=可解释性缺失，指向<b>告知与申诉机制</b></td></tr>
+<tr><td class="n">到面比</td><td class="n">未给</td><td class="n">要先定义：<b>到面人数 ÷ 邀约人数</b>（建议口径，会上第一句就把口径定死）</td><td>口径不统一，后面所有指标都是空谈——这一句能直接拿分</td></tr>
+</table>
+
+<div class="box b-amber">
+<p><b>会上第一句可以这么起：</b>"我先把三个指标的口径对齐，否则我们讨论半天算的不是一件事：周期我按<u>简历首投到 offer 发出</u>算，到面比按<u>实到 ÷ 邀约</u>算，满意度按<u>候选人 NPS 加投诉率</u>一起看。口径定了，我们再看流程哪里卡。"</p>
+</div>
+
+<h2>二、四个角色的真实诉求，和它们的冲突点</h2>
+
+<div class="grid">
+<div class="card">
+<h4>① 业务线 HRBP<span class="who">要人，要快要准</span></h4>
+<ul>
+<li><b>核心诉求：</b>核心技术岗别断档，招聘周期短、候选人质量不降</li>
+<li><b>最怕：</b>AI 把好简历误杀——"漏掉一个就是我业务缺人"</li>
+<li><b>会让步的地方：</b>可以接受流程标准化、可以接受多一轮测评，但要求<b>核心岗保留人工终审</b></li>
+</ul>
+</div>
+<div class="card">
+<h4>② 候选人体验代表<span class="who">要尊重，要透明</span></h4>
+<ul>
+<li><b>核心诉求：</b>每一步都知道自己在哪、什么时候有结果；被拒也能知道大概为什么</li>
+<li><b>最怕：</b>对着机器说话、被算法判死还没处说理、长期"简历沉底"</li>
+<li><b>会让步的地方：</b>能接受 AI 初面，但要求<b>可转人工、可申诉、告知 AI 参与</b></li>
+</ul>
+</div>
+<div class="card">
+<h4>③ 校招运营负责人<span class="who">要能复用，要降本</span></h4>
+<ul>
+<li><b>核心诉求：</b>一套流程明年还能用、换岗位还能用；人力成本可量化下降；峰值扛得住</li>
+<li><b>最怕：</b>为这一次定制一堆一次性工具，明年重来；系统上线即崩</li>
+<li><b>会让步的地方：</b>愿意分阶段上线、愿意先在一个岗位类试点</li>
+</ul>
+</div>
+<div class="card">
+<h4>④ 合规 &amp; 雇主品牌<span class="who">要不出事，要口碑</span></h4>
+<ul>
+<li><b>核心诉求：</b>个人信息合规、算法不歧视、决策可解释可追溯；负面舆情零发生</li>
+<li><b>最怕：</b>AI 筛简历被曝出偏见（性别/院校/地域），一次舆情把雇主品牌打穿</li>
+<li><b>会让步的地方：</b>不反对 AI，但要求<b>人工兜底条款 + 数据审计留痕</b></li>
+</ul>
+</div>
+</div>
+
+<p><b>冲突就三组，讨论时不要躲：</b></p>
+<table>
+<colgroup><col style="width:16%"><col style="width:16%"><col style="width:32%"><col style="width:36%"></colgroup>
+<tr><th>冲突</th><th>双方</th><th>可谈成的解</th><th>话术要点</th></tr>
+<tr><td>效率 vs 质量</td><td>运营 ↔ HRBP</td><td>AI 只做<b>排序不做淘汰</b>；核心岗 Top 段必进人工</td><td>"AI 给的是顺序，不是判决。前 30% 直接进面，后 70% 保留人工抽检，抽检还能反过来校准模型。"</td></tr>
+<tr><td>自动化 vs 体验</td><td>运营 ↔ 体验代表</td><td>全流程节点自动触达 + 一键转人工</td><td>"AI 省下来的时间，第一时间花在'给每个人回一句话'上。"</td></tr>
+<tr><td>数据使用 vs 合规</td><td>运营/HRBP ↔ 合规</td><td>最小必要采集 + 敏感字段不喂模型 + 全程留痕</td><td>"模型只看跟岗位相关的能力项，学校和性别这两栏根本不进模型。"</td></tr>
+</table>
+
+<h2>三、流程重排：七环节，每环"AI 做什么 / 人做什么 / 卡什么指标"</h2>
+
+<table>
+<colgroup><col style="width:15%"><col style="width:32%"><col style="width:28%"><col style="width:25%"></colgroup>
+<tr><th>环节</th><th>AI 做什么</th><th>人做什么（不能交出去的）</th><th>这个环节的指标</th></tr>
+<tr>
+<td><b>① 需求对齐</b><br><span class="src">JD结构化</span></td>
+<td>把业务口述的用人要求结构化成能力项与权重，自动生成岗位画像</td>
+<td>HRBP 签字确认权重（哪个能力是一票否决）</td>
+<td>JD 一次确认率</td>
+</tr>
+<tr>
+<td><b>② 简历初筛</b><br><span class="src">量最大的一环</span></td>
+<td>解析 15,000 份简历，按能力项打分、分档（强/中/弱），自动去重与硬性条件过滤</td>
+<td>抽检每档样本；<b>核心研发岗前 30% 必须人工复核</b></td>
+<td>筛选准确率、单份处理时长、漏筛率</td>
+</tr>
+<tr>
+<td><b>③ 测评/初面</b></td>
+<td>异步 AI 初面 + 在线测评，自动出结构化评价（不是"感觉不错"）</td>
+<td>设计题目与评分维度；抽查低分样本</td>
+<td>测评完成率、AI 评分与人工评分一致性</td>
+</tr>
+<tr>
+<td><b>④ 复面安排</b></td>
+<td>自动约面、自动改期、自动催到场、冲突时段智能排</td>
+<td>面试官时间协调（这是人的活）</td>
+<td><b>到面比</b>、约面一次成功 rate</td>
+</tr>
+<tr>
+<td><b>⑤ 面试评价</b></td>
+<td>面试记录转写、按维度出面试纪要、提示追问方向</td>
+<td><b>决策由人做</b>，AI 只做记录与提醒</td>
+<td>面试官评价完整率、单场用时</td>
+</tr>
+<tr>
+<td><b>⑥ 背调录用</b></td>
+<td>资料核验、材料齐全度检查、offer 模板生成</td>
+<td>背调结论由人签、异常由人判</td>
+<td>offer 发出时效、核验差错率</td>
+</tr>
+<tr>
+<td><b>⑦ 入职保温</b><br><span class="src">对18%流失</span></td>
+<td>offer 后定期触达、入职前答疑、报到提醒</td>
+<td>直属主管主动联系（AI 不能替代）</td>
+<td><b>offer 接受率、报到率</b></td>
+</tr>
+</table>
+
+<div class="box b-green">
+<p><b>为什么这么排能压周期：</b>21 天里真正卡的是两类时间——<b>等人工筛简历</b>和<b>等面试官凑时间</b>。这两块占了绝大头（属常识判断，会上可以说"按经验"）。所以 AI 要打的位置很明确：<b>②筛和④排</b>。其他环节动它就只是锦上添花，说服力反而弱。</p>
+</div>
+
+<h2 class="pb">四、三大量化指标：现状 → 目标 → 怎么算</h2>
+
+<table>
+<colgroup><col style="width:12%"><col style="width:13%"><col style="width:22%"><col style="width:27%"><col style="width:26%"></colgroup>
+<tr><th>指标</th><th>题目现状</th><th>目标（建议值）</th><th>靠什么环节达成</th><th>口径与备注</th></tr>
+<tr><td><b>招聘周期</b></td><td class="n">21 天</td><td class="n">≤13天</td><td>②初筛（省 3～4 天）+ ④约面（省 3～4 天）</td><td>简历首投 → offer 发出；分岗位类分别看，核心研发单独定</td></tr>
+<tr><td><b>到面比</b></td><td class="n">题目未给</td><td class="n">到面≥85%</td><td>④自动触达 + 改期 + 提醒；体验代表的告知机制</td><td>实到 ÷ 邀约；这是体验和效率<b>共同</b>的指标，容易形成共识</td></tr>
+<tr><td><b>满意度</b></td><td class="n">投诉率7%</td><td class="n">投诉率≤2%<br>NPS≥40</td><td>全流程告知 + 申诉通道 + 被拒反馈</td><td>投诉率按"每千名候选人投诉件数"统一口径</td></tr>
+<tr><td><b>人才质量</b></td><td class="n">流失率 18%</td><td class="n">合格率不降<br>试用流失≤12%</td><td>⑥⑦ 保温 + 人岗匹配</td><td>质量与效率是会打架的，必须有一个"不降"的守门指标</td></tr>
+<tr><td><b>合规</b></td><td class="n">—</td><td class="n">偏见审计无重大项<br>申诉全部有回音</td><td>人工兜底 + 留痕 + 审计</td><td>合规没有"提升"，只有"不发生"</td></tr>
+</table>
+
+<h2>五、落地与迭代：怎么让人相信"可复用、可动态迭代"</h2>
+
+<div class="flow">
+<div class="step"><b>第一阶段</b><span>选一个岗位类试点<br>（建议研发）</span><em>跑通 ②④</em></div>
+<div class="step"><b>第二阶段</b><span>扩到产品、运营<br>同一套模板换权重</span><em>验证可复用</em></div>
+<div class="step"><b>第三阶段</b><span>全流程贯通<br>加 ⑥⑦ 保温</span><em>收口三指标</em></div>
+<div class="step"><b>迭代机制</b><span>每轮招聘后<br>用人工抽检结果回校模型</span><em>形成闭环</em></div>
+</div>
+
+<p><b>三条"可复用"的具体做法</b>（别只说"可复用"三个字，要说出是什么）：</p>
+<ul>
+<li><b>模板化：</b>能力项、权重、评分卡做成配置，换岗位只改配置不改代码。</li>
+<li><b>数据回灌：</b>每轮把"AI 判错"的样本人工标注后回灌，下一轮准确率上升——这是唯一能自证越用越准的方式。</li>
+<li><b>版本留痕：</b>每次改规则留版本号，出了争议能倒查"当时用的是哪版"。</li>
+</ul>
+
+<h2>六、风险清单（合规方最会追问的四处）</h2>
+<table>
+<colgroup><col style="width:32%"><col style="width:68%"></colgroup>
+<tr><th>风险</th><th>怎么破</th></tr>
+<tr><td>算法偏见（院校、性别、地域）</td><td>这些字段<b>不进模型</b>；按群体做通过率差异审计，差异超阈值就调规则并留档</td></tr>
+<tr><td>个人信息合规</td><td>最小必要采集、明确告知用途、保存期限到期清理；简历仅用于本次招聘</td></tr>
+<tr><td>AI 误杀好苗子</td><td>人工抽检 + 申诉通道 + 核心岗前 30% 必人工复核</td></tr>
+<tr><td>候选人反感"和机器说话"</td><td>开场明确告知 AI 参与环节；随时可转人工；AI 初面控制时长并给即时反馈</td></tr>
+</table>
+
+<hr>
+
+<h2>七、发言脚本（按顺序说，约 2 分钟）</h2>
+
+<div class="script">
+<div class="lbl">开场 · 定口径（20 秒）</div>
+<p>"我先花半分钟把口径对齐，不然我们算的不是一件事：周期按简历首投到 offer 发出，到面比按实到除以邀约，满意度我们用投诉率加 NPS 一起看。<span class="src">（落笔在纸上写下来，主持人会注意到你在做结构化动作）</span>"</p>
+
+<div class="lbl">拆题 · 找病灶（30 秒）</div>
+<p>"这道题的信息量其实很集中：<b>15,000 份简历、150 个名额、1% 的转化率</b>，而周期是 21 天。这意味着两件事：一，人工筛简历这一环是最大的时间黑洞；二，越往后越不能多面，后面每一环都得有淘汰闸。<br>
+我判断 21 天主要烧在两个地方：<b>筛简历</b>和<b>等面试官凑时间</b>，AI 应该优先打这两处，其他地方是锦上添花。"</p>
+
+<div class="lbl">接角色 · 化冲突（35 秒）</div>
+<p>"四个角色我理解下来是两组对抗：<b>HRBP 要快但更怕漏，合规要稳但怕出事</b>，运营和体验代表则在自动化和人情味之间拉。<br>
+我提一个能同时满足的解法：<b>AI 只做排序，不做淘汰</b>。前 30% 直接进面，后 70% 保留人工抽检，抽检的错例反过来校准模型。核心研发岗的终审一定留给人——这一句是给 HRBP 的，也是给合规的。"</p>
+
+<div class="lbl">落方案 · 给指标（35 秒）</div>
+<p>"具体七环，我重点讲变化最大的三环：筛简历从人工翻变成机器分档加人工抽检；约面从一个个打电话变成自动约、自动改、自动催；offer 之后加保温触达，直接对着 18% 的流失率打。<br>
+指标我建议三个主数加两个守门数：<b>周期 21 天压到 13 天，到面比做到 85% 以上，投诉率从 7% 降到 2% 以内</b>；守门的是<b>转正合格率不降</b>和<b>合规零重大项</b>——效率可以谈，质量不能降。"</p>
+</div>
+
+<h2>八、可能被反问的三问</h2>
+<div class="box b-red">
+<p><b>Q1「AI 筛简历会不会把好苗子筛掉？」</b><br>
+先认这个风险是真的，再说解法：所以我不做"淘汰"只做"排序"，并且设三重兜底——前 30% 必进面、后 70% 抽检、候选人可申诉。<b>而且漏筛率我会当成核心指标盯着</b>，不是上线就不管了。</p>
+<p><b>Q2「150 个名额花这么多钱搭系统，划算吗？」</b><br>
+这笔账不按这一次算，按复用算：15,000 份简历如果人工筛，按每人次几分钟算就是几百个工时；更关键的是这套配置明年春招、秋招、社招都能用，边际成本趋零。<b>如果只做一次，确实不划算，所以我的方案第一阶段只在一个岗位类试点。</b></p>
+<p><b>Q3「怎么保证这不是纸上方案？」</b><br>
+三阶段上线、每阶段有验收指标；试点阶段就要拿到两个数：单份简历处理时长、约面一次成功率。拿不到就说明这环不该上 AI。</p>
+</div>
+
+<h2>九、这题最容易丢分的地方</h2>
+<ul>
+<li><b>把方案讲成 AI 功能清单</b>（智能筛选、AI 面试、聊天机器人…）——考官要的是流程重排，不是产品选型。</li>
+<li><b>角色扮演走过场</b>：只念一遍四个角色名字，不说他们彼此哪里冲突。这题的重点就在冲突怎么解。</li>
+<li><b>指标只报数不给口径</b>："周期降到 10 天"——10 天从哪算到哪？口径一说清，专业度立刻不一样。</li>
+<li><b>忘了 1% 转化率</b>：这是全题最有信息量的数字，用它去论证"后面环节不能多面"，比任何形容词都有用。</li>
+<li><b>抢着当总结者却说不出取舍</b>：总结必须包含"我们放弃了什么"，比如"我们放弃了全流程无人化，因为核心岗的信任成本太高"。</li>
+</ul>
+
+<div class="foot">
+本卡为个人备战材料，非官方口径。题目数字均引自用户提供的真题题干；目标值与流程建议为个人推算，已在文中标注"建议值"。
+</div>
+
+</div>
+<script src="nav.js" defer></script>
+</body>
+</html>
