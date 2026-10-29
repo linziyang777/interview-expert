@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>群面倒计时</title>
+<style>
+:root{
+  --ink:#111; --sub:#8a8a8a; --line:#e8e8e8; --bg:#fff;
+  --run:#1e5eff; --warn:#c77700; --over:#d93025; --idle:#c9c9c9;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{
+  background:#f5f5f7;color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:22px;overflow:hidden;transition:background .4s;
+}
+body.st-over{background:#fdf2f1}
+.wrap{width:100%;max-width:860px}
+
+/* 顶部阶段条 */
+.steps{display:flex;gap:8px;margin-bottom:26px}
+.step{
+  flex:1;border-radius:10px;padding:10px 12px;background:#fff;border:1px solid var(--line);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.step .nm{font-size:13px;font-weight:600;color:#b0b0b0;transition:color .3s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step .du{font-size:11px;color:#c9c9c9;margin-top:2px}
+.step .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--run);transition:width .3s linear}
+.step.done{border-color:#dfe9ff;background:#f7faff}
+.step.done .nm{color:#6b90e0}
+.step.done .bar{background:#c3d5f7;width:100%!important}
+.step.on{border-color:var(--run);background:#fff;box-shadow:0 6px 20px rgba(30,94,255,.13)}
+.step.on .nm{color:var(--ink)}
+.step.on .du{color:var(--run)}
+
+/* 主计时 */
+.main{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px 34px 24px;
+  box-shadow:0 10px 40px rgba(0,0,0,.05);transition:border-color .4s,box-shadow .4s;
+}
+body.st-run .main{border-color:#d8e3ff}
+body.st-warn .main{border-color:#ffe0b0;box-shadow:0 10px 40px rgba(199,119,0,.12)}
+body.st-over .main{border-color:#f5c6c2;box-shadow:0 10px 40px rgba(217,48,37,.12)}
+
+.hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+.now{font-size:15px;font-weight:600;letter-spacing:.5px}
+.now em{font-style:normal;color:var(--sub);font-weight:400;font-size:13px;margin-left:8px}
+.wall{font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
+
+.time{
+  font-size:clamp(92px,19vw,180px);line-height:1;font-weight:200;letter-spacing:-4px;
+  font-variant-numeric:tabular-nums;text-align:center;margin:10px 0 22px;
+  color:var(--run);transition:color .3s;
+}
+body.st-idle .time{color:#d0d0d0}
+body.st-warn .time{color:var(--warn)}
+body.st-over .time{color:var(--over);animation:blink 1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:.35}}
+
+
+.ctrl{display:flex;gap:10px;margin-top:6px}
+button{
+  font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;border-radius:10px;
+  border:1px solid var(--line);background:#fff;color:var(--ink);padding:12px 18px;
+  transition:all .15s;flex:1;white-space:nowrap;
+}
+button:hover{border-color:#ccc;background:#fafafa}
+button:disabled{opacity:.45;cursor:not-allowed;background:#fff}
+button:disabled:hover{border-color:var(--line);background:#fff}
+button:active{transform:scale(.985)}
+button.primary{background:var(--ink);color:#fff;border-color:var(--ink);flex:1.6}
+button.primary:hover{background:#333}
+button.primary.warn{background:var(--over);border-color:var(--over)}
+button.ghost{flex:.85;color:var(--sub)}
+
+/* 总进度 */
+.total{margin-top:18px}
+.total .row{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-bottom:6px;font-variant-numeric:tabular-nums}
+.total .track{height:6px;border-radius:3px;background:#e9e9ee;overflow:hidden;display:flex}
+.total .fill{height:100%;background:var(--run);transition:width .3s linear}
+.total .seg{height:100%;border-right:2px solid #f5f5f7}
+
+@media (max-width:640px){
+  body{padding:16px 14px;justify-content:flex-start;padding-top:13vh}
+  .steps{gap:5px}
+  .step{padding:7px 8px;border-radius:8px}
+  .step .nm{font-size:11px}
+  .step .du{display:none}
+  .main{padding:20px 18px 18px;border-radius:14px}
+  .time{letter-spacing:-2px}
+  .ctrl{gap:7px}
+  button{padding:12px 6px;font-size:13.5px;border-radius:9px}
+  button.primary{flex:1.25}
+  button.ghost{flex:1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="steps" id="steps"></div>
+
+  <div class="main">
+    <div class="hd">
+      <div class="now" id="nowName">准备开始<em id="nowDu"></em></div>
+      <div class="wall" id="wall">--:--</div>
+    </div>
+    <div class="time" id="time">05:00</div>
+    <div class="ctrl">
+      <button class="primary" id="btnMain">开始</button>
+      <button class="ghost" id="btnNext">下一环节 &rarr;</button>
+      <button class="ghost" id="btnReset">重置</button>
+    </div>
+  </div>
+
+  <div class="total">
+    <div class="row"><span>全场进度</span><span id="totTxt">0:00 / 38:00</span></div>
+    <div class="track" id="track"></div>
+  </div>
+
+</div>
+
+<script>
+const PHASES = [
+  {name:"阅读思考", sec:5*60},
+  {name:"轮流发言", sec:10*60},
+  {name:"头脑风暴", sec:15*60},
+  {name:"组内总结", sec:5*60},
+  {name:"汇报",     sec:3*60},
+];
+const TOTAL = PHASES.reduce((a,b)=>a+b.sec,0);
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,"0");
+const fmt = s => pad(Math.floor(Math.abs(s)/60)) + ":" + pad(Math.abs(s)%60);
+
+let idx = 0, left = PHASES[0].sec, running = false, tid = null, finished = false;
+
+// 构建阶段条
+function buildSteps(){
+  $("steps").innerHTML = PHASES.map((p,i)=>`
+    <div class="step" data-i="${i}">
+      <div class="nm">${p.name}</div>
+      <div class="du">${Math.round(p.sec/60)} 分钟</div>
+      <div class="bar"></div>
+    </div>`).join("");
+}
+function buildTrack(){
+  $("track").innerHTML = PHASES.map(p=>`<div class="seg" style="flex:${p.sec}"></div>`).join("");
+}
+
+let acc = 0; // 已消耗的场次时间（用于总进度）
+function render(){
+  const p = PHASES[idx];
+  const over = left < 0;
+  const st = over ? "over" : (!running && left === p.sec ? "idle" : (left <= 30 && running ? "warn" : "run"));
+  document.body.className = "st-" + st;
+
+  $("time").textContent = (over ? "+" : "") + fmt(left);
+  $("nowName").innerHTML = (idx+1) + ". " + p.name + `<em>${Math.round(p.sec/60)} 分钟</em>`;
+  $("btnMain").textContent = over ? "超时 · 暂停" : (running ? "暂停" : (left === p.sec ? "开始" : "继续"));
+  $("btnMain").classList.toggle("warn", over);
+
+  document.querySelectorAll(".step").forEach((el,i)=>{
+    el.classList.toggle("on", i === idx);
+    el.classList.toggle("done", i < idx);
+    if (i === idx){
+      const used = p.sec - Math.max(left,0);
+      el.querySelector(".bar").style.width = Math.min(100, used/p.sec*100) + "%";
+    }
+  });
+
+  // 总进度
+  let before = PHASES.slice(0,idx).reduce((a,b)=>a+b.sec,0);
+  let used = before + (p.sec - Math.max(left,0));
+  $("totTxt").textContent = fmt(Math.min(used,TOTAL)) + " / " + fmt(TOTAL);
+  const segs = document.querySelectorAll(".seg");
+  segs.forEach((el,i)=>{
+    const s0 = PHASES.slice(0,i).reduce((a,b)=>a+b.sec,0);
+    const ratio = Math.max(0, Math.min(1, (used - s0) / PHASES[i].sec));
+    el.style.background = ratio > 0 ? (i === idx ? "var(--run)" : "#9db9f5") : "#e9e9ee";
+    el.style.flex = PHASES[i].sec;
+  });
+  // 用遮罩式填充更准：整体 fill 宽度
+  $("wall").textContent = new Date().toTimeString().slice(0,5);
+}
+
+function tick(){
+  left -= 1;
+  if (left === 0) beep(2);
+  if (left === -1) beep(1);
+  render();
+}
+
+function start(){
+  if (running || finished) return;
+  running = true;
+  clearInterval(tid);
+  tid = setInterval(tick, 1000);
+  if (left === PHASES[idx].sec) beep(2);
+  render();
+}
+function pause(){
+  running = false; clearInterval(tid); tid = null; render();
+}
+function toggle(){ running ? pause() : start(); }
+
+function next(){
+  if (finished) return;
+  if (idx >= PHASES.length - 1){
+    pause();
+    finished = true; left = 0; idx = PHASES.length - 1;
+    $("time").textContent = "完成";
+    $("time").style.color = "#c9c9c9";
+    document.body.className = "st-done";
+    $("nowName").textContent = "全部走完";
+    $("btnMain").textContent = "已结束";
+    $("btnMain").disabled = true;
+    $("btnNext").disabled = true;
+    $("btnMain").classList.remove("warn");
+    document.querySelectorAll(".step").forEach(el=>{
+      el.classList.add("done"); el.classList.remove("on");
+      el.querySelector(".bar").style.width = "100%";
+    });
+    $("totTxt").textContent = fmt(TOTAL) + " / " + fmt(TOTAL);
+    document.querySelectorAll(".seg").forEach(el=>{ el.style.background = "#9db9f5"; });
+    beep(2);
+    return;
+  }
+  idx += 1;
+  left = PHASES[idx].sec;
+  beep(3);
+  running = false; clearInterval(tid); tid = null;
+  render();
+}
+function reset(){
+  pause();
+  finished = false;
+  idx = 0; left = PHASES[0].sec;
+  $("time").style.color = "";
+  $("btnMain").disabled = false;
+  $("btnNext").disabled = false;
+  render();
+}
+
+// 提示音（不用音频文件，WebAudio 生成短促两声）
+let ac = null;
+function beep(times){
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    for (let i=0;i<times;i++){
+      const t = ac.currentTime + i*0.22;
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = "sine"; o.frequency.value = i === times-1 ? 880 : 660;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.22, t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.18);
+      o.connect(g); g.connect(ac.destination);
+      o.start(t); o.stop(t+0.2);
+    }
+  }catch(e){}
+}
+
+document.addEventListener("keydown", e=>{
+  if (e.code === "Space"){ e.preventDefault(); toggle(); }
+  else if (e.code === "ArrowRight"){ e.preventDefault(); next(); }
+  else if (e.key === "r" || e.key === "R"){ reset(); }
+});
+$("btnMain").onclick = toggle;
+$("btnNext").onclick = next;
+$("btnReset").onclick = reset;
+
+buildSteps(); buildTrack(); render();
+setInterval(()=>{ $("wall").textContent = new Date().toTimeString().slice(0,5); }, 5000);
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
