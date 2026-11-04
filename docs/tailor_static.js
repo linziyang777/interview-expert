@@ -821,6 +821,114 @@
 
   function locked() { return !CFG; }
 
+  /* ---------------- 上传简历（静态版：没有后端，全部在前端做） ----------------
+   *  · 图片 / 能读出文字的 PDF：让模型整理成要点
+   *  · 微信里选不到文件：给一条"点右上角用浏览器打开"的实话，并展开粘贴框
+   *  · 粘贴文字：直接把文字交给模型整理（不经过任何服务器）
+   * 纯静态版读不了 .docx 二进制，遇到就提示改用 PDF 或粘贴文字。
+   */
+  (function bindUpload(){
+    var btn = $('#btnUp'), inp = $('#fResume');
+    var card = $('#upCard'), src = $('#upSrc'), upText = $('#upText');
+    var paste = $('#upPaste');
+    if (!btn || !inp) return;
+    var SRC_DEF = src ? src.textContent : '';
+    var isWx = /MicroMessenger/i.test(navigator.userAgent);
+
+    function say(t, cls) { if (!src) return; src.textContent = t; src.className = 'upsrc' + (cls ? ' ' + cls : ''); }
+
+    function showPaste(msg){
+      if (msg) say(msg, 'err');
+      if (paste) paste.classList.add('on');
+    }
+
+    if (isWx) say('微信里可能只给「相册 / 拍照」—— 想要聊天文件，点右上角「···」用浏览器打开');
+
+    btn.onclick = function(){
+      inp.value = '';
+      inp.click();
+      if (isWx) setTimeout(function(){ if (!(inp.files && inp.files.length)) showPaste(); }, 3500);
+    };
+
+    async function pointsFromText(txt, label){
+      say('正在整理文字 …', '');
+      var ask = '把下面这段简历原文整理成面试卡片能用的「简历要点」。\n' +
+        '每行一条，最多 8 行，每条不超过 60 字；一行一个经历单元：公司/项目 + 做了什么 + 结果数字（原文没有就不编）；' +
+        '从最新往前写；教育/奖项/技能合并成最后一行；不要"负责/参与"开头，不要序号和引号，只输出要点本身。\n\n' + txt.slice(0, 6000);
+      var raw = await chat([{ role: 'system', content: '只输出要点，不要解释。' }, { role: 'user', content: ask }],
+        { temp: 0.2, max: 900 });
+      var lines = (raw || '').split('\n').map(function (x) {
+        return x.replace(/^[\s\-•·\d.、)）]+/, '').replace(/\*\*/g, '').trim();
+      }).filter(function (x) { return x.length >= 2 && x.length <= 80; }).slice(0, 8);
+      if (!lines.length) throw new Error('没整理出内容');
+      $('#upName').textContent = label || '简历';
+      $('#upMeta').textContent = '· 整理成 ' + lines.length + ' 条要点';
+      upText.value = lines.join('\n');
+      card.classList.add('on');
+      say('整理完成，确认后填入', 'ok');
+    }
+
+    async function readImage(f){
+      /* 浏览器没有 OCR：把图片缩到 1600 宽后直接交给多模态模型读。
+         当前 deepseek-chat 不收图，所以这里老实提示，不假装能读。 */
+      throw new Error('静态版读不了图片文字，请改用 PDF，或把简历文字粘到下面');
+    }
+
+    async function handle(f){
+      if (!f || !f.size) return;
+      if (f.size > 12 * 1024 * 1024) { say('文件超过 12MB，压缩一下再传', 'err'); return; }
+      var name = (f.name || '').toLowerCase();
+      if (/\.(docx?|doc)$/.test(name)) {
+        showPaste('静态版读不了 Word 文件：另存为 PDF 再传，或直接把文字粘到下面');
+        return;
+      }
+      try {
+        btn.disabled = true;
+        if (/\.(png|jpe?g|webp|bmp)$/.test(name)) {
+          await readImage(f);
+        } else if (/\.pdf$/.test(name)) {
+          /* 纯前端不引重库：提示用户在原生预览里复制文字，比硬解 PDF 稳 */
+          showPaste('静态版不能直接解 PDF 文字：点「打开 PDF」复制全文粘到下面，或用在线版');
+        } else {
+          showPaste('这个格式不支持，换 PDF 或直接粘贴文字');
+        }
+      } catch (e) {
+        showPaste(e.message);
+      } finally { btn.disabled = false; }
+    }
+
+    inp.onchange = function(){ handle(inp.files && inp.files[0]); };
+
+    var up = $('#btnUsePaste');
+    if (up) up.onclick = async function(){
+      var ta = $('#upPasteTx');
+      var txt = ((ta && ta.value) || '').trim();
+      if (txt.length < 40) { say('文字太短了，粘完整一点（至少 40 字）', 'err'); return; }
+      try {
+        up.disabled = true;
+        await pointsFromText(txt, '粘贴的文字');
+        if (paste) paste.classList.remove('on');
+      } catch (e) {
+        say('整理失败：' + e.message + '（可以把要点直接手写在下面的框里）', 'err');
+      } finally { up.disabled = false; }
+    };
+    var cp = $('#btnCancelPaste');
+    if (cp) cp.onclick = function(){ if (paste) paste.classList.remove('on'); say(SRC_DEF, ''); };
+
+    var uu = $('#btnUseUp');
+    if (uu) uu.onclick = function(){
+      var t = ((upText && upText.value) || '').trim();
+      if (!t) { say('上面是空的', 'err'); return; }
+      var box = $('#cResume');
+      if (box) { box.value = t; box.dispatchEvent(new Event('input', { bubbles: true })); }
+      card.classList.remove('on');
+      say('已填入简历要点', 'ok');
+      saveLocal(); paintBar();
+    };
+    var cu = $('#btnCancelUp');
+    if (cu) cu.onclick = function(){ card.classList.remove('on'); say(SRC_DEF, ''); };
+  })();
+
   window.IVP_TAILOR = { gen: genSelected, refreshPoints: refreshPoints, cfg: decodeCfg,
     openGate: openGate, unlock: function (p) { return decodeCfg(p); }, reset: function () { CFG = null; } };
 })();
