@@ -86,6 +86,14 @@
     .me-btn{padding:3px}
     .me-chip{font-size:11px;padding:4px 8px;letter-spacing:.3px}
     .session{font-size:12px;padding:3px 10px}
+    /* 弹层锚在屏幕右上、限宽不超出视口：头像在小屏上离右边只有十几像素，
+       原来 288px 定宽弹层会顶到左边缘外 */
+    .me-pop{position:fixed;right:10px;left:10px;top:auto;width:auto;max-width:none;
+      padding:13px 14px}
+    .me-row input{font-size:16px}          /* iOS 低于 16px 会自动放大页面 */
+  }
+  @media(max-width:380px){
+    .me-chip{font-size:10.5px;padding:3px 6px}
   }
 
   /* ---- 历史记录 ---- */
@@ -126,7 +134,20 @@
   nav button{
     font-family:inherit;font-size:14px;font-weight:600;color:var(--sub);cursor:pointer;
     background:none;border:none;padding:10px 15px;border-bottom:2.5px solid transparent;
-    margin-bottom:-1px;transition:color .15s}
+    margin-bottom:-1px;transition:color .15s;white-space:nowrap;flex:none}
+  /* 手机上 6 个标签 + 小标题塞不进一行：把「总册 / 新窗」这类小标注藏掉，
+     字号和内边距压一档，让 6 个标签在 360px 屏也一次排完，不用横向划 */
+  @media(max-width:640px){
+    nav{gap:0;margin-top:12px;justify-content:space-between}
+    nav button{padding:10px 4px;font-size:13.5px;letter-spacing:-.2px;flex:0 1 auto;
+      position:relative}
+    nav button .n{display:none}
+    /* 每个标签等宽分配：6 个标签在 390/360/320 都刚好铺满，不用划 */
+    nav button{flex:1 1 0;padding-left:0;padding-right:0;text-align:center}
+  }
+  @media(max-width:380px){
+    nav button{padding:10px 2px;font-size:12.8px}
+  }
   nav button:hover{color:var(--ink)}
   nav button.on{color:var(--blue);border-color:var(--blue)}
   nav button .n{font-size:11px;font-weight:500;color:var(--faint);margin-left:4px}
@@ -292,6 +313,14 @@
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239ca3af'/></svg>");
     background-repeat:no-repeat;background-position:right 11px center}
   .fld select:focus{border-color:var(--blue);background-color:#fff}
+  /* 手机上输入框字号低于 16px，iOS 一聚焦就自动放大整页，填一个字段要手动缩回去。
+     视觉不变大多少，但彻底止住这个跳变 */
+  @media(max-width:640px){
+    .fld input,.fld textarea,.upcard textarea{font-size:16px!important}
+    .fld select{font-size:15px!important}
+    .fld input,.fld select{padding:10px 11px}
+    .fld textarea{padding:10px 11px}
+  }
   .fld .sub{font-size:11.5px;color:var(--faint);margin-top:4px;line-height:1.5}
   .uprow{display:flex;align-items:center;gap:8px;margin:-2px 0 6px}
   .upbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:600;
@@ -343,6 +372,7 @@
   .qset .qt{font-size:13px;font-weight:600;margin-bottom:6px}
   .qset .qi{display:flex;align-items:center;gap:7px;font-size:12.8px;color:#4b5563;margin:4px 0}
   .qset .qi input{width:14px;height:14px;accent-color:var(--sage-d)}
+  .qset .qi label{line-height:1.55}
   .qset .qi .cp{font-size:11px;color:#9ca3af;border:1px solid var(--line2);border-radius:5px;
     padding:0 6px;cursor:pointer;background:#fff}
   .qset .qi .cp:hover{color:var(--sage-d);border-color:#93b4f5}
@@ -392,15 +422,13 @@
 
   @media (max-width:860px){
     .grid,.reader,.custom{grid-template-columns:1fr}
-    .doclist{position:static;flex-direction:row;flex-wrap:wrap}
+    .doclist{position:static;flex-direction:row;flex-wrap:wrap;gap:7px}
     .doclist button{flex:1 1 45%}
+    .doclist .dsep,.doclist a.dl{flex:1 1 100%}
     .framebox iframe{height:62vh}
     h1{font-size:20px}
     header{padding:18px 0 0}
     .session{font-size:12px;padding:3px 10px}
-    nav{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-    nav::-webkit-scrollbar{display:none}
-    nav button{white-space:nowrap;flex:none;padding:10px 12px;font-size:13.5px}
     .flow{font-size:12.5px;padding:10px 12px;gap:6px}
     .card{padding:13px 15px 12px}
     .card p{font-size:13px}
@@ -408,6 +436,52 @@
     .frameview .br,.frameview .root{font-size:12px;padding:5px 9px}
     .record{font-size:13px}
     footer{padding-bottom:30px}
+  }
+
+  /* ---- 手机（≤640）：按钮给够点击高度、编辑器高度按屏幕算 ---- */
+  @media (max-width:640px){
+    .wrap{padding:0 14px}
+    .acts{gap:7px}
+    .acts button,.acts a{padding:9px 14px;min-height:40px;display:inline-flex;align-items:center}
+    .recacts button{min-height:38px}
+    .th-acts .pri,.th-dl{padding:12px 16px;flex:1 1 auto;text-align:center}
+    .th-acts{flex-wrap:wrap}
+    .th-l{padding:20px 17px}
+    .th-l h2{font-size:19px}
+    .th-l p{font-size:13.2px;line-height:1.8}
+    .th-r{padding:15px 16px}
+    .emptybox{padding:28px 20px;margin:14px auto}
+    .roombar{flex-wrap:wrap;gap:6px}
+    .roombar .rb-k{flex:none}
+    .roombar .rb-sp{display:none}
+    .roombar .rb-a{margin-left:auto}
+    /* 稿子内置 iframe：手机竖屏按视口高度封顶，别一屏塞不下又得滚两层 */
+    #docFrame,#frameFrame{height:min(72vh,620px)!important}
+    .framebox iframe{height:min(72vh,620px)}
+    /* 定制页：左边表单结束后，历史/清单/结果紧跟其后，间距拉开一点 */
+    .custom{gap:14px}
+    .form{margin-bottom:2px}
+    .qhint{font-size:12px;line-height:1.7}
+    .gen{padding:14px;font-size:15px}
+    .hist-body{max-height:none}
+    /* 勾题：14px 的框在手机上很容易点偏。整行都能点（label 绑了同一道题），
+       框放大到 18px，「填到下面」也给到 28px 高 */
+    .qset{padding:10px 11px}
+    .qset .qi{align-items:flex-start;gap:9px;margin:0;padding:7px 0;
+      border-top:1px solid #f3efe7}
+    .qset .qi:first-of-type{border-top:none}
+    .qset .qi input{width:18px;height:18px;flex:none;margin:1px 0 0}
+    .qset .qi .cp{flex:none;padding:4px 8px;min-height:26px;display:inline-flex;
+      align-items:center;font-size:11.5px;margin-top:-2px}
+    .me-code{font-size:15px}
+    /* 隐藏滚动条引起的溢出，但保留横向手势 */
+    body{overflow-x:hidden}
+  }
+
+  @media (max-width:380px){
+    .wrap{padding:0 12px}
+    h1{font-size:19px}
+    .me-chip{display:none}          /* 极窄屏：码收进头像面板里，避免和标题抢位 */
   }
 
 
