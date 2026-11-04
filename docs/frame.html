@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>贴题出框架 · XMind</title>
+<style>
+  /* 与总台同一套暖白 + 鼠尾草绿配色 */
+  :root{
+    --bg:#faf7f2; --panel:#fffdf9; --line:#e8e1d6; --line2:#d9d0c1;
+    --ink:#2b2724; --sub:#6d635a; --faint:#a2978a;
+    --sage:#5f7f6a; --sage-d:#4a6553; --sage-bg:#eef3ee; --sage-bd:#cfdcd1;
+    --clay:#b9713f; --clay-d:#a2603a; --clay-bg:#fbeee4; --clay-bd:#eccfb8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.65;
+    font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+    font-size:14px}
+  header{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);
+    background:var(--panel);flex-wrap:wrap;position:sticky;top:0;z-index:10}
+  header h1{margin:0;font-size:15px;font-weight:800;letter-spacing:-.2px}
+  header .tag{font-size:11px;font-weight:700;color:var(--sage-d);background:var(--sage-bg);
+    border:1px solid var(--sage-bd);border-radius:20px;padding:1px 9px}
+  .sp{flex:1}
+  header button{font-family:inherit;font-size:12.5px;cursor:pointer;border:1px solid var(--line2);
+    background:#fff;color:var(--ink);border-radius:8px;padding:6px 12px}
+  header button:hover{border-color:var(--faint)}
+  header button.pri{background:var(--clay);border-color:var(--clay);color:#fff}
+  header button.pri:hover{background:var(--clay-d)}
+  header button.ghost{border-style:dashed;color:var(--sub)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:16px 18px 40px;
+    display:grid;grid-template-columns:minmax(320px,0.9fr) 1.1fr;gap:16px;align-items:start}
+  @media(max-width:860px){ .wrap{grid-template-columns:1fr} }
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 17px}
+  .card h2{margin:0 0 4px;font-size:14px;font-weight:700}
+  .card .sub{font-size:12px;color:var(--faint);margin:0 0 12px;line-height:1.6}
+  label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin:12px 0 5px}
+  textarea,select{width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);background:#fff;
+    border:1px solid var(--line2);border-radius:9px;padding:9px 11px;line-height:1.7;resize:vertical}
+  textarea:focus,select:focus{outline:none;border-color:var(--sage);background:#fff}
+  textarea{min-height:150px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .go{width:100%;margin-top:14px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+    background:var(--clay);color:#fff;border:none;border-radius:9px;padding:11px;transition:.15s}
+  .go:hover{background:var(--clay-d)}
+  .hint{font-size:11.5px;color:var(--faint);margin-top:9px;line-height:1.65}
+  .hint b{color:var(--sage-d)}
+
+  .prev{min-height:340px}
+  .tree{font-size:13.5px}
+  .node{margin:0;padding-left:0;list-style:none}
+  .node .n{position:relative;padding:5px 0 5px 0}
+  .lvl0>.n{font-size:15px;font-weight:800;color:var(--ink);padding-bottom:8px;
+    border-bottom:1px solid var(--line);margin-bottom:6px}
+  .lvl1{margin:2px 0 2px 0;padding-left:16px;border-left:2px solid var(--sage-bd)}
+  .lvl1>.n{font-weight:700;color:var(--sage-d)}
+  .lvl2{margin-left:2px;padding-left:15px;border-left:1px dashed var(--line2)}
+  .lvl2>.n{color:var(--sub);font-size:13px}
+  .lvl1>.n::before{content:"";position:absolute;left:-17px;top:14px;width:9px;height:2px;background:var(--sage-bd)}
+  .lvl2>.n::before{content:"";position:absolute;left:-16px;top:14px;width:9px;height:1px;background:var(--line2)}
+  .empty{color:var(--faint);font-size:13px;padding:36px 0;text-align:center;line-height:1.9}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#3f3a34;color:#fff;
+    font-size:13px;font-weight:600;border-radius:10px;padding:9px 16px;opacity:0;pointer-events:none;
+    transition:opacity .2s;z-index:99}
+  .toast.on{opacity:1}
+  .meta{font-size:11.5px;color:var(--faint);margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>贴题出框架</h1>
+  <span class="tag">导出 XMind</span>
+  <span class="sp"></span>
+  <button class="ghost" onclick="window.close()">关闭窗口</button>
+  <button onclick="copyOutline()">复制大纲</button>
+  <button onclick="download('mm')" title="XMind：文件 → 导入 → FreeMind">.mm</button>
+  <button onclick="download('opml')" title="XMind：文件 → 导入 → OPML">.opml</button>
+  <button class="pri" onclick="download('xmind')" title="双击即可用 XMind 打开">下载 .xmind</button>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>把题目贴进来</h2>
+    <p class="sub">群面材料、单面题、JD 都行。选一个框架类型，生成后可以再改。</p>
+
+    <label>题目 / 材料原文</label>
+    <textarea id="q" placeholder="例如：某类目近三个月动销率持续下滑，供给数量不少但成交集中。请讨论诊断原因并给出 90 天提升方案。"></textarea>
+
+    <div class="row2">
+      <div>
+        <label>框架类型</label>
+        <select id="kind">
+          <option value="general">通用四步（最稳）</option>
+          <option value="group">群面讨论</option>
+          <option value="product">产品 / 功能设计</option>
+          <option value="data">数据分析 / 指标排查</option>
+          <option value="self">自我介绍</option>
+        </select>
+      </div>
+      <div>
+        <label>根节点名称</label>
+        <input id="root" placeholder="留空则自动取题目首句"
+          style="width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);background:#fff;
+          border:1px solid var(--line2);border-radius:9px;padding:9px 11px">
+      </div>
+    </div>
+
+    <button class="go" onclick="build()">生成框架</button>
+    <div class="hint">
+      <b>推荐下载 .xmind</b>：这是 XMind 自己的文件类型，装过 XMind 的电脑<b>双击就直接打开</b>，不用再导入。<br>
+      <b>.mm / .opml</b> 是通用交换格式，系统一般没关联，双击只会用浏览器打开源码 —— 需要在 XMind 里「文件 → 导入 → FreeMind / OPML」。老版本 XMind（8 及以前）打不开 .xmind 时，用这两个兜底。<br>
+      连文件都不想存：点右上「复制大纲」，在 XMind 画布里直接粘贴，会自动分层。
+    </div>
+  </div>
+
+  <div class="card prev">
+    <h2>框架预览</h2>
+    <p class="sub" id="prevSub">左边填完点「生成框架」，这里出树。</p>
+    <div id="tree" class="tree">
+      <div class="empty">还没有框架<br><span style="font-size:12px">贴一道题试试</span></div>
+    </div>
+    <div class="meta" id="meta"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ------------------------------------------------------------------
+   框架模板：每个类型 = 几个一级分支，每个分支带提示点。
+   刻意不用模型：贴题→出图要的是「立刻」，规则模板 0.1 秒出结果、
+   离线可用、结构稳定，比等 20 秒生成更符合这个页面的用途。
+   ------------------------------------------------------------------ */
+var TPL = {
+  general: [
+    {t:'① 破题：这题到底在问什么', s:[
+      '任务：要产出什么（方案 / 判断 / 排序）',
+      '对象：对谁做，用户是谁',
+      '约束：时间、预算、人力、不能碰的红线'
+    ]},
+    {t:'② 拆解：拆成能算的几块', s:[
+      '主公式：结果 = A × B × C（写成乘法）',
+      '每块现状：哪个环节最弱（要有数）',
+      '先打哪块：投入产出最高的那一块'
+    ]},
+    {t:'③ 动作：先做什么再做什么', s:[
+      '第一步（一周内）：验证判断，小成本试',
+      '第二步（一个月）：铺开，配资源',
+      '怎么衡量做对了：过程指标 + 结果指标'
+    ]},
+    {t:'④ 收口：一句话结论', s:[
+      '核心判断：一句话说清你选哪条路',
+      '最大风险 + 兜底方案',
+      '需要谁配合：资源 / 权限 / 排期'
+    ]}
+  ],
+  group: [
+    {t:'① 读题：先把任务钉死', s:[
+      '要产出什么：方案 / 排序 / 建议',
+      '几人几分钟：时间怎么分配',
+      '评分点：谁在听什么（逻辑 / 协作 / 推进）'
+    ]},
+    {t:'② 定标准：按什么排优先级', s:[
+      '选哪几个维度（不超过 3 个）',
+      '每个维度怎么打分',
+      '标准先说出来，别自己闷头算'
+    ]},
+    {t:'③ 分工与推进', s:[
+      '谁记时、谁记观点、谁最后汇报',
+      '第一轮：每人 30 秒给结论',
+      '卡住时：提议投票或收敛到两个方案'
+    ]},
+    {t:'④ 分歧处理', s:[
+      '先认同对方合理处，再补条件',
+      '用数据/标准收敛，不用音量',
+      '实在不合：保留意见，按多数推进'
+    ]},
+    {t:'⑤ 结论：说清三件事', s:[
+      '方案是什么（一句话）',
+      '为什么是它（两条理由）',
+      '怎么验证（一个指标）'
+    ]}
+  ],
+  product: [
+    {t:'① 用户与场景', s:[
+      '谁：具体到一类人，不说"所有用户"',
+      '什么时候用：触发场景',
+      '现在怎么凑合解决的'
+    ]},
+    {t:'② 痛点与验证', s:[
+      '痛点有多痛：频率 × 强度',
+      '证据：数据 / 访谈 / 客服记录',
+      '不做会怎样'
+    ]},
+    {t:'③ 方案与取舍', s:[
+      '核心功能：只解决那一个痛点',
+      '砍掉什么：明确说不做什么',
+      '和现有功能怎么衔接'
+    ]},
+    {t:'④ 落地', s:[
+      '依赖谁：研发 / 运营 / 商家',
+      '节奏：MVP 先上哪一半',
+      '风险：最可能死在哪'
+    ]},
+    {t:'⑤ 指标', s:[
+      '北极星指标：一个，带分子分母',
+      '护栏指标：别把什么搞坏了',
+      '多久看一次，看什么数'
+    ]}
+  ],
+  data: [
+    {t:'① 先对齐口径', s:[
+      '这个指标怎么算：分子 / 分母',
+      '统计范围：哪些算、哪些不算',
+      '和谁的口径不一样'
+    ]},
+    {t:'② 拆指标', s:[
+      '乘法拆：GMV = 用户 × 频次 × 客单',
+      '加法拆：总量 = A 类 + B 类 + C 类',
+      '找贡献度最大的那一项'
+    ]},
+    {t:'③ 定位异常', s:[
+      '什么时候开始掉的（时间点）',
+      '谁在掉（分渠道 / 分人群 / 分品类）',
+      '同期有什么变化（版本 / 活动 / 竞对）'
+    ]},
+    {t:'④ 假设与验证', s:[
+      '列 3 个假设，按可能性排序',
+      '每个假设怎么证伪（一个查询）',
+      '排除掉的写下来，别重复猜'
+    ]},
+    {t:'⑤ 结论与动作', s:[
+      '根因一句话',
+      '短期止血动作',
+      '长期机制（怎么不再犯）'
+    ]}
+  ],
+  self: [
+    {t:'① 一句话定位', s:[
+      '我是谁 + 最相关的一段经历',
+      '落到这个岗位的关键词',
+      '不超过 30 字'
+    ]},
+    {t:'② 两段证据', s:[
+      '第一段：做了什么 → 结果（带数）',
+      '第二段：换了个场景也能复用',
+      '每段只讲一个动作，别铺开'
+    ]},
+    {t:'③ 为什么是这家', s:[
+      '对这家业务的一个具体判断',
+      '我的哪段经历刚好对上',
+      '不说"平台大、能学到东西"'
+    ]},
+    {t:'④ 收口', s:[
+      '我能带来什么（一句话）',
+      '留一个钩子给追问',
+      '停住，别补充'
+    ]}
+  ]
+};
+
+var BUILT = null;
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function rootName(){
+  var r = (document.getElementById('root').value || '').trim();
+  if(r) return r;
+  var q = (document.getElementById('q').value || '').trim().replace(/\s+/g,' ');
+  if(!q) return '这道题';
+  var cut = q.split(/[。！？；\n]/)[0];
+  return cut.length > 22 ? cut.slice(0,22) + '…' : cut;
+}
+
+function build(){
+  var q = (document.getElementById('q').value || '').trim();
+  var kind = document.getElementById('kind').value;
+  if(q.length < 4){ toast('先把题目贴进来'); document.getElementById('q').focus(); return; }
+  var tpl = TPL[kind] || TPL.general;
+  var root = rootName();
+
+  BUILT = { root: root, branches: tpl.map(function(b){
+    return { t: b.t, children: b.s.slice() };
+  })};
+
+  var html = '<ul class="node lvl0"><div class="n">' + esc(root) + '</div>';
+  BUILT.branches.forEach(function(b){
+    html += '<li><ul class="node lvl1"><div class="n">' + esc(b.t) + '</div>';
+    b.children.forEach(function(c){
+      html += '<li><ul class="node lvl2"><div class="n">' + esc(c) + '</div></ul></li>';
+    });
+    html += '</ul></li>';
+  });
+  html += '</ul>';
+  document.getElementById('tree').innerHTML = html;
+  document.getElementById('prevSub').textContent =
+    '按「' + document.getElementById('kind').selectedOptions[0].textContent + '」拆的，共 '
+    + BUILT.branches.length + ' 个分支、'
+    + BUILT.branches.reduce(function(a,b){ return a + b.children.length; }, 0) + ' 个提示点。';
+  document.getElementById('meta').textContent =
+    '改完题目再点一次「生成框架」即可覆盖；导出用右上角按钮。';
+}
+
+/* 缩进大纲：粘进 XMind 画布会自动分层 */
+function outlineText(){
+  if(!BUILT) return '';
+  var L = [BUILT.root];
+  BUILT.branches.forEach(function(b){
+    L.push('\t' + b.t);
+    b.children.forEach(function(c){ L.push('\t\t' + c); });
+  });
+  return L.join('\n');
+}
+
+function copyOutline(){
+  if(!BUILT){ toast('先生成框架'); return; }
+  var txt = outlineText();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast('已复制，去 XMind 里粘贴'); },
+      function(){ fallbackCopy(txt); });
+  } else fallbackCopy(txt);
+}
+
+function fallbackCopy(txt){
+  var ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); toast('已复制，去 XMind 里粘贴'); }
+  catch(e){ toast('复制失败，手动选中吧'); }
+  document.body.removeChild(ta);
+}
+
+function xmlEsc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+/* FreeMind .mm —— XMind：文件 → 导入 → FreeMind */
+function toMM(){
+  var b = BUILT, out = ['<map version="1.0.1">'];
+  out.push('<node TEXT="' + xmlEsc(b.root) + '">');
+  b.branches.forEach(function(br){
+    out.push('<node TEXT="' + xmlEsc(br.t) + '">');
+    br.children.forEach(function(c){
+      out.push('<node TEXT="' + xmlEsc(c) + '"/>');
+    });
+    out.push('</node>');
+  });
+  out.push('</node></map>');
+  return out.join('\n');
+}
+
+/* OPML —— XMind 也认 */
+function toOPML(){
+  var b = BUILT, out = ['<?xml version="1.0" encoding="UTF-8"?>',
+    '<opml version="2.0"><head><title>' + xmlEsc(b.root) + '</title></head><body>'];
+  out.push('<outline text="' + xmlEsc(b.root) + '">');
+  b.branches.forEach(function(br){
+    out.push('<outline text="' + xmlEsc(br.t) + '">');
+    br.children.forEach(function(c){ out.push('<outline text="' + xmlEsc(c) + '"/>'); });
+    out.push('</outline>');
+  });
+  out.push('</outline></body></opml>');
+  return out.join('\n');
+}
+
+/* ===================================================================
+   生成 .xmind（原生格式，双击就能用 XMind 打开）
+   -------------------------------------------------------------------
+   .mm / .opml 是「交换格式」：系统一般没关联，双击只会用浏览器打开源码，
+   必须去 XMind 里手动「文件 → 导入」。而 .xmind 是 XMind 自己的文件类型，
+   装了 XMind 的电脑双击就打开，省一步。
+   .xmind 本质是 zip：content.json + metadata.json，这里手写一个
+   store 模式的 zip（不压缩），不引入任何第三方库，离线也能用。
+   =================================================================== */
+var CRC_TABLE = (function(){
+  var t = new Uint32Array(256);
+  for(var n = 0; n < 256; n++){
+    var c = n;
+    for(var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+
+function crc32(u8){
+  var c = 0xFFFFFFFF;
+  for(var i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+
+/* files: [{name:'content.json', data:'字符串'}] → zip Blob（store，无压缩） */
+function zipStore(files){
+  var enc = new TextEncoder();
+  var parts = [], central = [], offset = 0;
+  var d = new Date();
+  var dosTime = ((d.getHours() << 11) | (d.getMinutes() << 5) | Math.floor(d.getSeconds() / 2)) & 0xFFFF;
+  var dosDate = (((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate()) & 0xFFFF;
+
+  files.forEach(function(f){
+    var name = enc.encode(f.name);
+    var data = (typeof f.data === 'string') ? enc.encode(f.data) : f.data;
+    var crc = crc32(data);
+
+    var lh = new Uint8Array(30 + name.length);
+    var dv = new DataView(lh.buffer);
+    dv.setUint32(0, 0x04034b50, true);   // local file header
+    dv.setUint16(4, 20, true);           // version needed
+    dv.setUint16(6, 0x0800, true);       // UTF-8 flag
+    dv.setUint16(8, 0, true);            // method: store
+    dv.setUint16(10, dosTime, true);
+    dv.setUint16(12, dosDate, true);
+    dv.setUint32(14, crc, true);
+    dv.setUint32(18, data.length, true);
+    dv.setUint32(22, data.length, true);
+    dv.setUint16(26, name.length, true);
+    dv.setUint16(28, 0, true);
+    lh.set(name, 30);
+    parts.push(lh, data);
+
+    var ch = new Uint8Array(46 + name.length);
+    var dv2 = new DataView(ch.buffer);
+    dv2.setUint32(0, 0x02014b50, true);  // central directory
+    dv2.setUint16(4, 20, true);
+    dv2.setUint16(6, 20, true);
+    dv2.setUint16(8, 0x0800, true);
+    dv2.setUint16(10, 0, true);
+    dv2.setUint16(12, dosTime, true);
+    dv2.setUint16(14, dosDate, true);
+    dv2.setUint32(16, crc, true);
+    dv2.setUint32(20, data.length, true);
+    dv2.setUint32(24, data.length, true);
+    dv2.setUint16(28, name.length, true);
+    dv2.setUint16(30, 0, true);          // extra
+    dv2.setUint16(32, 0, true);          // comment
+    dv2.setUint16(34, 0, true);          // disk
+    dv2.setUint16(36, 0, true);          // internal attr
+    dv2.setUint32(38, 0, true);          // external attr
+    dv2.setUint32(42, offset, true);     // local header offset
+    ch.set(name, 46);
+    central.push(ch);
+
+    offset += lh.length + data.length;
+  });
+
+  var cdSize = central.reduce(function(a, b){ return a + b.length; }, 0);
+  var eocd = new Uint8Array(22);
+  var dv3 = new DataView(eocd.buffer);
+  dv3.setUint32(0, 0x06054b50, true);
+  dv3.setUint16(8, files.length, true);
+  dv3.setUint16(10, files.length, true);
+  dv3.setUint32(12, cdSize, true);
+  dv3.setUint32(16, offset, true);
+  return new Blob(parts.concat(central, [eocd]), {type: 'application/vnd.xmind.workbook'});
+}
+
+var _seq = 0;
+function tid(){ _seq++; return 'x' + Date.now().toString(36) + _seq.toString(36); }
+
+function topic(title, kids){
+  var t = {id: tid(), class: 'topic', title: title};
+  if(kids && kids.length){
+    t.children = {attached: kids.map(function(k){ return {id: tid(), class: 'topic', title: k}; })};
+  }
+  return t;
+}
+
+function toXMind(){
+  var b = BUILT;
+  var root = topic(b.root, null);
+  root.structureClass = 'org.xmind.ui.logic.right';
+  root.children = {attached: b.branches.map(function(br){ return topic(br.t, br.children); })};
+
+  var content = [{
+    id: 'sheet-1',
+    class: 'sheet',
+    title: '画布 1',
+    rootTopic: root
+  }];
+  var metadata = {
+    creator: {name: '面试专家 · 贴题出框架', version: '1.0'},
+    activeSheetId: 'sheet-1',
+    dataStructureVersion: '2',
+    layoutEngineVersion: '3'
+  };
+  var manifest = {'file-entries': {'content.json': {}, 'metadata.json': {}}};
+
+  return zipStore([
+    {name: 'content.json',  data: JSON.stringify(content)},
+    {name: 'metadata.json', data: JSON.stringify(metadata)},
+    {name: 'manifest.json', data: JSON.stringify(manifest)}
+  ]);
+}
+
+function download(kind){
+  if(!BUILT){ toast('先生成框架'); return; }
+  var name = BUILT.root.replace(/[\\/:*?"<>|]/g, '').slice(0, 24) || '框架';
+  var a = document.createElement('a');
+  var blob, ext;
+
+  if(kind === 'xmind'){
+    blob = toXMind();
+    ext = '.xmind';
+  } else {
+    var isMM = kind === 'mm';
+    ext = isMM ? '.mm' : '.opml';
+    blob = new Blob([isMM ? toMM() : toOPML()],
+      {type: isMM ? 'text/xml;charset=utf-8' : 'text/x-opml;charset=utf-8'});
+  }
+
+  a.href = URL.createObjectURL(blob);
+  a.download = name + ext;
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+
+  toast(kind === 'xmind'
+    ? '已下载 .xmind —— 双击它就能用 XMind 打开'
+    : (kind === 'mm' ? '已下载 .mm —— XMind：文件 → 导入 → FreeMind'
+                     : '已下载 .opml —— XMind：文件 → 导入 → OPML'));
+}
+
+var toastT = null;
+function toast(msg){
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ el.classList.remove('on'); }, 2600);
+}
+
+document.getElementById('q').addEventListener('keydown', function(e){
+  if((e.metaKey || e.ctrlKey) && e.key === 'Enter') build();
+});
+</script>
+</body>
+</html>
