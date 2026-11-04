@@ -22,6 +22,14 @@
   var LS_ITEMS = 'ivpStaticItems';
   var LS_PASS = 'ivpPass';
 
+  /* ===================== 口令模式（要改就改这两行） =====================
+   * 'auto' → 打开页面就用下面的口令直连模型，不弹框（会消耗你的额度）。
+   * 'ask'  → 每次生成前手动输口令，不输就不调用模型。
+   * 觉得消耗快，把 PASS_MODE 改成 'ask' 重新上传本文件即可。
+   * ==================================================================== */
+  var PASS_MODE = 'auto';
+  var DEFAULT_PASS = 'ziyang-1029';
+
   /* ---------------- 配置解密（要口令） ---------------- */
   var CFG = null;
   var PASS = '';
@@ -70,6 +78,7 @@
     var token = window.IVP_CFG;
     if (!token) throw new Error('缺少 config.enc.js，先跑 build_secure_config.py 并上传');
     pass = pass || PASS || loadPass();
+    if (!pass && PASS_MODE === 'auto') pass = DEFAULT_PASS;      // 自动模式：不用用户输
     if (!pass) { openGate(); throw new Error('还没输入口令'); }
     try {
       CFG = await fernetOpen(token, await deriveRaw(pass));
