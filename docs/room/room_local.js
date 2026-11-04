@@ -26,6 +26,16 @@
   var SALT = 'ivp-2026-10-29|v2', ITER = 200000, LS_PASS = 'ivpPass';
   var sessions = {};       // 内存里的会话表
 
+  /* ===================== 口令模式（要改就改这两行） =====================
+   * 'auto' → 打开页面就用下面的口令直连模型，不弹框。换句话说：一进考场就在花你的额度。
+   * 'ask'  → 每次打开都手动输口令，不输只用固定剧本、零消耗。
+   * 觉得消耗快，把 PASS_MODE 改成 'ask' 重新上传本文件即可。
+   * ==================================================================== */
+  var PASS_MODE = 'auto';
+  var DEFAULT_PASS = 'ziyang-1029';
+  var readyResolve;
+  var READY_P = new Promise(function (r) { readyResolve = r; });
+
   /* ---------------- 配置解密（与 tailor_static.js 一致） ---------------- */
   function b64d(s) {
     s = s.replace(/-/g, '+').replace(/_/g, '/');
@@ -60,6 +70,7 @@
     var token = window.IVP_CFG;
     if (!token) throw new Error('缺少 config.enc.js');
     pass = pass || sessionStorage.getItem(LS_PASS) || localStorage.getItem(LS_PASS) || '';
+    if (!pass && PASS_MODE === 'auto') pass = DEFAULT_PASS;      // 自动模式：不需要用户输
     if (!pass) { var e0 = new Error('还没输口令'); e0.code = 'PASS'; throw e0; }
     CFG = await fernetOpen(token, await deriveRaw(pass));
     return CFG;
@@ -311,9 +322,10 @@
       return {
         job: META.job, doc: META.doc, topics: META.topics, personas: META.personas,
         dims: META.dims, checks: META.checks, questions: META.questions,
-        interviewers: (P && P.interviewerPersonas) || [], soloChecks: (P && P.soloChecks) || [],
+        interviewers: META.interviewers || (P && P.interviewerPersonas) || [],
+        soloChecks: META.soloChecks || (P && P.soloChecks) || [],
         mode: CFG ? 'live' : 'static',
-        model: CFG ? '浏览器直连' : '未解锁（走本地剧本）'
+        model: CFG ? ((CFG && CFG.model) || 'AI') : '固定剧本'
       };
     },
 
@@ -610,13 +622,32 @@
   var READY = !!(META && META.topics && META.topics.length);
 
   if (READY && installFetch()) {
-    /* 没口令就先问一次；用户选"先用本地的"就不再来烦 */
-    var hasPass = false;
-    try { hasPass = !!(sessionStorage.getItem(LS_PASS) || localStorage.getItem(LS_PASS)); } catch (e) {}
-    if (hasPass) { try { decodeCfg(); } catch (e) {} }
-    else if (!sessionStorage.getItem('ivpGateSkipped')) {
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { gate(); });
-      else gate();
+    /* 先自己试着解锁一遍：auto 模式直接内置口令，成功就静默进直连模式；
+       只有失败（口令改了/浏览器不支持 crypto）才弹框，并可回退固定剧本。 */
+    if (PASS_MODE === 'auto') {
+      decodeCfg().then(function () {
+        try { sessionStorage.setItem(LS_PASS, DEFAULT_PASS); } catch (e) {}
+        readyResolve(true);
+        console.log('[模拟考场] 已自动解锁，AI 直连模式（会消耗 API 额度）');
+        if (window.ROOM_LOCAL && window.ROOM_LOCAL.onUnlock) try { window.ROOM_LOCAL.onUnlock(); } catch (e) {}
+      }).catch(function (err) {
+        readyResolve(false);
+        console.warn('[模拟考场] 自动解锁失败：', err && err.message);
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () { gate('自动解锁没成功（口令可能改过了），输一次就行。'); });
+        } else gate('自动解锁没成功（口令可能改过了），输一次就行。');
+      });
+    } else {
+      var saved = '';
+      try { saved = sessionStorage.getItem(LS_PASS) || localStorage.getItem(LS_PASS) || ''; } catch (e) {}
+      if (saved) decodeCfg().then(function () { readyResolve(true); }).catch(function () { readyResolve(false); gate(); });
+      else {
+        readyResolve(false);
+        if (!sessionStorage.getItem('ivpGateSkipped')) {
+          if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { gate(); });
+          else gate();
+        }
+      }
     }
     document.addEventListener('click', function once() {
       if (!CFG) { try { sessionStorage.setItem('ivpGateSkipped', '1'); } catch (e) {} }
@@ -625,6 +656,7 @@
 
     console.log('[模拟考场] 本地引擎已接管，接口走浏览器内实现');
   } else {
+    readyResolve(false);
     console.warn('[模拟考场] 没读到 meta.json，走真实后端');
   }
 
@@ -674,6 +706,13 @@
     setTimeout(function () { inp.focus(); }, 100);
   }
 
-  window.ROOM_LOCAL = { ready: READY, unlock: decodeCfg, routes: ROUTES, gate: gate,
-    unlocked: function () { return !!CFG; } };
+  window.ROOM_LOCAL = {
+    ready: READY_P,                 // Promise<boolean>：自动解锁是否成功
+    passMode: PASS_MODE,
+    unlock: decodeCfg,
+    routes: ROUTES,
+    gate: gate,
+    unlocked: function () { return !!CFG; },
+    onUnlock: null                  // 页面自己挂：解锁成功后重绘状态胶囊
+  };
 })();
