@@ -6,12 +6,26 @@
 <title>定制生成 · 面试专家（离线版）</title>
 <style>
 
+  /* ------------------------------------------------------------------
+     配色：按「考前 30 分钟该看到什么颜色」来定，不是凭好看选的
+     · 底色用暖白/米白（#faf7f2 一系）：比冷灰蓝低唤起，血压和心率更稳；
+       纯白屏在暗环境里对比过强，容易视疲劳 → 用暖白降一档对比
+     · 主色用鼠尾草绿（sage）：绿在色彩心理学里对应"安全/可休息"，
+       能压低皮质醇；比正绿更灰、更沉，不会像按钮一样催人
+     · 强调色用陶土橙（terracotta）——只留给"要你动手的那一下"（生成/勾题），
+       暖橙提升行动感但不像红那样触发威胁反应
+     · 正文用暖炭灰 #2b2724 而非纯黑：纯黑字在浅底上对比过强，长文读久了紧
+     · 暖砂色卡片（#fffdf9）：连续阅读区域给一点点"纸张感"，降低屏幕感
+     ------------------------------------------------------------------ */
   :root{
-    --bg:#f4f5f7; --panel:#fff; --line:#e5e7eb; --line2:#d6dae1;
-    --ink:#111827; --sub:#6b7280; --faint:#9ca3af;
-    --blue:#2563eb; --ink2:#111827;
-    --green:#0f766e; --green-bg:#ecfdf5;
-    --amber-bg:#fffbeb; --amber-bd:#fde68a; --amber-tx:#78350f;
+    --bg:#faf7f2; --panel:#fffdf9; --line:#e8e1d6; --line2:#d9d0c1;
+    --ink:#2b2724; --sub:#6d635a; --faint:#a2978a;
+    --blue:#5f7f6a; --blue-bg:#eef3ee; --ink2:#2b2724;
+    --sage:#5f7f6a; --sage-d:#4a6553; --sage-bg:#eef3ee; --sage-bd:#cfdcd1;
+    --clay:#b9713f; --clay-d:#a2603a; --clay-bg:#fbeee4; --clay-bd:#eccfb8;
+    --green:#4a6553; --green-bg:#eef3ee;
+    --amber-bg:#fdf6e6; --amber-bd:#ecdcb4; --amber-tx:#7a5b21;
+    --rec-bg:#fdf7f0; --rec-bd:#eddfcf;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;background:var(--bg);color:var(--ink);
@@ -20,6 +34,7 @@
   .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
 
   header{padding:26px 0 0}
+  h1 small{font-size:14px;font-weight:500;color:#6b7280;margin-left:10px;letter-spacing:0}
   .brandrow{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
   h1{margin:0;font-size:24px;letter-spacing:-.4px;font-weight:800}
   h1 em{font-style:normal;color:var(--blue)}
@@ -64,15 +79,32 @@
   .acts button,.acts a{font-family:inherit;text-decoration:none;font-size:13px;cursor:pointer;
     padding:7px 14px;border-radius:8px;border:1px solid var(--line2);color:var(--ink);background:#fff;transition:.15s}
   .acts button:hover,.acts a:hover{border-color:#bfc5cf;background:#fafafa}
-  .acts .pri{background:var(--ink);border-color:var(--ink);color:#fff}
-  .acts .pri:hover{background:#374151;border-color:#374151}
+  .acts .pri{background:var(--sage-d);border-color:var(--sage-d);color:#fff}
+  .acts .pri:hover{background:#3d5645;border-color:#3d5645}
   .acts .mini{font-size:12px;padding:6px 10px;color:var(--sub)}
 
-  .record{grid-column:1/-1;background:var(--amber-bg);border:1px solid var(--amber-bd);
-    border-radius:13px;padding:16px 19px;font-size:13.5px;color:var(--amber-tx)}
-  .record h3{margin:0 0 8px;font-size:14.5px;color:var(--amber-tx)}
+  .record{grid-column:1/-1;background:var(--rec-bg);border:1px solid var(--rec-bd);
+    border-radius:13px;padding:16px 19px;font-size:13.5px;color:#5d4a33;
+    border-left:3px solid var(--clay)}
+  .record h3{margin:0 0 8px;font-size:14.5px;color:#8a5a30;letter-spacing:-.1px}
   .record ul{margin:0;padding-left:20px}
-  .record li{margin:4px 0}
+  .record li{margin:4px 0;color:#4a4238}
+  .record li b{color:#2b2724}
+  .record.idle{background:#f7f4ee;border-left-color:var(--line2)}
+  .record.idle h3{color:var(--sub)}
+  .record.ready{background:var(--amber-bg);border-color:var(--amber-bd);border-left-color:#c9a227}
+  .record.ready h3{color:var(--amber-tx)}
+  .record.done{background:var(--sage-bg);border-color:var(--sage-bd);border-left-color:var(--sage)}
+  .record.done h3{color:var(--sage-d)}
+  .record .kwi{font-style:normal;display:inline-block;background:#fff;border:1px solid var(--sage-bd);
+    color:var(--sage-d);border-radius:20px;padding:0 8px;margin:1px 3px 1px 0;font-size:12px}
+  .record .stamp{color:var(--faint);font-size:12px}
+  .recacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+  .recacts button{font-family:inherit;font-size:13px;cursor:pointer;padding:6px 13px;
+    border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink)}
+  .recacts button:hover{border-color:var(--faint)}
+  .recacts .pri{background:var(--clay);border-color:var(--clay);color:#fff}
+  .recacts .pri:hover{background:var(--clay-d);border-color:var(--clay-d)}
 
   /* ---- 阅读器 ---- */
   .reader{display:grid;grid-template-columns:230px 1fr;gap:14px;align-items:start}
@@ -81,15 +113,84 @@
     background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 13px;color:var(--ink);
     transition:.15s;line-height:1.45}
   .doclist button small{display:block;color:var(--faint);font-size:11.5px}
-  .doclist button.on{border-color:var(--blue);background:var(--blue-bg,#eff5ff);color:var(--blue);font-weight:600}
+  .doclist button.on{border-color:var(--blue);background:var(--blue-bg,var(--blue-bg));color:var(--blue);font-weight:600}
   .doclist .bdg{display:inline-block;font-size:10.5px;font-weight:700;color:#065f46;background:#d1fae5;
     border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:1px}
   .doclist .dsep{font-size:11px;color:#9ca3af;letter-spacing:.5px;padding:8px 2px 2px;border-top:1px dashed var(--line);margin-top:4px}
   .doclist a.dl{font-size:12px;color:var(--sub);text-align:center;text-decoration:none;
     border:1px dashed var(--line2);border-radius:8px;padding:7px}
   .doclist a.dl:hover{color:var(--blue);border-color:var(--blue)}
+.timerhero{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+@media(max-width:820px){.timerhero{grid-template-columns:1fr}}
+.th-l{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 28px;
+  box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.th-k{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.4px;color:var(--sage-d);
+  background:var(--sage-bg);border:1px solid var(--sage-bd);border-radius:99px;padding:3px 10px;margin-bottom:12px}
+.th-l h2{margin:0 0 12px;font-size:21px;letter-spacing:-.3px}
+.th-l p{margin:0 0 11px;font-size:13.6px;line-height:1.85;color:#4b5563}
+.th-l p b{color:#111827}
+.th-acts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.th-acts .pri{background:#111827;color:#fff;border:1px solid #111827;border-radius:11px;
+  padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+.th-acts .pri:hover{background:#2b3442}
+.th-link{font-size:13px;color:var(--sage-d);text-decoration:none;font-weight:600;white-space:nowrap}
+.th-link:hover{text-decoration:underline}
+.th-tip{margin-top:12px;font-size:12px;color:#8a94a6;line-height:1.7}
+.th-r{background:#f8fafd;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.th-list{display:flex;flex-direction:column;gap:2px}
+.th-row{display:flex;align-items:center;gap:10px;font-size:13.2px;color:#374151;padding:7px 0;
+  border-bottom:1px dashed #e6ecf5}
+.th-row:last-child{border-bottom:none}
+.th-row b{width:18px;height:18px;border-radius:5px;background:#e8eef8;color:#5b6472;font-size:11px;
+  font-weight:700;display:grid;place-items:center;flex:0 0 18px}
+.th-row span{flex:1}
+.th-row em{font-style:normal;color:#8a94a6;font-size:12px;font-variant-numeric:tabular-nums}
+.th-note{margin-top:12px;font-size:11.8px;color:#8a94a6;line-height:1.7}
+.verline{display:block;margin-top:7px;font-size:11.5px;color:#9aa3b2}
+.verline b{color:#5b6472;font-variant-numeric:tabular-nums;font-weight:700}
+  .th-dl{display:inline-block;background:#111827;border:1px solid #111827;color:#fff;text-decoration:none;
+    font-size:14px;font-weight:700;border-radius:11px;padding:12px 22px;transition:.15s}
+  .th-dl:hover{background:#2b3442}
+  .th-meta{font-size:12.5px;color:#8a94a6}
+  .th-edit{margin-top:10px;width:100%;background:#fff;border:1px solid #dfe6f1;color:var(--sage-d);
+    font-size:12.5px;font-weight:700;border-radius:9px;padding:9px 12px;cursor:pointer;transition:.15s}
+  .th-edit:hover{background:#f3f8ff;border-color:#b7cefb}
+  .emptybox{background:#fff;border:1px dashed #d7dfea;border-radius:16px;padding:44px 40px;
+    max-width:660px;margin:20px auto;text-align:left}
+  .eb-k{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.5px;color:#8a94a6;
+    background:#f2f5f9;border-radius:99px;padding:3px 11px;margin-bottom:14px}
+  .emptybox h2{margin:0 0 12px;font-size:20px;letter-spacing:-.2px;color:#151a23}
+  .emptybox p{margin:0 0 12px;font-size:13.6px;line-height:1.9;color:#5b6472}
+  .eb-acts{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+  .eb-pri{background:#111827;border:1px solid #111827;color:#fff;font-size:13.5px;font-weight:700;
+    border-radius:10px;padding:11px 20px;cursor:pointer}
+  .eb-pri:hover{background:#2b3442}
+  .eb-lnk{background:#fff;border:1px solid #dfe6f1;color:#374151;font-size:13.5px;font-weight:600;
+    border-radius:10px;padding:11px 18px;cursor:pointer}
+  .eb-lnk:hover{background:#f6f9fd;border-color:#c3d2e8}
+  .roombar{display:flex;align-items:center;gap:10px;background:#fff8ec;border:1px solid #f0d8a8;
+    border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:#6b5a3c}
+  .roombar .rb-k{background:#c8961e;color:#fff;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .roombar .rb-t{line-height:1.6}
+  .roombar .rb-sp{flex:1}
+  .roombar .rb-a{color:#a97a12;font-weight:600;text-decoration:none;white-space:nowrap}
+  .roombar .rb-a:hover{text-decoration:underline}
   .framebox{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden}
   .framebox iframe{display:block;width:100%;height:76vh;border:0;background:#fff}
+  .docbar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:7px 12px;background:#fbfaf8;border-bottom:1px solid var(--line);font-size:12px;color:#8a9099}
+  .docbar b{color:#4b5563;font-weight:600}
+  .docbar a{color:var(--blue);text-decoration:none;white-space:nowrap;
+    border:1px solid #e2e5ea;border-radius:99px;padding:3px 10px;background:#fff}
+  .docbar a:hover{border-color:var(--blue)}
+  @media (max-width:760px){.docbar span{display:none} .framebox iframe{height:70vh}}
+  .dlhint{font-size:11.5px;color:#9aa0aa;line-height:1.7;margin:-4px 0 10px;padding:0 2px}
+  .dlhint a{color:var(--sage);text-decoration:none}
+  .docfb{display:none;padding:26px 20px;text-align:center;font-size:13.5px;color:#6b7280;line-height:2}
+  .docfb button{margin:0 6px;padding:7px 14px;border:1px solid #d7dbe2;background:#fff;border-radius:8px;cursor:pointer;font-size:13px}
+  .docfb a{color:var(--sage);text-decoration:none;margin-left:4px}
+  .framebox.blank iframe{display:none}
+  #frameFrame,#docFrame{height:max(76vh,660px)}
 
   /* ---- 定制生成 ---- */
   .custom{display:grid;grid-template-columns:400px 1fr;gap:16px;align-items:start}
@@ -102,33 +203,67 @@
     background:#fafbfc;border:1px solid var(--line2);border-radius:8px;padding:8px 11px;outline:none;transition:.15s}
   .fld input:focus,.fld textarea:focus{border-color:var(--blue);background:#fff}
   .fld textarea{resize:vertical;min-height:70px;line-height:1.6}
+  /* ---- 面试形式 / 简历上传 ---- */
+  .fld select{width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);
+    background:#fafbfc;border:1px solid var(--line2);border-radius:8px;padding:8px 11px;outline:none;
+    appearance:none;-webkit-appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239ca3af'/></svg>");
+    background-repeat:no-repeat;background-position:right 11px center}
+  .fld select:focus{border-color:var(--blue);background-color:#fff}
+  .fld .sub{font-size:11.5px;color:var(--faint);margin-top:4px;line-height:1.5}
+  .uprow{display:flex;align-items:center;gap:8px;margin:-2px 0 6px}
+  .upbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:600;
+    color:var(--sage-d);background:var(--sage-bg);border:1px solid var(--sage-bd);border-radius:7px;padding:5px 11px;cursor:pointer}
+  .upbtn:hover{background:#e4f0ff}
+  .upbtn[disabled]{opacity:.6;cursor:default}
+  .upsrc{font-size:11.5px;color:#6b7280}
+  .upsrc.ok{color:#047857}
+  .upsrc.err{color:#b91c1c}
+  .upcard{display:none;background:#f8fafc;border:1px dashed #c8d3e3;border-radius:9px;padding:10px 12px;margin:0 0 8px}
+  .upcard.on{display:block}
+  .upcard .uh{display:flex;align-items:baseline;gap:6px;font-size:12.5px;color:#374151;margin-bottom:6px;flex-wrap:wrap}
+  .upcard .uh b{color:#111827;font-weight:600;word-break:break-all;flex:0 1 auto;max-width:100%}
+  .upcard .uh span{color:#6b7280;flex:none}
+  .upcard textarea{min-height:96px!important;font-size:12.8px!important;background:#fff!important}
+  .upcard .uacts{display:flex;gap:8px;margin-top:7px}
+  .upcard .uacts button{font-family:inherit;font-size:12px;border-radius:7px;padding:5px 11px;cursor:pointer;
+    border:1px solid var(--line2);background:#fff;color:#374151}
+  .upcard .uacts .pri{background:var(--sage-d);border-color:var(--sage-d);color:#fff;font-weight:600}
+  .upcard .uacts .pri:hover{background:#1e40af}
+  /* 问题清单：生成之后才出现 */
+  #qWrap{display:none}
+  #qWrap.on{display:block}
+  .qhint{background:#f2faf2;border-left:3px solid #3a8f3a;border-radius:0 8px 8px 0;
+    padding:8px 13px;font-size:12.5px;color:#2f6b2f;margin-bottom:10px}
+  .qhint b{color:#1f6b1f}
   /* ---- 实时画像 ---- */
-  .livebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#f0f7ff;border:1px solid #cfe0fb;
+  .livebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--sage-bg);border:1px solid var(--sage-bd);
     border-radius:10px;padding:9px 13px;font-size:12.5px;color:#1e40af;margin-bottom:14px}
   .livebar .dot{width:7px;height:7px;border-radius:50%;background:#10b981;flex:none}
   .livebar .dot.dirty{background:#f59e0b}
-  .livebar b{color:#1e3a8a}
+  .livebar b{color:var(--sage-d)}
   .livebar .sp{flex:1}
-  .livebar button{font-family:inherit;font-size:12px;font-weight:600;color:#1d4ed8;background:#fff;
+  .livebar button{font-family:inherit;font-size:12px;font-weight:600;color:var(--sage-d);background:#fff;
     border:1px solid #c7d9f8;border-radius:7px;padding:4px 10px;cursor:pointer}
-  .livebar button:hover{background:#e8f1ff}
+  .livebar button:hover{background:#e6eee7}
   .gapbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:14px}
   .gapbox h4{margin:0 0 10px;font-size:13px;color:var(--faint);letter-spacing:1px}
   .gapbar{height:7px;border-radius:6px;background:#eef0f3;overflow:hidden;margin:6px 0 4px}
-  .gapbar i{display:block;height:100%;background:linear-gradient(90deg,#3b82f6,#10b981)}
+  .gapbar i{display:block;height:100%;background:linear-gradient(90deg,#8aa892,#5f7f6a);
+    transition:width .35s ease}
   .kwrow{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
   .kw{font-size:12px;border-radius:20px;padding:2px 10px;border:1px solid}
-  .kw.ok{color:#065f46;background:#ecfdf5;border-color:#a7f3d0}
-  .kw.no{color:#9a3412;background:#fff7ed;border-color:#fed7aa}
+  .kw.ok{color:#3f5a49;background:var(--sage-bg);border-color:var(--sage-bd)}
+  .kw.no{color:#8a4a22;background:#fbeee4;border-color:#e8cbb2}
   .gapbox ul{margin:8px 0 0;padding-left:18px;font-size:12.8px;color:#7c2d12}
   .gapbox li{margin:3px 0}
   .qset{border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:10px;background:#fff}
   .qset .qt{font-size:13px;font-weight:600;margin-bottom:6px}
   .qset .qi{display:flex;align-items:center;gap:7px;font-size:12.8px;color:#4b5563;margin:4px 0}
-  .qset .qi input{width:14px;height:14px;accent-color:#1d4ed8}
+  .qset .qi input{width:14px;height:14px;accent-color:var(--sage-d)}
   .qset .qi .cp{font-size:11px;color:#9ca3af;border:1px solid var(--line2);border-radius:5px;
     padding:0 6px;cursor:pointer;background:#fff}
-  .qset .qi .cp:hover{color:#1d4ed8;border-color:#93b4f5}
+  .qset .qi .cp:hover{color:var(--sage-d);border-color:#93b4f5}
   .tl-item{border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:11px;background:#fff}
   .tl-item .qh{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px}
   .tl-item .qh b{font-size:13.5px;flex:1;line-height:1.5}
@@ -141,11 +276,11 @@
   .tl-item .ops{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
   .tl-item .ops button{font-family:inherit;font-size:11.5px;color:#4b5563;background:#fff;
     border:1px solid var(--line2);border-radius:6px;padding:3px 9px;cursor:pointer}
-  .tl-item .ops button:hover{color:#1d4ed8;border-color:#93b4f5}
+  .tl-item .ops button:hover{color:var(--sage-d);border-color:#93b4f5}
 
   .gen{width:100%;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;
-    background:var(--ink);color:#fff;border:none;border-radius:9px;padding:12px;transition:.15s;margin-top:4px}
-  .gen:hover{background:#374151}
+    background:var(--clay);color:#fff;border:none;border-radius:9px;padding:12px;transition:.15s;margin-top:4px}
+  .gen:hover{background:var(--clay-d)}
   .gen:disabled{opacity:.5;cursor:wait}
   .hint{font-size:12px;color:var(--faint);margin-top:10px;line-height:1.6}
 
@@ -161,7 +296,7 @@
   .frameview{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
   .frameview .root{background:var(--ink);color:#fff;border-radius:8px;padding:7px 13px;font-size:13.5px;font-weight:700}
   .frameview .arw{color:var(--line2)}
-  .frameview .br{background:var(--blue-bg,#eff5ff);color:var(--blue);border:1px solid #c9dbfa;
+  .frameview .br{background:var(--blue-bg,var(--blue-bg));color:var(--blue);border:1px solid var(--sage-bd);
     border-radius:8px;padding:6px 11px;font-size:13px;font-weight:600}
   .talk{background:#fafbfc;border:1px dashed var(--line2);border-radius:10px;padding:13px 16px;
     font-size:14px;line-height:1.9}
@@ -236,15 +371,41 @@ section.tab{display:block!important;padding:24px 0 40px}
   <div class="custom">
     <div class="form">
       <h3>下一场的目标信息</h3>
-      <div class="fld"><label><b>目标公司</b> *</label><input id="cCompany" placeholder="例如：腾讯 / 美团 / 拼多多"></div>
+      <div class="fld"><label><b>目标公司</b> *</label><input id="cCompany" placeholder="例如：拼多多 / 美团 / 腾讯"></div>
       <div class="fld"><label><b>目标岗位</b> *</label><input id="cRole" placeholder="例如：产品培训生 / HR 培训生"></div>
+      <div class="fld"><label><b>面试形式</b> *</label>
+        <select id="cForm">
+          <option value="">请选择</option>
+          <option value="无领导小组讨论">无领导小组讨论</option>
+          <option value="一面">一面</option>
+          <option value="二面">二面</option>
+          <option value="终面">终面</option>
+        </select>
+        <div class="sub" id="formTip">选不同形式，右侧题型分组会跟着换（群面不考「为什么选我们」，单面才考）。</div>
+      </div>
       <div class="fld"><label>批次（选填）</label><input id="cScale" placeholder="例如：秋招 / 春招 / 暑期实习"></div>
       <div class="fld"><label>姓名（选填）</label><input id="cName" placeholder="用于开场白"></div>
       <div class="fld"><label>学校 / 届（选填）</label><input id="cSchool" placeholder="例如：吉林大学 2027 届"></div>
       <div class="fld"><label><b>岗位 JD</b> *（把 JD 原文贴进来）</label><textarea id="cJd" placeholder="粘贴 JD 原文，越完整越准"></textarea></div>
-      <div class="fld"><label><b>简历要点</b>（每行一条：公司/项目 + 你做了什么 + 数字）</label><textarea id="cResume" style="min-height:118px" placeholder="美团 学习发展 产品运营：行家平台供给运营 224 个供给方 覆盖率 79.6%&#10;美团 校招生培养项目：3 城并行 1000+ 学员&#10;安永 品牌营销：消博会 10+ 篇内容 47 万曝光"></textarea></div>
+      <div class="fld">
+        <label><b>简历要点</b>（每行一条：公司/项目 + 你做了什么 + 数字）</label>
+        <div class="uprow">
+          <button type="button" class="upbtn" id="btnUp">⬆ 上传简历</button>
+          <input type="file" id="fResume" accept=".pdf,.docx,.jpg,.jpeg,.png,.webp,.bmp" style="display:none">
+          <span class="upsrc" id="upSrc">支持 PDF / Word(.docx) / 图片，自动抽取要点</span>
+        </div>
+        <div class="upcard" id="upCard">
+          <div class="uh"><b id="upName">简历</b><span id="upMeta"></span></div>
+          <textarea id="upText" placeholder="抽取到的原文，可手动改"></textarea>
+          <div class="uacts">
+            <button class="pri" id="btnUseUp">整理成要点并填入 ↓</button>
+            <button id="btnCancelUp">取消</button>
+          </div>
+        </div>
+        <textarea id="cResume" style="min-height:118px" placeholder="美团 学习发展 产品运营：行家平台供给运营 224 个供给方 覆盖率 79.6%&#10;美团 校招生培养项目：3 城并行 1000+ 学员&#10;安永 品牌营销：消博会 10+ 篇内容 47 万曝光"></textarea>
+      </div>
       <button class="gen" id="btnGen">生成定制备战包</button>
-      <button class="gen" id="btnSaveProf" style="background:#1d4ed8;margin-top:8px">保存画像 · 让所有稿子跟着变</button>
+      <button class="gen" id="btnSaveProf" style="background:var(--sage-d);margin-top:8px">保存画像 · 让所有稿子跟着变</button>
       <div class="hint">改完简历/JD 点「保存画像」，下方所有稿件会按新画像重算；没变的题直接用缓存，不重复花钱。
       纯本地保存，不上传到任何地方。</div>
     </div>
@@ -256,7 +417,10 @@ section.tab{display:block!important;padding:24px 0 40px}
         <button id="btnRecalc">生成 / 更新已勾选的题</button>
       </div>
 
-      <div id="qList" style="margin-bottom:14px"></div>
+      <div id="qWrap">
+        <div class="qhint">问题清单已按面试形式「<b id="qForm">二面</b>」排好 —— <b>勾选要准备的题</b>，再点右上「生成 / 更新已勾选的题」</div>
+        <div id="qList" style="margin-bottom:14px"></div>
+      </div>
 
       <div class="gapbox" id="gapBox" style="display:none">
         <h4>简历 vs JD 缺口（改一个字就重算）<span id="gapStat" style="float:right;font-weight:400;font-size:11.5px;color:#9ca3af">…</span></h4>
