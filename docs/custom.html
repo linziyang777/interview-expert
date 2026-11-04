@@ -37,6 +37,86 @@
   h1 small{font-size:14px;font-weight:500;color:#6b7280;margin-left:10px;letter-spacing:0}
   .brandrow{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
   h1{margin:0;font-size:24px;letter-spacing:-.4px;font-weight:800}
+
+  /* ---- 右上角身份（头像 + 同步码） ---- */
+  .me{position:relative;margin-left:auto;align-self:center;display:flex;align-items:center;gap:7px}
+  .me-btn{display:flex;align-items:center;gap:8px;font-family:inherit;cursor:pointer;
+    background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:4px 12px 4px 4px;
+    transition:.15s}
+  .me-btn:hover{border-color:var(--line2);box-shadow:0 2px 8px rgba(43,39,36,.06)}
+  .me-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;color:#fff;background:var(--sage);flex:none;letter-spacing:0}
+  .me-av.off{background:#cfc6b8;color:#fff}
+  .me-nm{font-size:12.5px;color:var(--sub);max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .me-pop{position:absolute;right:0;top:calc(100% + 8px);width:288px;background:var(--panel);
+    border:1px solid var(--line);border-radius:13px;padding:14px 15px;z-index:200;
+    box-shadow:0 14px 40px rgba(43,39,36,.14);display:none}
+  .me-pop.on{display:block}
+  .me-pop h5{margin:0 0 10px;font-size:12px;letter-spacing:1px;color:var(--faint);font-weight:700}
+  .me-row{display:flex;gap:7px;margin-bottom:10px}
+  .me-row input{flex:1;min-width:0;font-family:inherit;font-size:13px;padding:7px 10px;
+    border:1px solid var(--line2);border-radius:8px;background:#fff;color:var(--ink)}
+  .me-row input:focus{outline:none;border-color:var(--sage)}
+  .me-row button{font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:8px;padding:2px 10px}
+  .me-row button.pri{background:var(--clay);border-color:var(--clay);color:#fff}
+  .me-row button.pri:hover{background:var(--clay-d)}
+  .me-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:16px;font-weight:700;
+    letter-spacing:1.5px;color:var(--sage-d);background:var(--sage-bg);border:1px dashed var(--sage-bd);
+    border-radius:9px;padding:8px 10px;text-align:center;cursor:pointer;user-select:all}
+  .me-code:hover{background:#e6eee7}
+  .me-tip{font-size:11.5px;color:var(--faint);line-height:1.6;margin:6px 0 12px}
+  .me-sep{height:1px;background:var(--line);margin:12px 0}
+  .me-out{width:100%;font-family:inherit;font-size:12.5px;cursor:pointer;border:1px solid var(--line2);
+    background:#fff;color:#9a4a22;border-radius:8px;padding:7px}
+  .me-out:hover{background:#fbeee4;border-color:#e8cbb2}
+
+  /* 常驻同步码：头像右边那个小胶囊，点一下变输入框 */
+  .me-chip{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;
+    letter-spacing:.6px;color:var(--sage-d);background:var(--sage-bg);border:1px dashed var(--sage-bd);
+    border-radius:99px;padding:5px 11px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .me-chip:hover{background:#e2ece4;border-style:solid}
+  .me-chip.bad{color:#9a4a22;background:var(--clay-bg);border-color:var(--clay-bd)}
+  .me-chip-in{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;
+    letter-spacing:.6px;width:112px;text-align:center;color:var(--sage-d);background:#fff;
+    border:1px solid var(--sage);border-radius:99px;padding:5px 8px}
+  .me-chip-in:focus{outline:none;box-shadow:0 0 0 3px rgba(95,127,106,.15)}
+  @media(max-width:640px){
+    .me-nm{display:none}
+    .me-btn{padding:3px}
+    .me-chip{font-size:11px;padding:4px 8px;letter-spacing:.3px}
+    .session{font-size:12px;padding:3px 10px}
+  }
+
+  /* ---- 历史记录 ---- */
+  .hist{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;
+    overflow:hidden}
+  .hist-hd{width:100%;display:flex;align-items:center;gap:8px;font-family:inherit;font-size:13px;
+    font-weight:600;color:var(--ink);background:none;border:none;padding:11px 15px;cursor:pointer;
+    text-align:left}
+  .hist-hd:hover{background:#faf7f1}
+  .hist-hd .hn{font-size:11.5px;font-weight:700;color:var(--sage-d);background:var(--sage-bg);
+    border:1px solid var(--sage-bd);border-radius:20px;padding:0 7px}
+  .hist-hd .ar{margin-left:auto;color:var(--faint);font-size:11px;transition:transform .18s}
+  .hist.open .hist-hd .ar{transform:rotate(180deg)}
+  .hist-body{display:none;border-top:1px solid var(--line);max-height:300px;overflow:auto}
+  .hist.open .hist-body{display:block}
+  .hist-empty{padding:16px 15px;font-size:12.5px;color:var(--faint);line-height:1.7}
+  .hitem{display:flex;align-items:flex-start;gap:9px;padding:10px 15px;border-top:1px solid #f0ebe2;
+    cursor:pointer;transition:.12s}
+  .hitem:first-child{border-top:none}
+  .hitem:hover{background:#faf7f1}
+  .hitem .hi-l{flex:1;min-width:0}
+  .hitem .hi-t{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis}
+  .hitem .hi-s{font-size:11.5px;color:var(--faint);margin-top:2px}
+  .hitem .hi-del{flex:none;font-family:inherit;font-size:11.5px;color:var(--faint);background:none;
+    border:1px solid transparent;border-radius:6px;padding:2px 7px;cursor:pointer}
+  .hitem .hi-del:hover{color:#9a4a22;background:#fbeee4;border-color:#e8cbb2}
+  .hist-foot{padding:8px 15px;border-top:1px solid var(--line);text-align:right}
+  .hist-foot button{font-family:inherit;font-size:11.5px;color:var(--faint);background:none;
+    border:none;cursor:pointer;text-decoration:underline}
+  .hist-foot button:hover{color:#9a4a22}
   h1 em{font-style:normal;color:var(--blue)}
   .session{font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);
     border-radius:99px;padding:4px 13px}
@@ -410,6 +490,18 @@ section.tab{display:block!important;padding:24px 0 40px}
       纯本地保存，不上传到任何地方。</div>
     </div>
     <div>
+      <!-- 历史记录：每次保存画像留一份快照，点一条就填回表单，改完保存会生成新记录 -->
+      <div class="hist" id="histBox" style="display:none">
+        <button class="hist-hd" id="histToggle">
+          <span>历史记录</span><span class="hn" id="histN">0</span>
+          <span class="ar">▼</span>
+        </button>
+        <div class="hist-body" id="histBody"></div>
+        <div class="hist-foot" id="histFoot" style="display:none">
+          <button id="histClear">清空历史</button>
+        </div>
+      </div>
+
       <div class="livebar" id="liveBar" style="display:none">
         <span class="dot" id="liveDot"></span>
         <span id="liveTxt">画像已保存</span>
