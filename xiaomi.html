@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小米 培训运营主管 · 面试作战稿</title>
+<style>
+:root{--accent:#b9713f;--accent-bg:#fdf3ec;--ink:#2b2724;--blue:#5f7f6a;--blue-bg:#eef3ee;--bg:#faf7f2;--line:#e8e1d6;--gold:#c9a227;}
+*{box-sizing:border-box;}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);
+margin:0;padding:0;line-height:1.8;font-size:15px;-webkit-font-smoothing:antialiased;}
+.shell{display:flex;gap:26px;max-width:1240px;margin:0 auto;padding:22px 18px 60px;align-items:flex-start;}
+nav.toc{position:sticky;top:18px;width:212px;flex:0 0 212px;background:#fff;border:1px solid var(--line);
+border-radius:12px;padding:14px 12px;font-size:13px;max-height:88vh;overflow:auto;}
+nav.toc h4{margin:0 0 10px;font-size:11px;letter-spacing:1.5px;color:#9aa0aa;font-weight:600;}
+nav.toc a{display:block;padding:6px 9px;border-radius:7px;color:#3d4450;text-decoration:none;line-height:1.45;margin-bottom:2px;}
+nav.toc a:hover{background:var(--blue-bg);color:var(--accent);}
+nav.toc a i{display:inline-block;width:15px;color:#b9bfc9;font-style:normal;font-size:11px;margin-right:4px;}
+main{flex:1;min-width:0;}
+.hero{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:6px;}
+.hero h1{font-size:22px;margin:0 0 8px;border-bottom:3px solid var(--accent);padding-bottom:10px;}
+.hero p{margin:0;color:#8a8a8a;font-size:13px;}
+.hero .tags{margin-top:10px}
+.hero .tags span{display:inline-block;background:#f6f2ec;border:1px solid var(--line);border-radius:99px;
+padding:2px 10px;font-size:12px;color:#6b6258;margin:0 6px 4px 0;}
+.chap{background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 26px 22px;margin:16px 0;}
+h2{font-size:19px;color:var(--accent);margin:26px 0 12px;border-left:5px solid var(--accent);
+padding-left:11px;scroll-margin-top:16px;}
+h3{font-size:16px;color:var(--blue);margin:22px 0 8px;}
+h4{font-size:14.5px;color:#4b5563;margin:16px 0 6px;}
+p{margin:9px 0;}
+.meta{color:#888;font-size:13px;}
+.box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:14px 0;}
+.tip{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.warn{background:var(--accent-bg);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.gold{background:#fffbe8;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.say{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:14px 18px;margin:12px 0;}
+.say p{margin:10px 0;}
+.say b{color:#41584a;}
+.k3{display:block;background:#fff9e6;border-left:4px solid #e8a300;padding:8px 14px;margin:9px 0;border-radius:0 6px 6px 0;font-weight:800;color:#6b4000;}
+.k{background:#fff2c2;border-bottom:2px solid #e8a300;padding:1px 4px;border-radius:3px;font-weight:700;}
+table{width:100%;border-collapse:collapse;margin:12px 0;background:#fff;font-size:13.5px;}
+thead{display:table-header-group;}
+tbody{display:table-row-group;}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top;}
+th{background:#f3efe9;font-weight:700;}
+.q{background:#fff;border-left:4px solid var(--accent);padding:9px 15px;margin:22px 0 6px;border-radius:6px;font-weight:700;font-size:15px;}
+.nogo{background:#f7f7f7;border-left:4px solid #999;padding:9px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14px;color:#555;}
+.pill{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:99px;padding:2px 11px;
+font-size:12.5px;color:#666;margin:0 6px 6px 0;}
+.src{color:#8a8a8a;font-size:12.5px;}
+.fix{background:var(--blue-bg);border:1px solid #d3e0d4;border-radius:6px;padding:2px 7px;font-size:12.5px;color:#41584a;white-space:nowrap;}
+.pre{background:#fdfbf7;border:1px solid #ece3d6;border-radius:10px;padding:4px 18px 16px;margin:16px 0;}
+.pre h3{margin-top:16px;}
+.pre .item{border-top:1px solid #efe7db;padding:10px 0;}
+.pre .item:first-of-type{border-top:0;}
+.pre .row{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:6px 0;font-size:13.8px;}
+.pre .row>i{font-style:normal;font-weight:700;color:var(--blue);font-size:13px;padding-top:2px;}
+.pre .row.risk>i{color:var(--accent);}
+.pre .row .say2{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 6px 6px 0;padding:7px 12px;}
+.pre .row .say2 b{color:#41584a;}
+.pre .row .no{color:#a33;font-size:12.8px;}
+@media (max-width:640px){.pre .row{grid-template-columns:1fr;gap:4px;}}
+@media (max-width:640px){table{font-size:12.4px;table-layout:auto;}th,td{padding:6px 7px;}}
+@media (min-width:641px){table td:first-child b, table th:first-child{white-space:nowrap;}}
+/* 小屏隐藏了左侧目录，补一条横向章节条 */
+.mnav{display:none;}
+@media (max-width:820px){
+  .mnav{display:flex;gap:7px;overflow-x:auto;padding:10px 2px 8px;margin:0 0 2px;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .mnav::-webkit-scrollbar{display:none;}
+  .mnav a{flex:none;background:#fff;border:1px solid var(--line);border-radius:99px;
+    padding:6px 13px;font-size:12.8px;color:#5b534a;text-decoration:none;line-height:1.4;}
+  .mnav a:active{background:var(--blue-bg);color:var(--accent);}
+}
+/* 时间轴 */
+.tl{border-left:2px solid #e6ddd0;margin:14px 0 14px 8px;padding-left:18px;}
+.tl .n{position:relative;padding:8px 0 10px;}
+.tl .n::before{content:"";position:absolute;left:-25px;top:16px;width:9px;height:9px;border-radius:50%;
+background:#fff;border:2px solid var(--accent);}
+.tl .n b{display:inline-block;background:var(--accent-bg);color:#8a4d24;border-radius:5px;
+padding:0 7px;font-size:12.5px;margin-right:7px;}
+/* 突发卡 */
+.ev{border:1px solid var(--line);border-radius:9px;padding:12px 15px;margin:11px 0;background:#fffdfa;}
+.ev .h{font-weight:800;color:#8a4d24;font-size:14px;margin-bottom:5px;}
+.ev .b{font-size:13.8px;line-height:1.75;}
+.ev .b em{font-style:normal;color:var(--blue);font-weight:700;}
+/* 一页纸 */
+.card1{background:linear-gradient(180deg,#fffdf8,#fdf8ef);border:2px solid #e2d3bd;border-radius:14px;padding:18px 20px;margin:16px 0;}
+.card1 h3{margin-top:0;color:var(--accent);}
+.card1 .ln{display:grid;grid-template-columns:84px 1fr;gap:9px;padding:5px 0;font-size:13.8px;border-bottom:1px dashed #eadfd0;}
+.card1 .ln:last-child{border-bottom:0;}
+.card1 .ln i{font-style:normal;color:#9a8b7a;font-size:12.5px;padding-top:2px;}
+@media print{tr{break-inside:avoid;page-break-inside:avoid;}}
+.tfoot{color:#9aa0aa;font-size:12px;text-align:center;margin:26px 0 0;}
+.embed nav.toc{display:none;}
+.embed .shell{display:block;padding:10px 14px 40px;max-width:none;}
+@media (max-width:820px){.shell{display:block;padding:14px 12px 40px;}nav.toc{display:none;}}
+@media print{
+  body{background:#fff;font-size:12.4px;line-height:1.62;}
+  .shell{display:block;padding:0;max-width:none;}
+  nav.toc{display:none;}
+  .hero{border:none;border-radius:0;padding:0 0 6px;}
+  .chap{border:none;border-radius:0;padding:0;margin:0;}
+  .chap + .chap{break-before:page;page-break-before:always;}
+  h2{break-after:avoid-page;page-break-after:avoid;margin-top:16px;}
+  h3,h4{break-after:avoid-page;page-break-after:avoid;}
+  .q{break-after:avoid-page;page-break-after:avoid;}
+  .say,.tip,.warn,.gold,.box,.k3,.ev,.card1,.tl .n{break-inside:avoid;page-break-inside:avoid;}
+  tr,td,th{break-inside:avoid;page-break-inside:avoid;}
+  thead{display:table-header-group;}
+  @page{size:A4;margin:13mm 12mm;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc">
+    <h4>六章 · 按面试节奏排</h4>
+    <a href="#ch1"><i>1</i>这一仗怎么打</a>
+    <a href="#ch2"><i>2</i>自我介绍（两版）</a>
+    <a href="#ch3"><i>3</i>经历追问预案</a>
+    <a href="#ch4"><i>4</i>问题预测 20 题</a>
+    <a href="#ch5"><i>5</i>场景题模板</a>
+    <a href="#ch6"><i>6</i>反问 · 清单 · 一页纸</a>
+  </nav>
+  <main>
+    <div class="hero" id="top">
+      <h1>小米 培训运营主管 · 面试作战稿</h1>
+      <p>2026-11-05 14:00 ｜ 北京 · 校招正式 · 运营类 · 2027 届校园招聘计划</p>
+      <div class="tags">
+        <span>基于你的真实简历</span><span>JD 六条职责逐条对标</span><span>公开信息核对</span><span>含场景题模板</span>
+      </div>
+    </div>
+
+<nav class="mnav">
+  <a href="#ch1">1 怎么打</a><a href="#ch2">2 自我介绍</a><a href="#ch3">3 经历追问</a>
+  <a href="#ch4">4 问题预测</a><a href="#ch5">5 场景模板</a><a href="#ch6">6 反问·一页纸</a>
+</nav>
+
+<div class="gold">
+<b>先用 30 秒看这三句。</b>
+① 这个岗位要的不是"会讲课的人"，是<b>能把一场培训从策划推到落地、还能让它在 10 个城市复制的人</b>。
+② 你最强的不是"培训经验"，是<b>「我既跑过现场，又写过培训后台的 PRD」</b>——校招生里极少有人两头都占。
+③ 有一个硬伤要今天就处理：<b>JD 最后一条写了"有 C1 驾照"，你简历里没有。</b>
+</div>
+
+<div class="warn">
+<b>关于这份稿子的一句话说明。</b>
+所有弹药都从你简历里的事实出发，追问预案里的细节是<b>按你简历描述的做法还原的</b>。
+面试前请自己过一遍，哪句和你实际做法不一样，<b>改成你的真实版本</b>——细节对不上比不回答更扣分。
+</div>
+
+<!-- ================= 第一章 ================= -->
+<section class="chap">
+<h2 id="ch1">第一章 · 这一仗怎么打</h2>
+
+<h3>1.1 JD 六条，其实只有三层</h3>
+
+<table>
+<thead><tr><th style="width:16%">层</th><th style="width:38%">JD 原文</th><th>翻译成人话</th></tr></thead>
+<tbody>
+<tr><td><b>项目层</b></td><td>①②③ 运营规划 / 运营准备 / 执行&amp;复盘</td><td>你就是这场培训的项目经理：策划案、供应商、场地、现场、复盘，一条龙</td></tr>
+<tr><td><b>平台层</b></td><td>④ 培训平台规划、与产品经理对接、课程创建、资料上传、考核</td><td>你是培训后台的"业务 owner"：提需求、验收、日常运维</td></tr>
+<tr><td><b>数据层</b></td><td>⑤ 培训数据分析整合、费用测算</td><td>你要能算清"这场花了多少、换回了什么"</td></tr>
+</tbody>
+</table>
+
+<div class="tip">
+<b>一句话记住：</b>项目经理 + 后台 owner + 半个数据分析师，三合一。
+面试里只要你能把这三层都碰到，你就比"只会执行"的候选人高一档。
+</div>
+
+<h3>1.2 小米的培训，和别家不一样在哪</h3>
+
+<p>这决定你所有答案的<b>口径</b>。写错方向，答得再流利也不对味。</p>
+
+<table>
+<thead><tr><th style="width:20%">特点</th><th style="width:40%">是什么</th><th>答题时怎么用</th></tr></thead>
+<tbody>
+<tr>
+<td><b>新品节奏驱动</b></td>
+<td>手机、AIoT、汽车，一年多次全国同步开训。培训不是"按年度计划排课"，是<b>跟着发布会倒计时打仗</b>。</td>
+<td>少讲"课程体系多完整"，多讲"<b>倒计时怎么排、节点怎么卡</b>"</td>
+</tr>
+<tr>
+<td><b>门店规模驱动</b></td>
+<td>小米之家 + 汽车销售/交付网络，参训人数大、地域分散、一线流动快。<b>标准化和可复制是命门</b>。</td>
+<td>讲"<b>我做的东西三个城市直接复用</b>"，比讲"我很细致"有用十倍</td>
+</tr>
+<tr>
+<td><b>考核绑上岗</b></td>
+<td>公开报道里，小米汽车上市前全国销售集中到北京培训、朝九晚九、<b>考核通过才能上岗</b>。</td>
+<td>说明培训直接对业务结果负责。你的复盘要落到"<b>学员回去有没有变</b>"，不是"满意度几分"</td>
+</tr>
+</tbody>
+</table>
+
+<p class="src">依据：小米招聘官网 2027 届校招说明（覆盖 AI 大模型、软硬件、汽车、供应链、产品、设计、新零售）；澎湃新闻对小米汽车上市前渠道培训的报道；小米同团队在招「人力资源专员-培训」与「领导力培训运营实习生」的公开 JD。</p>
+
+<h3>1.3 匹配度：你打得起这一仗</h3>
+
+<table>
+<thead><tr><th style="width:31%">JD 要求</th><th style="width:44%">你的弹药（简历原文）</th><th style="width:25%">强度</th></tr></thead>
+<tbody>
+<tr><td>① 运营策划、<b>标准化运营方案输出</b></td><td>美团新员工培养：3 城并行、每期 80–100 人；自研运营助手 4 模块（SOP 待办、讲师排期、礼品库存、话术模板库）——这本身就是"标准化工具化"</td><td>★★★★★</td></tr>
+<tr><td>② 协调内外部供应商、落地前准备</td><td>对接<b>讲师、场地、酒店、供应商 4 类角色</b>，保障 3 城节奏一致；消博会统筹 13 场展台物料并对接业务线</td><td>★★★★★</td></tr>
+<tr><td>③ 现场执行 + <b>复盘迭代</b> + 突发应对</td><td>任 4 人现场团队主负责人；每日课后问卷 → 定位"理论讲授脱离场景"→ 识别满意度"首日高、次日低、末日回升"规律并转改进项</td><td>★★★★★</td></tr>
+<tr><td>④ <b>培训平台规划、与产品经理对接、后台落地</b></td><td>独立撰写管理员后台 PRD（<b>三角色权限模型</b>），NoCode + Supabase 完成 PRD 到上线端到端交付；参与 AI 工作台数据看板方案预研</td><td>★★★★★ <b>最强</b></td></tr>
+<tr><td>⑤ 数据分析、<b>费用测算</b></td><td>增长公式定位转化瓶颈、咨询单量环比 +367%、满意度 5.00；Excel/SQL；<b>初级会计职称</b>；商赛队长主导财务建模</td><td>★★★★</td></tr>
+<tr><td>要求 1 细致耐心 / 项目管理</td><td>3 城并行、13 场物料、15+ 场活动宣传</td><td>★★★★</td></tr>
+<tr><td>要求 2 责任心 / 执行力 / 推动力</td><td><b>自发立项</b>用 AI Coding 搭沙盘计算系统，3 城复用</td><td>★★★★★</td></tr>
+<tr><td>要求 3 突发应对 / 提前预案</td><td>4 人团队里设"机动"位专处理突发（见第三章 Q2）</td><td>★★★★</td></tr>
+<tr><td>要求 4 开放心态 / 达成共识</td><td>对 4 类外部角色 + 学生会 10 人团队 + B 端需求试点</td><td>★★★★</td></tr>
+<tr><td>要求 5 本科 + <b>C1 驾照</b></td><td>本科 ✓ ｜ <b>驾照：简历未提 ⚠</b></td><td><span style="color:#b9713f;font-weight:700">待补</span></td></tr>
+</tbody>
+</table>
+
+<div class="tip">
+<b>看到没：</b>六条职责你有五条是五星。这不是"勉强能投"，是<b>对口</b>。
+你唯一要解决的不是能力问题，是<b>把经历翻译成培训语言</b>。
+</div>
+
+<h3>1.4 三个雷，今天必须先处理</h3>
+
+<div class="warn">
+<b>雷一：C1 驾照（硬性条件，写在"职位要求"里）</b><br>
+面试官大概率会顺口问一句"有驾照吗、能出差吗"。这不是闲聊，是在核对硬条件。<br>
+· <b>有</b> → 直接答"有，C1，X 年"，一句话带过，别展开。<br>
+· <b>在考</b> → 诚实说"科目 X 已过，预计 X 月拿证"，并且主动补一句"不影响出差，我平时就能跟场"。<br>
+· <b>没有也没打算考</b> → 这是硬缺口，建议今晚就想清楚怎么说，别现场卡住。<br>
+<span class="src">这条对应的是"要跑门店、要跟场、要下城市"，不是形式条款。</span>
+</div>
+
+<div class="warn">
+<b>雷二：到岗时间。</b>
+你简历上美团是"2026.09 – 至今"，你是 2027 届。面试官一定会算这笔账：你什么时候能来、能不能实习转正。
+<b>提前想好一句：</b>"我 2027 年 X 月毕业，现在这段实习到 X 月，之后可以全职到岗/可以提前来实习。"别含糊。
+</div>
+
+<div class="warn">
+<b>雷三："主管"两个字。</b>
+校招的"主管"是<b>储备主管/管培性质</b>，考的是"能不能独立扛一个项目"，不是"你带过多少人"。
+所以：<b>别吹带人经验，也别自我否定说"我没管过人"</b>。标准答法是——
+"我带过 10 人的学生团队、也在培训现场做过 4 人团队的主负责人。我知道主管岗真正考的是<b>能不能独立把一个项目从头扛到尾</b>，这个我做过。"
+</div>
+</section>
+
+<!-- ================= 第二章 ================= -->
+<section class="chap">
+<h2 id="ch2">第二章 · 自我介绍</h2>
+
+<p class="meta">90 秒版约 430 字，45 秒版约 205 字（按 4.8 字/秒）。同一副骨架，删句子不重写。</p>
+
+<h3>① 90 秒版（主版本 · 背这一段）</h3>
+
+<div class="say">
+<p><span class="k3">各位老师下午好，我是林子炀，吉林大学工商管理 2027 届。我现在在美团做学习发展相关的运营，所以今天这个岗位不是我临时起意投的，是我正在做的事的延伸。</span></p>
+<p>我在美团跟过两个项目。<b>一个是在线学习平台</b>，我负责供给和增长：把「话题 × 行家」两端的供给搭起来，新增 <b>224 个话题、196 位行家</b>，然后用增长公式拆转化瓶颈，把咨询单量做到<b>环比 +367%</b>。<b>另一个是校招新员工的培养项目</b>，我做现场统筹：<b>3 个城市并行、每期 80 到 100 人</b>，我一个人对讲师、场地、酒店、供应商四类角色，保证三城节奏一致。</p>
+<p>这两段让我养成两个习惯。<b>第一，做完一定要复盘。</b>我们每天发课后问卷，按天拆开发现满意度是"首日高、次日低、末日回升"，追下去才知道问题出在理论讲授脱离场景，改完第二轮就稳住了。<b>第二，能自己动手就不等人。</b>我用 AI 搭了一套沙盘计算系统，把交易登记、自动计算、成绩统奖全接掉，三个城市直接复用；也独立写过培训后台的 PRD，三角色权限，用 NoCode 加 Supabase 从需求到上线自己跑通。</p>
+<p>所以看到贵司这个岗位写"培训平台规划、与产品经理对接落地"，我觉得这就是我这两年在干的事。谢谢。</p>
+</div>
+
+<h3>② 45 秒版（面试官说"简单说一下"时用）</h3>
+
+<div class="say">
+<p><span class="k3">各位老师好，我是林子炀，吉林大学工商管理 2027 届，现在在美团做学习发展的运营。</span></p>
+<p>我主要做两块：<b>一块是培训项目的现场统筹</b>，3 城并行、每期 80 到 100 人，对讲师、场地、酒店、供应商四类角色；<b>一块是学习平台的后台和数据</b>，写过管理员后台 PRD，用 NoCode 加 Supabase 自己做到上线。</p>
+<p>我最想说的是：培训在我这儿不是排课，是<b>把一场活动从头跟到尾，还要让它能复制到下一个城市</b>。这也是我想来小米做培训运营的原因。</p>
+</div>
+
+<h3>③ 三个开场钩子（看面试官风格选）</h3>
+
+<table>
+<thead><tr><th style="width:22%">面试官气质</th><th style="width:33%">开场第一句换成</th><th>为什么</th></tr></thead>
+<tbody>
+<tr><td>业务型，语速快</td><td>"我现在就在做企业学习，做的是校招新员工的培养项目。"</td><td>直接对齐岗位，不铺垫</td></tr>
+<tr><td>HR 型，看匹配</td><td>"我是那种既跑过现场、又写过后台 PRD 的人。"</td><td>一句话制造记忆点</td></tr>
+<tr><td>质疑型 / 压力面</td><td>"我先说结论：我做过 3 城并行的培训统筹，也独立交付过培训后台。"</td><td>先给硬事实，堵住"你没经验"</td></tr>
+</tbody>
+</table>
+
+<h3>④ 五句不能说错的话</h3>
+
+<div class="nogo">
+<b>1.</b> 别说"我做过培训"就停住 —— 必须说清是<b>训前准备 / 训中执行 / 训后复盘</b>哪一段，含糊等于没做过。<br>
+<b>2.</b> 别说"3 城并行"不解释怎么并行 —— 这一定被追问，准备好第三章 Q1 的三个抓手。<br>
+<b>3.</b> 别说"我把单量做上去了" —— 说"<b>我用增长公式定位瓶颈，把咨询单量做到环比 +367%</b>"，功劳和动作分开。<br>
+<b>4.</b> 别说"我的 AI 系统很厉害" —— 说"<b>它替掉了原来手工登记和算分，讲师下课就能出结果</b>"，讲替代了什么。<br>
+<b>5.</b> 别说"我学习能力强、抗压" —— 换成具体的事，任何形容词都不如一个数字。
+</div>
+</section>
+
+<!-- ================= 第三章 ================= -->
+<section class="chap">
+<h2 id="ch3">第三章 · 经历追问预案</h2>
+
+<p class="meta">这一章是主战场。面试官只要对你的美团培训项目感兴趣，就会往死里问细节。每个追问给三块：<b>他想听什么 / 这么答 / 别这么说</b>。</p>
+
+<div class="pre">
+<h3>A 组 · 新员工培养项目（3 城并行、80–100 人）</h3>
+
+<div class="item">
+<h4>Q1「3 个城市并行，你怎么保证节奏一致？」</h4>
+<div class="row"><i>他想听</i><div>你是真的管过，还是只是"参与了一下"。<b>"一致"这两个字是关键。</b></div></div>
+<div class="row"><i>这么答</i><div class="say2">
+我用了三个抓手。<b>第一是统一物料包</b>：把"每个城市自己准备"改成"总部出一套标准件"，物料按场次打成包，每包配一张清单，缺一样就不发车。<br>
+<b>第二是统一时间轴</b>：精确到小时，三城共用一张表，谁到哪个节点都是同一张表上的同一行。<br>
+<b>第三是统一日报</b>：每天收一次各城日报，只看三个数——到场率、物料缺口、当天问题，当天在群里对掉，不留到第二天。<br>
+另外我留了一个人做"巡回"，哪个城市进度落后，就去哪个城市现场盯。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"我们拉了个群同步"（太轻）；"大家都很配合"（等于没方法）</div></div>
+</div>
+
+<div class="item">
+<h4>Q2「每期 80 到 100 人，现场怎么管？」</h4>
+<div class="row"><i>他想听</i><div>你有没有<b>分工和动线</b>的概念，还是靠人海硬扛。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+4 个人我分成四块：<b>签到与物料、场地与设备、讲师对接、机动</b>。<br>
+"机动"这个位最重要，专门处理突发——现场只要出问题，所有人第一反应是找机动，不是找我，这样主流程不会断。<br>
+80 到 100 人的场子，我把入场做成一条线：签到 → 领物料 → 找座位 → 扫码进群，中间不停留，避免堵在门口。<br>
+节奏靠主持人手里的时间表，每个环节提前 5 分钟给讲师一个手势，讲师就知道该收了。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"我盯得很紧"（这是态度不是方法）</div></div>
+</div>
+
+<div class="item">
+<h4>Q3「讲师、场地、酒店、供应商四类角色，具体怎么对接？」</h4>
+<div class="row"><i>他想听</i><div>你会不会<b>接口人混乱</b>——这是培训现场翻车的第一大原因。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+原则是<b>四类角色全部对我一个人，不让他们互相找</b>。<br>
+分工很窄：讲师只对接内容和到场时间；场地只对接电、网、桌椅、进出；酒店只对接房和餐；供应商只对接物料到货时间。<br>
+每一类都有一个"确认节点"：比如场地在 <b>T-3 天</b>必须完成设备联调，酒店在 <b>T-5 天</b>锁定房数。到点没确认就升级，不等。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"就是正常沟通、有问题随时联系"</div></div>
+</div>
+
+<div class="item">
+<h4>Q4「满意度'首日高、次日低、末日回升'——你是怎么发现、又怎么改的？」<span class="pill">最关键的一题</span></h4>
+<div class="row"><i>他想听</i><div>这是<b>复盘深度的试金石</b>。能看出你是"收问卷交差"，还是"拿问卷做决策"。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+我们每天课后都发问卷，我按天拆开看，发现它不是平的：<b>第一天高、第二天掉、最后一天回升</b>。<br>
+我判断原因：第一天高是新鲜感和期待；第二天掉，是因为进入理论讲授，学员觉得"跟我门店的实际情况对不上"；最后一天回升，是因为有结业和分享，有参与感。<br>
+所以问题不在讲师水平，在<b>内容形态</b>。第二轮我做了两件事：<b>一是</b>把第二天的纯讲授改成"案例 + 演练"，用学员自己门店的真实问题当素材；<b>二是</b>把结业的分享提前到第二天下午做一次小复盘，把"末日回升"那个峰值往前挪。<br>
+依据不是我拍脑袋——问卷开放题里反复出现"希望能多练"。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"满意度挺高的，大家都说好"（没洞察）；"后来也没来得及改"（承认光发现问题不解决，最扣分）</div></div>
+</div>
+
+<div class="item">
+<h4>Q5「你说的 AI 沙盘计算系统，到底解决了什么？」</h4>
+<div class="row"><i>他想听</i><div>是真需求还是自嗨。判断标准：<b>省了谁的时间、省了多少</b>。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+原来沙盘课的成绩是手工登、手工算、手工排名。一场 80 到 100 人，讲师和助教要花两三个小时，还容易算错。<br>
+我用 AI Coding 搭了一套，三块：<b>交易登记、自动计算、成绩统奖</b>。学员填完当场出分和排名，讲师下课就能直接讲结果。<br>
+<b>三个城市复用</b>，第二场开始基本零准备。<br>
+后来我还做了个运营助手，四个模块：<b>SOP 待办、讲师排期、礼品库存、话术模板库</b>——都是我自己带场次时被烦到的地方。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"我用了 AI，很先进"（技术炫耀，没有业务价值）</div></div>
+</div>
+
+<div class="item">
+<h4>Q6「你说的'标准化'，具体标准化了什么？」</h4>
+<div class="row"><i>他想听</i><div>JD 第 1 条原话就是"<b>标准化运营方案的输出</b>"，这题几乎是必问。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+标准化的本质是<b>把"靠人记"变成"靠件走"</b>。我做了三样：<br>
+<b>物料包</b>——每个场次一包一张清单，缺件不出发；<br>
+<b>时间轴</b>——精确到小时，换人接手也能照着跑；<br>
+<b>SOP 待办</b>——把"开场前要做什么"变成系统里的勾选项，做完打勾，不靠记性。<br>
+结果是：从第一个城市到第三个城市，我的准备时间明显下降，而且新人接手也能顶。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"我整理了一份文档"（文档 ≠ 标准化，要强调"可被执行、可被交接"）</div></div>
+</div>
+</div>
+
+<div class="pre">
+<h3>B 组 · 培训后台 PRD（你的杀手锏）</h3>
+
+<div class="item">
+<h4>Q7「培训后台的 PRD 是你独立写的？三角色权限为什么这么分？」</h4>
+<div class="row"><i>他想听</i><div>JD 第 4 条直接对应。<b>这题答好了，整场面试基本定调。</b></div></div>
+<div class="row"><i>这么答</i><div class="say2">
+是我独立写的。当时的痛点是<b>后台谁都能改</b>，课程、学员、数据混在一起，出了问题找不到责任人。<br>
+我把角色拆成三类：<b>管理员</b>——全量权限，管课程体系和考核规则；<b>运营</b>——管排期、物料、通知，但<b>不能改考核规则</b>；<b>讲师</b>——只看自己带的班和自己的学员数据。<br>
+核心原则一句话：<b>谁能改结果，谁负责。</b>考核规则只有管理员能动，因为一动就影响所有人的成绩。<br>
+落地是用 NoCode + Supabase，从 PRD 到上线我自己跑完的。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"按领导要求分的"（暴露没有产品判断）</div></div>
+</div>
+
+<div class="item">
+<h4>Q8「为什么用 NoCode 自己做，不找研发？」</h4>
+<div class="row"><i>他想听</i><div>你是"绕过流程"还是"用更低的成本验证需求"。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+因为那时候需求还没验证清楚，我不想占研发的排期。<br>
+<b>NoCode 的价值是先跑通、先让人用起来</b>，用真实反馈确认哪些功能是真需要的；等需求稳定了，再交给研发做正式版，PRD 我已经写好了，交接成本很低。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"研发排不上期"（听起来像抱怨协作）</div></div>
+</div>
+
+<div class="item">
+<h4>Q9「如果让你做小米的培训后台，你最想先改什么？」<span class="pill">反客为主的机会</span></h4>
+<div class="row"><i>他想听</i><div>你有没有<b>带着判断来</b>，而不是等着被安排。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+我没看过贵司的后台，不敢乱说。但如果按培训运营最常卡的地方，我会先看<b>三件事</b>：<br>
+<b>一是课程和资料的版本管理</b>——新品迭代快，一线最怕拿到旧版话术；<br>
+<b>二是考核数据的回收效率</b>——考完能不能马上出结果、马上知道哪个城市没达标；<br>
+<b>三是权限边界</b>——谁改了考核规则要留痕。<br>
+如果这三件已经做得很好，那我更想先听您说，现在最痛的是哪一段。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"我觉得你们的后台太老了"（没看过就下判断，最忌讳）</div></div>
+</div>
+</div>
+
+<div class="pre">
+<h3>C 组 · 在线学习与增长（+367% 的可信度）</h3>
+
+<div class="item">
+<h4>Q10「+367% 是怎么算的？基数是多少？」</h4>
+<div class="row"><i>他想听</i><div>数字是不是你做的，还是蹭的。<b>敢讲口径 = 数字是真的。</b></div></div>
+<div class="row"><i>这么答</i><div class="say2">
+是<b>咨询单量的环比</b>，对比的是我接手前后两个完整周期。<br>
+我做的事情是把供给先撑起来——新增 <b>224 个话题、196 位行家</b>，然后用增长公式拆：曝光 × 点击率 × 转化率，定位到底卡在哪一环。<br>
+卡点不在曝光，在<b>匹配</b>：用户搜得到话题，但匹配不到对的行家。所以我做了需求画像匹配，把两端对上。<br>
+基数不大，所以百分比看起来夸张，但<b>绝对值是真实涨上去的</b>，满意度也是 5.00。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"涨了 367%"（不给口径，面试官会怀疑）；更别硬撑说"基数很大"</div></div>
+</div>
+
+<div class="item">
+<h4>Q11「你从 C2C 改成 B2C，这个判断是怎么来的？」</h4>
+<div class="row"><i>他想听</i><div>你有没有<b>从数据倒推模式</b>的能力，而不是执行别人给的方案。</div></div>
+<div class="row"><i>这么答</i><div class="say2">
+做对标研究和用户调研之后发现：个人咨询撮合的问题是<b>供给不稳定、质量不可控</b>——同一个行家这周有时间、下周没有，用户拿到的东西忽好忽坏。<br>
+所以我推动转向 <b>B2C 专家资源链接</b>：设计"知识贡献者"的分层身份体系，让供给有稳定的激励；同时提出跟 AI 工作台联动的需求画像匹配机制，先做 B 端需求试点。<br>
+本质是把"碰运气的撮合"变成"可预期的服务"。
+</div></div>
+<div class="row risk"><i>别这么说</i><div class="no">"领导让我调研的"（把自己降级成执行者）</div></div>
+</div>
+</div>
+
+<div class="warn">
+<b>⚠ 面试前必做：</b>把上面 A/B/C 三组里所有具体做法<b>对照你的真实记忆过一遍</b>。
+哪一句和你实际做的不一样，当场改掉——用你自己的话讲，哪怕朴素一点，也比背一个对不上的版本安全。
+</div>
+</section>
+
+<!-- ================= 第四章 ================= -->
+<section class="chap">
+<h2 id="ch4">第四章 · 问题预测 20 题</h2>
+
+<p class="meta">按出现概率排。每题给「30 秒答法」和「考点」，不要背原文，记骨架。</p>
+
+<h3>动机类（几乎必问）</h3>
+
+<div class="q">1. 为什么想做培训运营？</div>
+<div class="say"><p><b>答：</b>因为在美团这两段实习里，我发现我最喜欢的不是"想策略"，是"<b>把一件事推到落地，还要让它能再来一次</b>"。培训刚好是这个属性最强的岗位——一场活动有明确的开始和结束，做得好不好当场能看见，而且能标准化复制。</p>
+<p><b>考点：</b>动机是不是"我投了很多岗顺便投的"。要落到"这件事本身的属性吸引我"。</p></div>
+
+<div class="q">2. 为什么是小米？</div>
+<div class="say"><p><b>答：</b>三个原因。<b>一是节奏</b>：小米新品密度高，手机、AIoT、汽车一起跑，培训是跟着发布会倒计时的，这种强度能让我长得快。<b>二是规模</b>：门店和交付网络铺得广，一场培训要影响上千人，标准化的价值特别大——这正是我在做的。<b>三是产品</b>：我自己就是用户，人车家这套东西我真的会用，讲起来不虚。</p>
+<p><b>考点：</b>有没有做功课。别只说"小米是伟大的公司"。</p></div>
+
+<div class="q">3. 你还投了哪些公司？为什么选我们？</div>
+<div class="say"><p><b>答：</b>我主要投两类：一类是企业学习/培训运营，一类是平台运营。现在我手上也有其他流程在走。<br>但我优先级很清楚：<b>我想要的是一线业务里"能看见结果"的培训岗</b>，而不是纯职能的支持岗。贵司这个岗位直接对新品上市和门店动作负责，这个位置对我更有吸引力。</p>
+<p><b>考点：</b>诚实 + 有选择逻辑。别说"只投了你们"（不可信），也别说"投了二十家"。</p></div>
+
+<div class="q">4. 培训运营很琐碎，订场地、搬物料、催人签到，你能接受吗？</div>
+<div class="say"><p><b>答：</b>我现在就在做这些。3 城并行的时候，物料是我一份份核的，酒店房间是我一间间锁的。<br>我的看法是：<b>琐碎的部分恰恰是培训的底盘</b>——签到乱一次，后面讲得再好学员也不信。而且我会把琐碎的部分做成工具，比如 SOP 待办清单，让它不靠记性。</p>
+<p><b>考点：</b>有没有心理落差。要既接受，又显示"我会把它系统化"。</p></div>
+
+<h3>经历类</h3>
+
+<div class="q">5. 讲一个你从头负责到尾的项目。</div>
+<div class="say"><p><b>骨架：</b>背景（为什么做）→ 目标（要什么结果）→ 我负责哪段 → 怎么做的（2–3 个动作）→ 结果（数字）→ 复盘（如果重来改什么）。<br><b>推荐讲：</b>新员工培养的 3 城统筹。<b>结尾一定要有"如果重来"</b>，这是加分位，很多人漏掉。</p></div>
+
+<div class="q">6. 你遇到过最大的突发是什么？怎么处理的？</div>
+<div class="say"><p><b>答法公式：</b>突发是什么 → 我第一秒做了什么（止损）→ 之后怎么补（保效果）→ 事后怎么防（进 SOP）。<br><b>关键：</b>最后一步"进 SOP"一定要说，它证明你不是救火队员，是能建机制的人。</p></div>
+
+<div class="q">7. 你和讲师/供应商有过分歧吗？</div>
+<div class="say"><p><b>答：</b>有过。我的原则是<b>先分清楚这是"内容问题"还是"执行问题"</b>。<br>内容上的分歧我听讲师的，他比我专业；但时间、物料、流程上的分歧，我要求按时间轴走，因为那影响的是全场 100 个人。<br>我会把话说在前面："这一条不是针对您，是全场的时间卡在这。"</p></div>
+
+<div class="q">8. 你带过几个人？怎么带的？</div>
+<div class="say"><p><b>答：</b>学生会在新媒体部带过 <b>10 人</b>团队，负责 15+ 场活动宣传；培训现场带过 <b>4 人</b>的现场团队做<b>主负责人</b>。<br>我的带法是<b>把任务切成"谁在什么时候交什么"</b>，而不是"你去弄一下"。4 人那次我设了"机动"位专处理突发，主流程就断不了。</p>
+<p><b>考点：</b>别说"我比较随和"，要说清分工方法。</p></div>
+
+<h3>专业类（这岗位的核心）</h3>
+
+<div class="q">9. 一场培训怎么做出"标准化运营方案"？</div>
+<div class="say"><p><b>答：</b>我会输出四件东西：<br><b>① 一张时间轴</b>（T-30 到 T+1，每个节点谁交付什么）<br><b>② 一份物料清单</b>（按包分，缺件不出发）<br><b>③ 一份角色分工表</b>（讲师/场地/酒店/供应商各自只对一个接口人）<br><b>④ 一份复盘模板</b>（问卷 + 数据 + 改进项）<br>标准化的判断标准只有一个：<b>换个人接手，能不能照样跑起来。</b></p></div>
+
+<div class="q">10. 培训效果怎么衡量？</div>
+<div class="say"><p><b>答：</b>分四层，从浅到深：<b>反应</b>（满意度、NPS）→ <b>学习</b>（考核通过率、分数）→ <b>行为</b>（回门店后动作有没有变，靠巡店/抽查）→ <b>结果</b>（对应业务指标，比如转化率、客单价、投诉率）。<br>培训运营最容易只停在第一层。我会至少推到第三层，因为<b>满意度高但回去不变，等于没培训</b>。</p></div>
+
+<div class="q">11. 费用怎么测算？</div>
+<div class="say"><p><b>答：</b>我按四个科目拆：<b>场地、餐饮住宿、物料、讲师（含差旅）</b>，再留 8%–10% 的机动。<br>然后算两个数：<b>人均成本</b>和<b>单场总成本</b>，跟历史场次比。<br>省钱我有两个惯用手段：一是物料按场次打包采购，避免单场零买；二是把可复用的部分（比如沙盘系统）做成一次投入多城复用——这比砍讲师费有效得多。</p>
+<p><b>加一句加分：</b>"我有初级会计职称，看成本和预算表不吃力。"</p></div>
+
+<div class="q">12. 培训后台你最想改什么？</div>
+<div class="say"><p>见第三章 Q9，可以完整复用那段答法。</p></div>
+
+<div class="q">13. 新品上市培训，你会怎么排？</div>
+<div class="say"><p>见第五章 5.6 的倒计时表，直接讲 T-30 → T+7 的节点。</p></div>
+
+<h3>场景 / 压力类</h3>
+
+<div class="q">14. 300 人的培训，只给你 7 天，你怎么做？</div>
+<div class="say"><p>见第五章 5.1，按天讲。</p></div>
+
+<div class="q">15. 现场投影坏了 / 讲师迟到，怎么办？</div>
+<div class="say"><p>见第五章 5.2，六种突发都有话术。</p></div>
+
+<div class="q">16. 学员当场说"这课没用"，你怎么接？</div>
+<div class="say"><p><b>答：</b>我不会当场辩。我会先接住："您具体觉得哪一段跟您的场景对不上？"——把情绪转成具体问题。<br>如果他说得对，我当场记下来，并在当天的复盘里改；如果说的是"太理论"，我会请他讲一个他门店的真实例子，让讲师现场用他的例子重讲一遍。<br><b>关键是：让提意见的人变成内容的一部分</b>，他就从反对者变成参与者了。</p></div>
+
+<div class="q">17. 业务方临时要加 50 人，加不加？</div>
+<div class="say"><p><b>答：</b>先看三件事：<b>场地消防容量、物料和餐的余量、讲师互动质量会不会被稀释</b>。<br>如果容量够、物料能补，我加；如果会稀释效果，我会加人但<b>同时改形式</b>——比如加一个线上分会场，或者这批人进下一场。<br>我不会直接说"不行"，也不会无脑说"可以"，我会给一个<b>带条件的方案</b>。</p></div>
+
+<div class="q">18. 你没做过手机/汽车行业的培训，凭什么能做？</div>
+<div class="say"><p><b>答：</b>行业知识我可以在一个月内补上，但<b>培训运营的底盘是通用的</b>：怎么把 100 个人组织好、怎么让 3 个城市节奏一致、怎么让后台跑得动。<br>而且我做过的产品运营，本身就是"快速学一个不懂的领域，然后讲给别人听"——行家平台那些话题，我一开始也一个都不懂。<br>另外我有个习惯：<b>新品我会自己去门店看一线怎么讲</b>，这比看资料快。</p></div>
+
+<div class="q">19. "主管"是要带人的，你带得动吗？</div>
+<div class="say"><p><b>答：</b>我带过 10 人的学生团队、也在培训现场做过 4 人团队的主负责人。<br>但我理解这个岗位现在真正考的是<b>能不能独立扛一个项目</b>——从策划到落地到复盘，中间不用人推。这个我做过，而且是自己找事做的那种：沙盘系统是我自发立项的，没人要求我做。</p></div>
+
+<div class="q">20. 你简历上这些数字，有多少是你自己的功劳？</div>
+<div class="say"><p><b>答：</b>我分得清。<b>+367% 是团队的结果，我负责的是供给搭建和瓶颈定位</b>；3 城统筹里现场是我主负责的；沙盘系统和后台 PRD 是我独立做的。<br>我不会把团队的成果说成我一个人的，但属于我的部分我能讲清每一步怎么做的。</p>
+<p><b>考点：</b>诚实度。这题敢分功劳，反而加分。</p></div>
+</section>
+
+<!-- ================= 第五章 ================= -->
+<section class="chap">
+<h2 id="ch5">第五章 · 场景题模板</h2>
+
+<p class="meta">这一章是可以"照着说"的。面试官出 case 时，直接按结构讲，比临场发挥稳十倍。</p>
+
+<h3 id="s51">5.1 300 人培训 · 7 天倒计时</h3>
+
+<p><b>开口先定框架：</b>"7 天做 300 人，我一定不是从'找场地'开始，而是<b>先把三件事锁死：人、钱、场地</b>。这三件不定，后面全是白做。"</p>
+
+<div class="tl">
+<div class="n"><b>D-7</b>锁三件事：<b>人数与名单</b>（分几批、有没有外地）、<b>预算上限</b>（人均多少）、<b>场地</b>（容量 ≥ 350，含消防通道）。当天出《需求确认单》给业务方签字。</div>
+<div class="n"><b>D-6</b>定<b>流程表</b>（精确到 15 分钟）+ <b>角色分工表</b>（签到/场地/讲师/机动，至少 6 人）。同时发讲师邀约、锁酒店房。</div>
+<div class="n"><b>D-5</b>发<b>通知与报名表</b>（含交通指引、着装、需带物品）。物料下单（胸牌、手册、桌牌、指引牌、伴手礼），确认到货时间 <b>≤ D-2</b>。</div>
+<div class="n"><b>D-4</b>讲师<b>课件定稿</b>+ 试讲 20 分钟（重点看时间够不够）。餐饮定量、茶歇定档。</div>
+<div class="n"><b>D-3</b><b>场地勘察</b>：电、网、投影、麦克、桌椅摆放、签到动线、卫生间指引。当天出《现场平面图》。</div>
+<div class="n"><b>D-2</b>物料<b>到货核验</b>（按清单逐项打勾）。学员群建好，发《参会须知》。打印全部纸质物料。</div>
+<div class="n"><b>D-1</b><b>全流程彩排</b>：主持人串词、PPT 翻页笔、备用投影、备用麦克、备用网络（4G 路由）。打包"应急箱"。<b>当晚给所有人发一次时间地点提醒。</b></div>
+<div class="n"><b>D-Day</b>提前 <b>90 分钟</b>到场：设备二次联调 → 签到台就位 → 物料上桌 → 讲师接待。<b>开场前 10 分钟</b>报一次到场率给业务方。</div>
+<div class="n"><b>D+1</b>发问卷（当天发，回收率最高）+ 出《现场问题清单》。<b>48 小时内</b>出复盘初稿。</div>
+</div>
+
+<div class="tip"><b>收口一句：</b>"7 天能做，但前提是<b>D-7 那天业务方必须把人数和预算定下来</b>。如果这两样悬着，我会先说清风险，而不是硬接。"——这句体现你会管预期。</div>
+
+<h3 id="s52">5.2 六种现场突发 · 应对话术</h3>
+
+<div class="ev"><div class="h">① 投影/大屏坏了</div><div class="b">
+<em>第一动作：</em>让机动立刻切备用（备用投影或大屏电视），同时主持人上场做 3 分钟互动，把注意力从台上带走。<br>
+<em>兜底：</em>课件提前导出一份 PDF 放 U 盘 + 一份在讲师手机里，实在不行用笔记本围一圈讲。<br>
+<em>事后：</em>把"双投影 + PDF 备份"写进 SOP。
+</div></div>
+
+<div class="ev"><div class="h">② 讲师迟到 / 临时来不了</div><div class="b">
+<em>第一动作：</em>先确认迟到多久。15 分钟内 → 主持人做破冰或提前放茶歇；超过 30 分钟 → 调换顺序，把不需要讲师的环节（分组讨论、案例演练）提前。<br>
+<em>兜底：</em>每个讲师都要提前给一份"可代讲版"课件，或者录一段 20 分钟视频备份。<br>
+<em>话术：</em>"我们先把这一段做个演练，X 老师稍后到。"——不解释、不道歉过度，保持节奏。
+</div></div>
+
+<div class="ev"><div class="h">③ 学员当场抱怨"没用 / 浪费时间"</div><div class="b">
+见第四章 Q16。<em>核心：</em>不辩、转成具体问题、让他给真实案例、当场用他的案例重讲。
+</div></div>
+
+<div class="ev"><div class="h">④ 物料少了 / 发错了</div><div class="b">
+<em>第一动作：</em>先保"必须有的"（手册、胸牌），缺的记下来，<b>不现场补发</b>（会乱）。<br>
+<em>兜底：</em>物料包按"人数 + 10%"备量，多出的 10% 就是给这种时候的。<br>
+<em>事后：</em>清单里增加"到货即点数"这一步。
+</div></div>
+
+<div class="ev"><div class="h">⑤ 领导临时到场要讲话</div><div class="b">
+<em>第一动作：</em>立刻确认三件事：讲多久、需不需要 PPT、什么时候讲。<br>
+<em>处理：</em>优先放在<b>开场或茶歇后</b>（这两个位置对流程破坏最小），并同步调整后面环节的时间，通知主持人。<br>
+<em>细节：</em>准备一支备用麦克、一瓶水、一个座位牌——这些永远是提前备好的。
+</div></div>
+
+<div class="ev"><div class="h">⑥ 人数远超预期（临时来了一堆人）</div><div class="b">
+<em>第一动作：</em>数人头，判断超多少。超 10% → 加椅子、加物料包余量。超 30% → 启用备用场地或开分会场（直播）。<br>
+<em>原则：</em>先保<b>安全和体验</b>，再保"所有人都进来"。消防容量是红线，不能让。
+</div></div>
+
+<h3 id="s53">5.3 费用测算表（可直接照着说）</h3>
+
+<table>
+<thead><tr><th style="width:22%">科目</th><th style="width:30%">怎么算</th><th>常见坑</th></tr></thead>
+<tbody>
+<tr><td>场地</td><td>按天 × 天数，含设备租赁</td><td>超时费、布场费、清洁费常另算</td></tr>
+<tr><td>餐饮住宿</td><td>人均餐标 × 人数 × 餐数；房数 × 房价 × 晚数</td><td>外地学员的交通补贴最容易漏</td></tr>
+<tr><td>物料</td><td>按场次打包，单价 × 数量 + 10% 余量</td><td>加急印刷的加价能翻倍，要留提前量</td></tr>
+<tr><td>讲师</td><td>课酬 + 差旅（机票/高铁 + 住宿 + 接送）</td><td>内部讲师的工时成本常被忽略</td></tr>
+<tr><td>机动</td><td>总额的 8%–10%</td><td>不留机动，现场一出事就要临时申请</td></tr>
+</tbody>
+</table>
+
+<div class="say"><p><b>两个关键指标：</b><b>人均成本</b>（总成本 ÷ 参训人数）和<b>单场成本</b>（跟历史场次横向比）。<br>
+<b>一句加分话：</b>"我更愿意在'可复用的系统'上花钱，而不是在'每场都要重买的东西'上省钱——前者摊到 10 个城市，人均成本会降下来。"</p></div>
+
+<h3 id="s54">5.4 效果衡量：四层 + 小米场景</h3>
+
+<table>
+<thead><tr><th style="width:14%">层级</th><th style="width:22%">看什么</th><th style="width:30%">怎么收</th><th>小米场景里对应什么</th></tr></thead>
+<tbody>
+<tr><td><b>反应</b></td><td>满意度、NPS、内容有用度</td><td>当天课后问卷（回收率最高）</td><td>学员觉得"这套话术我明天能用"</td></tr>
+<tr><td><b>学习</b></td><td>考核通过率、平均分、错题分布</td><td>课后测验、实操考核</td><td>产品参数、竞品对比、演示动线是否过关</td></tr>
+<tr><td><b>行为</b></td><td>回岗位后的动作有没有变</td><td>巡店抽查、神秘顾客、录音抽检</td><td>门店是不是真的按新话术讲、演示流程有没有走全</td></tr>
+<tr><td><b>结果</b></td><td>业务指标</td><td>对比培训前后同期</td><td>转化率、连带率、客单价、投诉率</td></tr>
+</tbody>
+</table>
+
+<div class="tip"><b>能加分的判断：</b>"培训运营最容易停在第一层——满意度 4.8 分，但学员回去该怎么说还怎么说。我会至少推到<b>行为层</b>，因为只有行为变了，业务才可能变。"</div>
+
+<h3 id="s55">5.5 培训后台需求：一页 PRD 骨架</h3>
+
+<div class="box">
+<b>① 角色与权限</b>——管理员（课程体系、考核规则）/ 运营（排期、物料、通知）/ 讲师（自己带的班）/ 学员（学习与考试）<br>
+<b>② 核心对象</b>——课程、班次、学员、资料、考题、成绩<br>
+<b>③ 关键流程</b>——建课 → 上传资料（带版本号）→ 排班 → 报名 → 签到 → 考试 → 出成绩 → 导出报表<br>
+<b>④ 必须有的三个细节</b>——<b>资料版本管理</b>（一线最怕拿到旧版）、<b>考核规则留痕</b>（谁改的、什么时候改的）、<b>数据可导出</b>（不然运营天天手工整理）<br>
+<b>⑤ 验收标准</b>——一场 100 人的培训，从建课到出成绩，运营手工操作不超过 X 步
+</div>
+
+<h3 id="s56">5.6 新品上市培训 · 节奏表</h3>
+
+<table>
+<thead><tr><th style="width:14%">节点</th><th style="width:40%">做什么</th><th>产出物</th></tr></thead>
+<tbody>
+<tr><td><b>T-30</b></td><td>跟产品/市场对齐：卖点、竞品对比、禁讲项</td><td>《培训需求单》</td></tr>
+<tr><td><b>T-21</b></td><td>定课程结构（参数/卖点/演示/异议处理）</td><td>课程大纲</td></tr>
+<tr><td><b>T-14</b></td><td>出<b>一页纸</b>（核心卖点 + 话术）+ 讲师手册 + 考核题库</td><td>三件套</td></tr>
+<tr><td><b>T-10</b></td><td>讲师集中培训（讲师先过考核）</td><td>讲师认证名单</td></tr>
+<tr><td><b>T-7</b></td><td>区域/城市分批开训，<b>考核不过不上岗</b></td><td>考核成绩表</td></tr>
+<tr><td><b>T-3</b></td><td>补考 + 重点城市复训</td><td>上岗名单</td></tr>
+<tr><td><b>T-0</b></td><td>上市日：现场答疑支持、话术卡补发</td><td>问题清单</td></tr>
+<tr><td><b>T+7</b></td><td>收集一线反馈，改第二版话术</td><td>迭代版一页纸</td></tr>
+</tbody>
+</table>
+
+<div class="warn"><b>为什么要有 T-10 的"讲师先过考核"：</b>规模化的命门是<b>讲师</b>，不是学员。总部讲得再好，一个城市一个讲师，讲师不齐，动作就散。这句说出来，面试官会知道你懂"复制"。</div>
+</section>
+
+<!-- ================= 第六章 ================= -->
+<section class="chap">
+<h2 id="ch6">第六章 · 反问 · 清单 · 一页纸</h2>
+
+<h3>6.1 五个反问（按面试阶段选 2–3 个）</h3>
+
+<table>
+<thead><tr><th style="width:6%">#</th><th style="width:52%">问什么</th><th>为什么问这个</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>"这个岗位现在最急的一件事，是新品培训的节奏，还是培训后台的搭建？"</td><td>显示你关心真实痛点，不在背题库</td></tr>
+<tr><td>2</td><td>"培训运营和产品、市场、区域销售是怎么分工的？谁定培训内容，谁定排期？"</td><td>摸清权责，也显得你懂跨部门</td></tr>
+<tr><td>3</td><td>"一线的讲师是总部派驻，还是各城市自己培养？"</td><td>直接问到"规模化"的命门</td></tr>
+<tr><td>4</td><td>"这个岗位做得好，一年后是什么样子？"</td><td>显示你想长期做，不是过渡</td></tr>
+<tr><td>5</td><td>"您觉得前几任/现在的团队，最大的挑战是什么？"</td><td>风险共担的姿态，但要放在最后问</td></tr>
+</tbody>
+</table>
+
+<div class="nogo"><b>别问：</b>加班多不多 / 转正率多少 / 能不能远程 / 薪资多少（这些等 HR 环节）/ "我表现怎么样"。</div>
+
+<h3>6.2 面试前 12 小时清单</h3>
+
+<div class="box">
+<b>今晚必做（20 分钟）</b><br>
+☐ 把第二章 90 秒版<b>出声念三遍</b>，掐时间（目标 85–95 秒）<br>
+☐ 把第三章 Q1（3 城怎么同步）、Q4（满意度规律）、Q7（三角色权限）<b>各讲一遍</b>——这三题最可能被追问<br>
+☐ 确认 <b>C1 驾照</b>怎么说（有 / 在考 / 没有，三选一，别现场想）<br>
+☐ 确认<b>到岗时间</b>怎么说
+</div>
+
+<div class="box">
+<b>明天出门前</b><br>
+☐ 简历纸质 2 份（万一两位面试官）<br>
+☐ 作品集链接确认能打开：<b>linziyang777.github.io</b><br>
+☐ 手机静音、提前 15 分钟到（线上则提前 5 分钟进会议室、测麦克）<br>
+☐ 一句开场先想好：<b>"各位老师下午好，我是林子炀"</b>——慢一点说
+</div>
+
+<h3>6.3 一页纸作战卡（出门前扫一眼这个就够）</h3>
+
+<div class="card1">
+<h3>小米 · 培训运营主管 · 2026-11-05 14:00</h3>
+<div class="ln"><i>一句话定位</i><div>我现在就在做企业学习：<b>既跑过 3 城培训现场，也独立交付过培训后台</b>。</div></div>
+<div class="ln"><i>三个数字</i><div><b>224</b> 话题 / <b>196</b> 行家 / <b>+367%</b> 咨询单量（环比，讲清口径）</div></div>
+<div class="ln"><i>三个现场</i><div><b>3 城并行</b>（每期 80–100 人）｜<b>4 类角色</b>（讲师/场地/酒店/供应商）｜<b>4 人团队</b>主负责人</div></div>
+<div class="ln"><i>杀手锏</i><div><b>三角色权限的后台 PRD + NoCode 自行上线</b>（直接对 JD 第 4 条）</div></div>
+<div class="ln"><i>复盘故事</i><div>满意度"<b>首日高、次日低、末日回升</b>"→ 判断是内容形态问题 → 改成案例+演练 → 峰值前移</div></div>
+<div class="ln"><i>小米口径</i><div>别讲课程多精美，讲<b>怎么让 300 个门店的人在同一周动作一致</b></div></div>
+<div class="ln"><i>硬条件</i><div>C1 驾照：<b>有 / 在考（X 月拿证）</b>——先想好，一句话带过</div></div>
+<div class="ln"><i>反问一句</i><div>"现在最急的是新品培训节奏，还是培训后台的搭建？"</div></div>
+</div>
+
+<div class="tip">
+<b>最后一句心态提醒：</b>你六条职责有五个五星，这不是"够格试试"，是<b>对口</b>。
+面试官真正想确认的只有一件事——<b>把这件事交给你，能不能不用管。</b>
+你答的每一句，都在回答这个问题。
+</div>
+
+<p class="tfoot">林子炀 · 小米培训运营主管 · 2026-11-05 ｜ 内容基于本人简历与公开招聘信息整理</p>
+</section>
+
+  </main>
+</div>
+</body>
+</html>
