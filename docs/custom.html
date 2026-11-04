@@ -322,16 +322,27 @@
     .fld textarea{padding:10px 11px}
   }
   .fld .sub{font-size:11.5px;color:var(--faint);margin-top:4px;line-height:1.5}
-  .uprow{display:flex;align-items:center;gap:8px;margin:-2px 0 6px}
+  .uprow{display:flex;align-items:center;gap:8px;margin:-2px 0 6px;flex-wrap:wrap}
   .upbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:600;
-    color:var(--sage-d);background:var(--sage-bg);border:1px solid var(--sage-bd);border-radius:7px;padding:5px 11px;cursor:pointer}
+    color:var(--sage-d);background:var(--sage-bg);border:1px solid var(--sage-bd);border-radius:7px;padding:5px 11px;cursor:pointer;
+    white-space:nowrap;flex:none}
   .upbtn:hover{background:#e4f0ff}
   .upbtn[disabled]{opacity:.6;cursor:default}
-  .upsrc{font-size:11.5px;color:#6b7280}
+  /* 提示占满剩余宽度，放不下就换到按钮下面一整行，别把按钮挤成三行 */
+  .upsrc{font-size:11.5px;color:#6b7280;flex:1 1 160px;min-width:0;line-height:1.55}
   .upsrc.ok{color:#047857}
   .upsrc.err{color:#b91c1c}
   .upcard{display:none;background:#f8fafc;border:1px dashed #c8d3e3;border-radius:9px;padding:10px 12px;margin:0 0 8px}
   .upcard.on{display:block}
+  .uppaste{display:none;background:#f8fafc;border:1px dashed #c8d3e3;border-radius:9px;padding:10px 12px;margin:0 0 8px}
+  .uppaste.on{display:block}
+  .uppaste .uh{font-size:12.5px;color:#374151;font-weight:600;margin-bottom:6px}
+  .uppaste textarea{width:100%;min-height:110px;font-family:inherit;font-size:13.5px;background:#fff;
+    border:1px solid var(--line2);border-radius:8px;padding:9px 11px;line-height:1.6;resize:vertical}
+  .uppaste .uacts{display:flex;gap:8px;margin-top:7px}
+  .uppaste .uacts button{font-family:inherit;font-size:12px;border-radius:7px;padding:5px 11px;cursor:pointer;
+    border:1px solid var(--line2);background:#fff;color:#374151}
+  .uppaste .uacts .pri{background:var(--sage-d);border-color:var(--sage-d);color:#fff;font-weight:600}
   .upcard .uh{display:flex;align-items:baseline;gap:6px;font-size:12.5px;color:#374151;margin-bottom:6px;flex-wrap:wrap}
   .upcard .uh b{color:#2b2724;font-weight:600;word-break:break-all;flex:0 1 auto;max-width:100%}
   .upcard .uh span{color:#6b7280;flex:none}
@@ -548,8 +559,18 @@ section.tab{display:block!important;padding:24px 0 40px}
         <label><b>简历要点</b>（每行一条：公司/项目 + 你做了什么 + 数字）</label>
         <div class="uprow">
           <button type="button" class="upbtn" id="btnUp">⬆ 上传简历</button>
-          <input type="file" id="fResume" accept=".pdf,.docx,.jpg,.jpeg,.png,.webp,.bmp" style="display:none">
-          <span class="upsrc" id="upSrc">支持 PDF / Word(.docx) / 图片，自动抽取要点</span>
+          <input type="file" id="fResume" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.bmp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*" style="display:none">
+          <input type="file" id="fFileMz" accept="application/*" style="display:none">
+          <span class="upsrc" id="upSrc">支持 PDF / Word / 图片，自动抽取要点</span>
+        </div>
+        <!-- 微信里选不到文件时的兜底：直接粘贴简历文字，一样能整理成要点 -->
+        <div class="uppaste" id="upPaste">
+          <div class="uh"><b>直接把简历文字粘进来</b></div>
+          <textarea id="upPasteTx" placeholder="从微信收藏 / 备忘录 / 邮件里复制简历全文，粘到这里"></textarea>
+          <div class="uacts">
+            <button class="pri" id="btnUsePaste">整理成要点并填入 ↓</button>
+            <button id="btnCancelPaste">取消</button>
+          </div>
         </div>
         <div class="upcard" id="upCard">
           <div class="uh"><b id="upName">简历</b><span id="upMeta"></span></div>
