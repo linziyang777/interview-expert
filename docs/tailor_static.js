@@ -729,7 +729,12 @@
   function bindStaticOverrides() {
     try { loadLocal(); } catch (e) {}
     paintQuestions(); paintGap(); paintBar(); paintItems();
-    if (!loadPass()) setTimeout(function () { if (locked()) openGate(); }, 350);
+    if (PASS_MODE === 'auto') {
+      /* 自动模式：静默解一次，成功就直接能用；失败（口令改过）才弹框 */
+      decodeCfg().then(function () { paintBar(); }).catch(function () { openGate(); });
+    } else if (!loadPass()) {
+      setTimeout(function () { if (locked()) openGate(); }, 350);
+    }
     var b = $('#btnRecalc'); if (b) b.onclick = genSelected;
     var c = $('#btnGen'); if (c) c.onclick = genSelected;
     var s = $('#btnSaveProf');
