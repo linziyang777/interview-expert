@@ -420,7 +420,9 @@
 
 </main>
 
-<!-- 静态版引擎：必须放在主脚本之前，这样它在 boot() 发出 /api/meta 之前就把 fetch 换掉 -->
+<!-- 静态版引擎：必须放在主脚本之前，这样它在 boot() 发出 /api/meta 之前就把 fetch 换掉。
+     config.enc.js 还要更靠前，否则引擎启动时拿不到密文、自动解锁会失败。 -->
+<script src="../config.enc.js"></script>
 <script src="room_local.js"></script>
 <script>
 // 这个页面既能单跑（/），也能挂在 /room 下，所以接口前缀要跟着路径走
@@ -438,6 +440,11 @@ function inFrame(){ try{ return window.self !== window.top; }catch(e){ return tr
 
 async function boot(){
   if (inFrame()) document.body.classList.add('embedded');
+  /* 静态版会先静默解锁（口令模式决定成败），等它出结果再渲染状态，免得闪一下"未解锁" */
+  if (window.ROOM_LOCAL && window.ROOM_LOCAL.ready){
+    try { await window.ROOM_LOCAL.ready; } catch(e){}
+    window.ROOM_LOCAL.onUnlock = function(){ renderModePill(); };
+  }
   try{
     META = await (await fetch(API + '/api/meta')).json();
   }catch(e){
@@ -473,24 +480,32 @@ async function boot(){
       ${arr.map(t => `<div style="font-size:13px;color:#c6cedb;padding:4px 0;line-height:1.6">· ${esc(t.title)}</div>`).join('')}
     </div>`).join('');
 
-  const pill = $('#modePill');
-  const unlocked = !!(window.ROOM_LOCAL ? window.ROOM_LOCAL.unlocked && window.ROOM_LOCAL.unlocked() : false);
-  if (META.mode === 'live') { pill.textContent = '已接 V4.1 Flash'; pill.className = 'pill live'; }
-  else if (unlocked) { pill.textContent = 'AI 直连中'; pill.className = 'pill live'; }
-  else { pill.textContent = '未解锁 · 固定剧本'; pill.className = 'pill demo'; }
-
-  if (META.mode !== 'live' && !unlocked){
-    $('#modeTip').innerHTML = '<b>现在跑的是固定剧本。</b>流程能走完、抢话能生效、复盘能出，但 AI 考生说的是预设台词，不会接住你的话。'
-      + '想让 AI 真的像人：点右上角<b>「解锁」</b>输入口令即可（浏览器直连模型，不外传）。';
-    $('#modeTip').classList.remove('hide');
-  } else {
-    $('#modeTip').classList.add('hide');
-  }
+  renderModePill();
 
   // URL 参数：从备战稿跳进来，直接落到群面设置
   const q = new URLSearchParams(location.search);
   if (q.get('go') === 'group'){ go('setup-group'); }
   else if (q.get('go') === 'single'){ go('setup-single'); }
+}
+
+/* 状态胶囊：自动解锁完成后也要能就地刷新，所以单独拎出来 */
+function renderModePill(){
+  const pill = $('#modePill');
+  if (!pill) return;
+  const unlocked = !!(window.ROOM_LOCAL && window.ROOM_LOCAL.unlocked && window.ROOM_LOCAL.unlocked());
+  if (META && META.mode === 'live') { pill.textContent = '已接 ' + (META.model || 'AI'); pill.className = 'pill live'; }
+  else if (unlocked) { pill.textContent = 'AI 直连中'; pill.className = 'pill live'; }
+  else { pill.textContent = '固定剧本'; pill.className = 'pill demo'; }
+
+  const tip = $('#modeTip');
+  if (!tip) return;
+  if (META && META.mode !== 'live' && !unlocked){
+    tip.innerHTML = '<b>现在跑的是固定剧本。</b>流程能走完、抢话能生效、复盘能出，但 AI 考生说的是预设台词，不会接住你的话。'
+      + '想让 AI 真的像人：点右上角<b>「解锁」</b>输入口令即可（浏览器直连模型，不外传）。';
+    tip.classList.remove('hide');
+  } else {
+    tip.classList.add('hide');
+  }
 }
 
 /* ---------------- 视图切换 ---------------- */
@@ -1002,6 +1017,5 @@ function exitRoom(){
 
 boot();
 </script>
-<script src="../config.enc.js"></script>
 </body>
 </html>
