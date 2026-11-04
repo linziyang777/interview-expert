@@ -277,6 +277,8 @@
   .form{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}
   .form h3{margin:0 0 12px;font-size:15px}
   .fld{margin-bottom:11px}
+  .fld2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:560px){ .fld2{grid-template-columns:1fr} }
   .fld label{display:block;font-size:12.5px;color:var(--sub);margin-bottom:4px}
   .fld label b{color:var(--ink)}
   .fld input,.fld textarea{width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);
@@ -463,9 +465,10 @@ section.tab{display:block!important;padding:24px 0 40px}
         </select>
         <div class="sub" id="formTip">选不同形式，右侧题型分组会跟着换（群面不考「为什么选我们」，单面才考）。</div>
       </div>
-      <div class="fld"><label>批次（选填）</label><input id="cScale" placeholder="例如：秋招 / 春招 / 暑期实习"></div>
-      <div class="fld"><label>姓名（选填）</label><input id="cName" placeholder="用于开场白"></div>
-      <div class="fld"><label>学校 / 届（选填）</label><input id="cSchool" placeholder="例如：吉林大学 2027 届"></div>
+      <div class="fld2">
+        <div class="fld"><label>姓名（选填）</label><input id="cName" placeholder="开场白第一句用"></div>
+        <div class="fld"><label>学校 / 届（选填）</label><input id="cSchool" placeholder="吉林大学 2027 届"></div>
+      </div>
       <div class="fld"><label><b>岗位 JD</b> *（把 JD 原文贴进来）</label><textarea id="cJd" placeholder="粘贴 JD 原文，越完整越准"></textarea></div>
       <div class="fld">
         <label><b>简历要点</b>（每行一条：公司/项目 + 你做了什么 + 数字）</label>
