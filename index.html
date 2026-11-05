@@ -39,11 +39,13 @@ a.on{display:inline-block}
   <a id="fb" href="https://a1bb3b6066bf43ba2.app.workbuddy.host/portal">没反应？点这里进入</a>
 </div>
 <script>
-var T = "https://a1bb3b6066bf43ba2.app.workbuddy.host/portal";
+/* 查询串一起带过去：?code=同步码 用来把任意设备接到同一份记忆，丢了它就白点 */
+var T = "https://a1bb3b6066bf43ba2.app.workbuddy.host/portal" + location.search + location.hash;
 setTimeout(function () {
   var fb = document.getElementById('fb');
-  if (fb) fb.className = 'on';
+  if (fb) { fb.className = 'on'; fb.href = T; }
 }, 1300);
+try { var _a = document.getElementById('fb'); if (_a) _a.href = T; } catch (e) {}
 try { location.replace(T); } catch (e) { location.href = T; }
 </script>
 </body>
