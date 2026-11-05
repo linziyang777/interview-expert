@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="0;url=./index.html">
-<title>面试专家</title></head>
+<title>面试专家</title>
+<script>
+/* 静态入口一律收敛到动态版总台：路径（/portal）、查询串（?code=同步码、?t=custom）原样带过去，
+   否则老链接点进来会落在一份和当前画像无关的静态稿上，看起来像「内容没同步」。 */
+(function () {
+  var T = 'https://a1bb3b6066bf43ba2.app.workbuddy.host/portal' + location.search + location.hash;
+  document.write('<meta http-equiv="refresh" content="0;url=' + T + '">');
+  try { location.replace(T); } catch (e) { location.href = T; }
+})();
+</script>
+</head>
 <body style="font-family:system-ui;padding:40px;text-align:center">
-正在进入 <a href="./index.html">面试专家总台</a> …
+正在进入 <a id="fb" href="https://a1bb3b6066bf43ba2.app.workbuddy.host/portal">面试专家总台</a> …
+<script>try{var a=document.getElementById('fb');if(a)a.href='https://a1bb3b6066bf43ba2.app.workbuddy.host/portal'+location.search+location.hash;}catch(e){}</script>
 </body></html>
